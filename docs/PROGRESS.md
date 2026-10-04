@@ -19,9 +19,9 @@
 | P6 Statistics | ✅ done (`dev`) | tracker → `/api/track` (cookieless, daily salt) → `/api/cron/daily` (rollups + purges, 00:30 PH) → `/admin/statistics` (kotoha KPIs + all §12 cards, CSV). Admin opt-out switch on Account |
 | P7 Messages | ✅ done (`dev`) | inbox with folders, search, bulk actions, detail, reply via e-mail (9/9 e2e) |
 | P8 Kotoha seed & media | ✅ done | 8 desktop + 2 phone shots, 29 s preview + 8 s hover loop, **7 admin shots (S4 done: temporary Neon branch `br-dawn-resonance-b3uw8bd6` created, anonymised, used, deleted; local copy + env removed)**; `seed:tech` (23) + `seed:kotoha` (19 media, admin shots on the For admins cards) |
-| Design checkpoint ✋ | ⏳ waiting for Kyle | Preview of branch `dev` on Vercel (SSO-protected, Kyle's login). Merge to `main` only with Kyle's OK |
+| Design checkpoint ✋ | ✅ approved 2026-10-04 | Kyle: design OK, copy OK, Facebook link OK, Cloudinary key + secret added (Vercel production + `.env.local`); signed upload + delete verified |
 | P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
-| P10 Launch | ⬜ | merge `dev` → `main`, Kyle's first login (own password), Search Console; Kyle removes `moesoft-web` |
+| P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moesoft.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers; Kyle removes `moesoft-web` |
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
@@ -44,6 +44,6 @@
 - `npm run seed:tech`, `npm run seed:kotoha -- --dry-run | --replace`.
 
 ## Owner to-dos
-- Add **Cloudinary API key + secret** to `.env.local` and Vercel (needed for admin uploads; not for viewing).
-- First login on the live site → set your own password (the seed password is temporary).
-- Design checkpoint: review the `dev` preview.
+- First login on the live site (`/admin`) → set your own password (the seed password is temporary).
+- Optional: add the Cloudinary key + secret to the **Preview** environment too if you want uploads on preview builds.
+- Submit `https://moesoft.vercel.app/sitemap.xml` in Google Search Console; remove the old `moesoft-web` project when ready.
