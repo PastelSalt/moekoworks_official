@@ -2,6 +2,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import type { Metadata } from "next";
+import { CountMyVisits } from "@/components/admin/CountMyVisits";
 import { PasswordForm } from "@/components/admin/PasswordForm";
 import { logoutOthersAction } from "@/server/auth/actions";
 import { requireAdmin } from "@/server/auth/session";
@@ -35,6 +36,15 @@ export default async function AccountPage() {
               Sign out other devices
             </Button>
           </form>
+        </Paper>
+        <Paper elevation={0} sx={{ p: 3, boxShadow: "var(--shadow-paper)" }}>
+          <Typography variant="h6" component="h2">
+            Statistics
+          </Typography>
+          <Typography color="text.secondary" sx={{ my: 1.5 }}>
+            While you&apos;re signed in, your visits are never counted. Turn this on to keep this browser out of the statistics even after you sign out.
+          </Typography>
+          <CountMyVisits />
         </Paper>
       </div>
     </>

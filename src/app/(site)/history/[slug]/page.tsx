@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps<"/history/[slug]">)
     title: p.seoTitle || p.title,
     description: p.seoDescription || p.tagline,
     alternates: { canonical: `/history/${p.slug}` },
-    openGraph: { type: "article", title: `${p.title} · ${site.name}`, description: p.tagline, images: p.cover ? [{ url: cldImage(p.cover.publicId, { w: 1200, h: 630, crop: "fill", gravity: "auto" }), width: 1200, height: 630 }] : undefined },
+    openGraph: { type: "article", title: `${p.title} · ${site.name}`, description: p.tagline, images: p.cover ? [{ url: cldImage(p.cover.publicId, { w: 1200, h: 630, crop: "fill", gravity: "auto" }).replace("f_auto", "f_jpg"), width: 1200, height: 630, alt: p.cover.altText ?? p.title }] : undefined },
   };
 }
 

@@ -32,8 +32,21 @@ export default async function Home() {
   const works = projects.slice(0, 5);
   const lastUpdate = updates[0]?.date;
 
+  const jsonLd = [
+    { "@context": "https://schema.org", "@type": "WebSite", name: site.name, alternateName: site.legalName, url: site.url, description: site.intro },
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: site.owner,
+      url: site.url,
+      description: "Makes creative websites and the systems behind them, as Moesoft.",
+      sameAs: site.socials.filter((s) => s.id !== "email").map((s) => s.href),
+    },
+  ];
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <NewsTicker items={updates.map((u) => ({ date: dotDate(u.date), iso: isoDate(u.date), text: u.text, href: u.href }))} />
 
       {/* ── Key-visual stage ── */}
