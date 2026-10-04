@@ -1,0 +1,36 @@
+/* Admin: calm pastel paper on a quiet pattern (plan §10.8). MUI does the components. */
+@layer components {
+  .admin-root {
+    min-height: 100dvh;
+    background:
+      radial-gradient(circle at 0% 0%, color-mix(in oklch, var(--pink-200) 55%, transparent) 0, transparent 34rem),
+      radial-gradient(circle at 100% 100%, color-mix(in oklch, var(--blue-200) 55%, transparent) 0, transparent 34rem),
+      radial-gradient(var(--gray-300) 1px, transparent 1.4px) 0 0 / 24px 24px,
+      var(--canvas);
+  }
+  .admin-auth {
+    min-height: 100dvh; display: grid; place-items: center; padding: 24px;
+  }
+  .admin-auth__card {
+    width: min(440px, 100%); padding: clamp(24px, 5vw, 40px); border-radius: var(--r-panel);
+    background: var(--paper); box-shadow: var(--shadow-lift);
+  }
+  .admin-auth__logo { width: 210px; margin: 0 auto 8px; }
+  .admin-auth__label {
+    margin: 0 0 18px; text-align: center; font-size: var(--fs-meta); font-weight: 700;
+    letter-spacing: var(--track-label); text-transform: uppercase; color: var(--ink-soft);
+  }
+  .admin-rules { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+  .admin-rules li { display: flex; gap: 8px; align-items: center; color: var(--ink-soft); }
+  .admin-rules li::before {
+    content: "○"; width: 18px; text-align: center; font-weight: 700; color: var(--gray-400);
+  }
+  .admin-rules li[data-state="ok"] { color: var(--success); }
+  .admin-rules li[data-state="ok"]::before { content: "✓"; color: var(--success); }
+  .admin-rules li[data-state="bad"] { color: var(--error); }
+  .admin-rules li[data-state="bad"]::before { content: "✗"; color: var(--error); }
+  .admin-main { padding: clamp(16px, 3vw, 32px); max-width: 1200px; }
+  .admin-label {
+    margin: 0; font-size: 12px; font-weight: 700; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--pink-700);
+  }
+}

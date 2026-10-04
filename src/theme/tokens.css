@@ -1,0 +1,76 @@
+/* Moesoft design system · tokens. Loaded first: fixes the cascade-layer order for every stylesheet.
+   "Bloom Expo": Miku Expo structure, Happy Sugar Life palette & ornaments, kotoha density (plan §6). */
+@layer reset, tokens, base, mui, components, sections, motion, utilities;
+
+@property --iris { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --progress { syntax: "<number>"; inherits: true; initial-value: 0; }
+
+@layer tokens {
+  :root {
+    /* neutrals */
+    --white: #ffffff; --paper: #fffdfe; --canvas: #f6f7fb;
+    --gray-50: #fafafc; --gray-100: #f1f2f7; --gray-200: #e4e6ee; --gray-300: #cdd0dc; --gray-400: #a9adbd; --gray-500: #858a9c;
+    --ink: #2e2a36; --ink-soft: #5d5869; --ink-muted: #77727f; --outline: #1e1a24;
+
+    /* pastel pink — primary */
+    --pink-50: #fff5fa; --pink-100: #ffe9f7; --pink-200: #ffd3ee; --pink-300: #ffb4e3; --pink-400: #f49cc5;
+    --pink-500: #e95399; --pink-600: #d63f86; --pink-700: #b42a6c; --pink-800: #8f1f55;
+
+    /* pastel blue — secondary */
+    --blue-50: #f1fbff; --blue-100: #e1f3ff; --blue-200: #c4e5fe; --blue-300: #a0cffc; --blue-400: #7ecef3;
+    --blue-500: #2a9ef9; --blue-600: #1c7fd6; --blue-700: #1665ae; --blue-800: #124f87;
+
+    /* brand accents from the logo */
+    --lilac-100: #f7eafc; --lilac-200: #efd2f8; --lilac-300: #e2a8f2; --violet-400: #be8af0; --violet-700: #7a4bc2;
+    --rose-400: #f28aa9; --butter-300: #f8d95a; --peach-300: #f0c68e;
+
+    /* states */
+    --success: #2e7d4f; --success-50: #ecf8f0; --warning: #946200; --warning-50: #fff6dd; --error: #c2333b; --error-50: #fdecee;
+
+    /* project accent (overridden per project page) */
+    --project-accent: var(--pink-300); --project-accent-strong: var(--pink-700); --project-on-accent: var(--ink);
+    --project-tint-50: color-mix(in oklch, var(--project-accent) 12%, white);
+    --project-tint-100: color-mix(in oklch, var(--project-accent) 22%, white);
+
+    /* type */
+    --font: var(--font-fredoka), system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-logo: var(--font-lilita), var(--font-fredoka), sans-serif; /* giant decorative words & stage pattern only */
+    --fs-meta: clamp(12px, 0.74rem + 0.12vw, 14px);
+    --fs-body: clamp(15px, 0.86rem + 0.28vw, 17px);
+    --fs-lead: clamp(16px, 0.94rem + 0.4vw, 20px);
+    --fs-h3: clamp(20px, 1rem + 0.9vw, 28px);
+    --fs-h2: clamp(26px, 1.1rem + 1.7vw, 44px);
+    --fs-h1: clamp(30px, 1.15rem + 2.4vw, 56px);
+    --fs-display: clamp(40px, 1.4rem + 4.4vw, 92px);
+    --fs-giant: clamp(110px, 4rem + 14vw, 300px);
+    --lh-body: 1.6; --lh-tight: 1.12;
+    --track-label: 0.16em; --track-title: 0.22em;
+
+    /* space (4-based) & layout */
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+    --gutter: clamp(16px, 3vw, 40px);
+    --section-y: clamp(48px, 7vw, 112px);
+    --sidebar-w: clamp(176px, 14vw, 232px);
+    --content-max: 1200px;
+
+    /* shape */
+    --r-chip: 12px; --r-input: 16px; --r-card: 24px; --r-panel: 32px; --r-pill: 999px;
+
+    /* depth — tinted, never grey-black */
+    --shadow-paper: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 12px 26px -16px rgb(143 31 85 / 0.35), 0 2px 6px -2px rgb(143 31 85 / 0.14);
+    --shadow-lift: 0 22px 42px -20px rgb(143 31 85 / 0.42), 0 6px 14px -6px rgb(122 75 194 / 0.22);
+    --shadow-modal: 0 34px 90px -24px rgb(46 26 54 / 0.55);
+    --shadow-sticker: 4px 5px 0 var(--lilac-300);
+    --outline-sticker: 2.5px solid var(--outline);
+
+    /* motion — one tempo: 120 BPM → 1 beat = 500 ms */
+    --beat: 500ms; --t-tap: 120ms; --t-pop: 350ms; --t-move: 560ms; --t-glide: 820ms;
+    --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+
+    /* focus */
+    --focus-ring: 0 0 0 3px var(--white), 0 0 0 6px var(--pink-700);
+  }
+}
