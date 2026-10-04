@@ -10,18 +10,18 @@
 ## Status
 | Phase | Status | Notes |
 |---|---|---|
-| P0 Start-up | ✅ done 2026-10-04 | Node 24.21, `gh` login, private repo `PastelSalt/moesoft_official`, Neon `moesoft-official` (`shy-rice-98401386`, Singapore, PG 17), Cloudinary folders `moesoft-official/{projects,certifications,site}` + presets `moesoft_images_signed` / `moesoft_videos_signed` |
-| P1 Foundations | ✅ done | Next 16.3.8, React 19.2.8, MUI 9.4 (`@layer mui`), tokens/base CSS, Fredoka 400/700 + Lilita One, security headers (CSP report-only), brand SVGs from the logo PDF |
-| P3 Data & auth | ✅ core done | Schema + migration `0000_init` applied; owner seeded (forced change); login / forced change / Account change password / sign out / sign out others / lockout — 9/9 e2e checks passed with a throwaway account (deleted) |
-| P2 Shell & design system | ✅ done (branch `dev`) | Sidebar / mobile bar + MENU sheet / footer / PAGE TOP; splash (real progress, FLIP); pattern stage from the logo glyphs (`public/brand/pattern.svg`), watercolor washes, giant words, vertical text, badge, stickers, tape, marquee; motion (Lenis, lean, sparkles, letter pops, CSS scroll-driven reveals, calm mode) |
-| P5 Public pages | ✅ first pass (branch `dev`) | Home, About, Contact (server action: honeypot, signed start time, 5/h rate limit, spam score), History (archive + floating hover preview), project template `/history/[slug]`, Privacy, 404, error, sitemap, robots, manifest. Missing: OG image file, JSON-LD Person/WebSite on Home |
-| P8 Kotoha seed & media | 🟡 public part done | Live-site screenshots (8 desktop + 2 phone), 29 s preview + 8 s hover loop uploaded to `moesoft-official/projects/kotoha-fansite/*`; `npm run seed:tech` (23) + `npm run seed:kotoha` done (project id 1). **Pending: S4 admin screenshots** (temporary Neon branch of Kotoha DB + local Kotoha) |
-| Design checkpoint ✋ | ⏳ waiting for Kyle | Preview of branch `dev` on Vercel (SSO-protected). Merge to `main` only with Kyle's OK |
-| P4 Admin inputs | ⬜ next | Project History + Certifications CRUD, tech catalog. Needs `CLOUDINARY_API_SECRET` for signed uploads |
-| P6 Statistics | ⬜ | tracker, `/api/track`, rollups, dashboard |
-| P7 Messages | ⬜ | inbox for `contact_messages` |
-| P9 Quality | ⬜ | |
-| P10 Launch | ⬜ | Owner removes `moesoft-web` after launch |
+| P0 Start-up | ✅ done 2026-10-04 | Node 24.21, `gh` login, private repo `PastelSalt/moesoft_official`, Neon `moesoft-official` (`shy-rice-98401386`, Singapore, PG 17), Cloudinary folders + signed presets, Vercel project `moesoft` |
+| P1 Foundations | ✅ done | Next 16.3.8, React 19.2.8, MUI 9.4 (`@layer mui`), tokens/base CSS, Fredoka 400/700 + Lilita One, security headers (CSP report-only), brand SVGs |
+| P2 Shell & design system | ✅ done (`dev`) | Sidebar / mobile bar + MENU sheet / footer / PAGE TOP; splash (real progress, FLIP); pattern stage from the logo glyphs, watercolor washes, giant words, vertical text, badge, stickers, tape, marquee; motion (Lenis, lean, sparkles, letter pops, CSS scroll-driven reveals, calm mode) |
+| P3 Data & auth | ✅ done | Schema + `0000_init`; owner seeded (forced change pending — Kyle's first login); login / change password / sessions / lockout (9/9 e2e) |
+| P4 Admin inputs | ✅ done (`dev`) | Project History editor (all §11.2 fields, signed uploads, publish, slug 301), Certifications, Tech catalog, Activity (10/10 e2e). **Uploads need `CLOUDINARY_API_KEY` + `_SECRET`** |
+| P5 Public pages | ✅ done (`dev`) | Home, About, Contact, History, project template, Privacy, 404, error, sitemap, robots, manifest, OG image, JSON-LD |
+| P6 Statistics | ✅ done (`dev`) | tracker → `/api/track` (cookieless, daily salt) → `/api/cron/daily` (rollups + purges, 00:30 PH) → `/admin/statistics` (kotoha KPIs + all §12 cards, CSV). Admin opt-out switch on Account |
+| P7 Messages | ✅ done (`dev`) | inbox with folders, search, bulk actions, detail, reply via e-mail (9/9 e2e) |
+| P8 Kotoha seed & media | ✅ done | 8 desktop + 2 phone shots, 29 s preview + 8 s hover loop, **7 admin shots (S4 done: temporary Neon branch `br-dawn-resonance-b3uw8bd6` created, anonymised, used, deleted; local copy + env removed)**; `seed:tech` (23) + `seed:kotoha` (19 media, admin shots on the For admins cards) |
+| Design checkpoint ✋ | ⏳ waiting for Kyle | Preview of branch `dev` on Vercel (SSO-protected, Kyle's login). Merge to `main` only with Kyle's OK |
+| P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
+| P10 Launch | ⬜ | merge `dev` → `main`, Kyle's first login (own password), Search Console; Kyle removes `moesoft-web` |
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
@@ -34,6 +34,9 @@
 - Video URLs use the preset's eager transformations exactly (`c_limit,q_auto,vc_h264,w_1280/…mp4` etc.).
 - Contact form: the signed start-time token is fetched when the visitor starts typing (pages are static); without JS the form still works but scores +2 spam.
 - Seed media was uploaded before Kyle's review (nothing is public yet; easy to redo with `seed:kotoha -- --replace`).
+- Statistics: no MUI X Charts (custom SVG/CSS bars, lighter); no `isbot` / `ua-parser-js` (small family-level classifier in `src/lib/ua.ts`). The tracker flushes 4 s after events as well as on hide/pagehide (headless Chrome drops unload beacons).
+- Messages are plain text in the admin (no auto-linking) for safety.
+- The scratchpad was wiped during a pause: the logo/pattern/wash generator scripts are gone (their outputs in `public/brand/` are final).
 
 ## Capture & seed commands
 - `npx tsx scripts/capture/kotoha.mts [--shots|--video]` → `scripts/capture/out/kotoha/` (git-ignored), then `scripts/capture/encode.sh`.

@@ -105,7 +105,24 @@ const media: [string, string, string, string, string | null][] = [
   ["loader", "gallery", "browser", "Loading screen with a birthday artwork, spinning clovers and a “Did you know?” fact.", "Loader: artwork, spinning clovers and real progress."],
   ["phone-home", "gallery", "phone", "Kotoha Fan Site on a phone: logo, links, stream countdown and weekly schedule.", "On a phone: Home."],
   ["phone-gallery", "gallery", "phone", "Fan-art gallery on a phone in two columns.", "On a phone: the gallery."],
+  // admin panel (captured from a local copy on a temporary database branch; the owner shows as "owner")
+  ["admin-statistics", "gallery", "browser", "Admin panel: cookieless visitor statistics with sections, devices, languages, countries, sources and busiest hours.", "Admin: visitor statistics."],
+  ["admin-activity", "gallery", "browser", "Admin panel: the activity log listing sign-ins and password changes.", "Admin: the activity log."],
+  ["admin-dashboard", "operation", "browser", "Admin dashboard: content counts and visitor statistics with a daily visits chart.", null],
+  ["admin-videos", "operation", "browser", "Admin panel: the Latest Videos list with edit, unpublish and archive actions.", null],
+  ["admin-gallery", "operation", "browser", "Admin panel: the fan-art gallery with a drop zone for uploads and credit editing.", null],
+  ["admin-accounts", "operation", "browser", "Admin panel: account management, where the owner creates admin accounts.", null],
+  ["admin-account", "operation", "browser", "Admin panel: changing the password, with the live password rules.", null],
 ];
+
+// operation title → screenshot shown in its card
+const opMedia: Record<string, string> = {
+  "Sign in safely": "admin-account",
+  "Publish content": "admin-videos",
+  "Upload fan art": "admin-gallery",
+  "Manage the team": "admin-accounts",
+  "Watch the numbers": "admin-dashboard",
+};
 
 type Upload = { public_id: string; version: number; format: string; width: number; height: number; bytes: number; duration?: number; resource_type: string; dominant?: string | null };
 const uploads: Record<string, Upload> = JSON.parse(readFileSync(join(import.meta.dirname, "capture", "out", "kotoha", "uploads.json"), "utf8"));
@@ -147,36 +164,42 @@ const [row] = await db
   .returning({ id: schema.projects.id });
 const projectId = row.id;
 
-await db.batch([
+const [, , , , , , mediaRows] = await db.batch([
   db.delete(schema.projectOperations).where(eq(schema.projectOperations.projectId, projectId)),
   db.delete(schema.projectLinks).where(eq(schema.projectLinks.projectId, projectId)),
   db.delete(schema.projectTechnologies).where(eq(schema.projectTechnologies.projectId, projectId)),
   db.delete(schema.mediaAssets).where(eq(schema.mediaAssets.projectId, projectId)),
   db.insert(schema.projectLinks).values(links.map((l, i) => ({ ...l, projectId, sortOrder: i }))),
   db.insert(schema.projectTechnologies).values(stack.map(([slug, usageNote], i) => ({ projectId, technologyId: techId.get(slug)!, usageNote, sortOrder: i }))),
-  db.insert(schema.projectOperations).values(operations.map(([audience, title, bodyMd, icon], i) => ({ projectId, audience, title, bodyMd, icon, sortOrder: i }))),
-  db.insert(schema.mediaAssets).values(
-    media.map(([key, role, frame, altText, caption], i) => {
-      const u = uploads[key];
-      return {
-        projectId,
-        kind: u.resource_type === "video" ? "video" : "image",
-        role,
-        publicId: u.public_id,
-        version: u.version,
-        format: u.format,
-        width: u.width,
-        height: u.height,
-        bytes: u.bytes,
-        durationMs: u.duration ? Math.round(u.duration * 1000) : null,
-        frame,
-        altText,
-        caption,
-        dominantColor: u.dominant ?? null,
-        sortOrder: i,
-      };
-    }),
-  ),
+  db
+    .insert(schema.mediaAssets)
+    .values(
+      media.map(([key, role, frame, altText, caption], i) => {
+        const u = uploads[key];
+        return {
+          projectId,
+          kind: u.resource_type === "video" ? "video" : "image",
+          role,
+          publicId: u.public_id,
+          version: u.version,
+          format: u.format,
+          width: u.width,
+          height: u.height,
+          bytes: u.bytes,
+          durationMs: u.duration ? Math.round(u.duration * 1000) : null,
+          frame,
+          altText,
+          caption,
+          dominantColor: u.dominant ?? null,
+          sortOrder: i,
+        };
+      }),
+    )
+    .returning({ id: schema.mediaAssets.id, publicId: schema.mediaAssets.publicId }),
 ]);
+const idByKey = new Map(media.map(([key]) => [key, mediaRows.find((r) => r.publicId === uploads[key].public_id)?.id ?? null]));
+await db.insert(schema.projectOperations).values(
+  operations.map(([audience, title, bodyMd, icon], i) => ({ projectId, audience, title, bodyMd, icon, sortOrder: i, mediaId: opMedia[title] ? (idByKey.get(opMedia[title]) ?? null) : null })),
+);
 
 console.log(`✓ ${project.title} seeded (project id ${projectId}). Pages refresh within 10 minutes, or on the next deploy.`);
