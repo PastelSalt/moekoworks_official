@@ -36,7 +36,7 @@ const NAV: Item[] = [
   { href: "/admin/projects", label: "Project History", icon: FolderKanban, ready: false },
   { href: "/admin/certifications", label: "Certifications", icon: Award, ready: false },
   { href: "/admin/statistics", label: "Statistics", icon: BarChart3, ready: false },
-  { href: "/admin/messages", label: "Messages", icon: Mail, ready: false },
+  { href: "/admin/messages", label: "Messages", icon: Mail, ready: true },
   { href: "/admin/tech", label: "Tech catalog", icon: Shapes, ready: false },
   { href: "/admin/activity", label: "Activity", icon: Activity, ready: false },
   { href: "/admin/account", label: "Account", icon: UserRound, ready: true },
