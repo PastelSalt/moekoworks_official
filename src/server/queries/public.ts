@@ -220,3 +220,14 @@ export async function getToolbox(): Promise<CatalogTech[]> {
     projects: used.filter((u) => u.technologyId === t.id).length,
   }));
 }
+
+/** A slug that was renamed after publishing → its current slug (served as a 301, plan §5.4). */
+export async function getMovedSlug(oldSlug: string) {
+  const [row] = await db
+    .select({ slug: schema.projects.slug })
+    .from(schema.projectSlugHistory)
+    .innerJoin(schema.projects, eq(schema.projects.id, schema.projectSlugHistory.projectId))
+    .where(and(eq(schema.projectSlugHistory.oldSlug, oldSlug), eq(schema.projects.status, "published")))
+    .limit(1);
+  return row?.slug ?? null;
+}

@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, ChevronDown } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { CSSProperties } from "react";
 import { GiantWord, PatternStage, PopText, RotatingBadge, Spark, Tape } from "@/components/decor/Decor";
 import { Marquee } from "@/components/decor/Marquee";
@@ -17,7 +17,7 @@ import { CATEGORY_LABEL, dotDate, isoDate, LIFECYCLE_LABEL, no, pad2, PLATFORM_L
 import { Markdown, markdownToText } from "@/lib/markdown";
 import { opIcon } from "@/lib/op-icons";
 import { site } from "@/lib/site";
-import { getProjectBySlug, getPublishedProjects, type Operation } from "@/server/queries/public";
+import { getMovedSlug, getProjectBySlug, getPublishedProjects, type Operation } from "@/server/queries/public";
 import "@/styles/project.css";
 
 export const revalidate = 600;
@@ -99,7 +99,11 @@ function Operations({ items, tone }: { items: Operation[]; tone: "visitor" | "ad
 export default async function ProjectPage({ params }: PageProps<"/history/[slug]">) {
   const { slug } = await params;
   const [p, all] = await Promise.all([getProjectBySlug(slug), getPublishedProjects()]);
-  if (!p) notFound();
+  if (!p) {
+    const moved = await getMovedSlug(slug);
+    if (moved) permanentRedirect(`/history/${moved}`);
+    notFound();
+  }
 
   const position = all.findIndex((x) => x.id === p.id);
   const number = position >= 0 ? all.length - position : 1;

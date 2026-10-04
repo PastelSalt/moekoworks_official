@@ -33,12 +33,12 @@ const WIDTH = 248;
 type Item = { href: string; label: string; icon: LucideIcon; ready: boolean };
 const NAV: Item[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, ready: true },
-  { href: "/admin/projects", label: "Project History", icon: FolderKanban, ready: false },
-  { href: "/admin/certifications", label: "Certifications", icon: Award, ready: false },
+  { href: "/admin/projects", label: "Project History", icon: FolderKanban, ready: true },
+  { href: "/admin/certifications", label: "Certifications", icon: Award, ready: true },
   { href: "/admin/statistics", label: "Statistics", icon: BarChart3, ready: true },
   { href: "/admin/messages", label: "Messages", icon: Mail, ready: true },
-  { href: "/admin/tech", label: "Tech catalog", icon: Shapes, ready: false },
-  { href: "/admin/activity", label: "Activity", icon: Activity, ready: false },
+  { href: "/admin/tech", label: "Tech catalog", icon: Shapes, ready: true },
+  { href: "/admin/activity", label: "Activity", icon: Activity, ready: true },
   { href: "/admin/account", label: "Account", icon: UserRound, ready: true },
 ];
 
