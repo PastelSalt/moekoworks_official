@@ -9,7 +9,15 @@ export function Socials({ className = "" }: { className?: string }) {
     <ul className={`socials ${className}`}>
       {site.socials.map((s) => (
         <li key={s.id}>
-          <a className="socials__link" href={s.href} aria-label={s.label} title={s.label} {...(s.id === "email" ? {} : { target: "_blank", rel: "noopener noreferrer me" })}>
+          <a
+            className="socials__link"
+            href={s.href}
+            aria-label={s.label}
+            title={s.label}
+            data-track="outbound_click"
+            data-track-target={s.id}
+            {...(s.id === "email" ? {} : { target: "_blank", rel: "noopener noreferrer me" })}
+          >
             <SocialIcon id={s.id} />
           </a>
         </li>

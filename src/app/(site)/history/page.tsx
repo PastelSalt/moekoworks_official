@@ -88,7 +88,7 @@ export default async function HistoryPage() {
                               <CldImg media={p.cover} sizes="(max-width: 760px) 92vw, 1px" maxWidth={960} />
                             </span>
                           ) : null}
-                          <Link className="hrow__title" href={`/history/${p.slug}`}>
+                          <Link className="hrow__title" href={`/history/${p.slug}`} data-track="project_open" data-track-id={p.id} data-track-target="history">
                             {p.title}
                           </Link>
                           {n === projects.length ? (

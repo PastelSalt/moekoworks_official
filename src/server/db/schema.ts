@@ -18,7 +18,12 @@ import {
 const id = () => bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity();
 const createdAt = () => timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
 const updatedAt = () => timestamp("updated_at", { withTimezone: true }).notNull().defaultNow();
-const bytea = customType<{ data: Buffer }>({ dataType: () => "bytea" });
+// bytea as hex text on the wire ("\x…"), so it round-trips the same through the HTTP and TCP drivers.
+const bytea = customType<{ data: Buffer; driverData: string }>({
+  dataType: () => "bytea",
+  toDriver: (value) => `\\x${value.toString("hex")}`,
+  fromDriver: (value) => (typeof value === "string" && value.startsWith("\\x") ? Buffer.from(value.slice(2), "hex") : Buffer.from(value as unknown as Uint8Array)),
+});
 
 // ── Admin & security ────────────────────────────────────────────────
 export const adminUsers = pgTable(

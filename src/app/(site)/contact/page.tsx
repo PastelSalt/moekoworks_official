@@ -50,7 +50,9 @@ export default function ContactPage() {
                 </span>
                 <span className="contact__what">
                   <span className="micro">E-mail</span>
-                  <a href={`mailto:${site.email}`}>{site.email}</a>
+                  <a href={`mailto:${site.email}`} data-track="outbound_click" data-track-target="email">
+                    {site.email}
+                  </a>
                 </span>
                 <CopyEmail email={site.email} />
               </li>
@@ -60,7 +62,7 @@ export default function ContactPage() {
                 </span>
                 <span className="contact__what">
                   <span className="micro">GitHub</span>
-                  <a href={github.href} target="_blank" rel="noopener noreferrer me">
+                  <a href={github.href} target="_blank" rel="noopener noreferrer me" data-track="outbound_click" data-track-target="github">
                     @{github.handle}
                   </a>
                 </span>
@@ -71,7 +73,7 @@ export default function ContactPage() {
                 </span>
                 <span className="contact__what">
                   <span className="micro">Facebook</span>
-                  <a href={facebook.href} target="_blank" rel="noopener noreferrer me">
+                  <a href={facebook.href} target="_blank" rel="noopener noreferrer me" data-track="outbound_click" data-track-target="facebook">
                     {facebook.handle}
                   </a>
                 </span>

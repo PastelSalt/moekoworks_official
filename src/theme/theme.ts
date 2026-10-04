@@ -44,6 +44,12 @@ export const theme = createTheme({
       },
       variants: [
         { props: { variant: "contained", color: "primary" }, style: { color: "#2E2A36", "&:hover": { backgroundColor: "#F49CC5" } } },
+        { props: { variant: "contained", color: "secondary" }, style: { color: "#2E2A36" } },
+        // pastel mains are too light for text: outlined/text buttons use the strong shades (≥ 4.5:1)
+        { props: { variant: "outlined", color: "primary" }, style: { color: "#B42A6C", borderColor: "#F49CC5" } },
+        { props: { variant: "text", color: "primary" }, style: { color: "#B42A6C" } },
+        { props: { variant: "outlined", color: "secondary" }, style: { color: "#1665AE", borderColor: "#7ECEF3" } },
+        { props: { variant: "text", color: "secondary" }, style: { color: "#1665AE" } },
       ],
     },
     MuiPaper: { styleOverrides: { rounded: { borderRadius: 24 } } },

@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Page not found", robots: { index: fa
 export default function NotFound() {
   return (
     <SiteShell>
-      <PatternStage as="section" className="lost">
+      <PatternStage as="section" className="lost" data-track-view="not_found">
         <div className="lost__card paper">
           <p className="lost__code" aria-hidden="true">
             404

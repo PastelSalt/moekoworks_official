@@ -27,12 +27,20 @@ const host = (url: string) => {
 };
 
 /** Event-ticket CTAs with a perforated stub (Miku Expo tour sites). */
-export function Ticket({ link, compact = false }: { link: Link; compact?: boolean }) {
+export function Ticket({ link, compact = false, projectId }: { link: Link; compact?: boolean; projectId?: number }) {
   const meta = LINK_META[link.kind] ?? LINK_META.other;
   const Icon = meta.icon;
   const label = link.label || meta.label;
   return (
-    <a className={`ticket ${compact ? "ticket--compact" : ""}`} href={link.url} target="_blank" rel="noopener noreferrer">
+    <a
+      className={`ticket ${compact ? "ticket--compact" : ""}`}
+      href={link.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-track="project_link_click"
+      data-track-id={projectId}
+      data-track-target={link.kind}
+    >
       <span className="ticket__main">
         <span className="ticket__icon" aria-hidden="true">
           <Icon size={compact ? 18 : 22} strokeWidth={2} />

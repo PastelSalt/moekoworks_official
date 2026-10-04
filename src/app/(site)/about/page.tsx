@@ -177,6 +177,7 @@ export default async function AboutPage() {
               caption: `${c.title} · obtained ${longDate(c.obtainedOn)}`,
               width: c.media.width,
               height: c.media.height,
+              track: { t: "certificate_open" as const, id: c.id },
             }))}
           >
             <ul className="certgrid__list">

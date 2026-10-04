@@ -37,7 +37,7 @@ export default async function Home() {
       <NewsTicker items={updates.map((u) => ({ date: dotDate(u.date), iso: isoDate(u.date), text: u.text, href: u.href }))} />
 
       {/* ── Key-visual stage ── */}
-      <PatternStage as="section" className="hero" aria-labelledby="hero-title">
+      <PatternStage as="section" className="hero" aria-labelledby="hero-title" data-track-section="hero">
         <div className="hero__frame" aria-hidden="true">
           <span className="hero__corner hero__corner--tl">No.00 — Moesoft</span>
           <span className="hero__corner hero__corner--tr">{lastUpdate ? `Updated ${dotDate(lastUpdate)}` : `Est. ${site.since}`}</span>
@@ -92,7 +92,7 @@ export default async function Home() {
       {latest ? <LatestProject project={latest} /> : null}
 
       {/* ── Profile strip ── */}
-      <section className="wrap section--tight profile" aria-label="Profile at a glance">
+      <section className="wrap section--tight profile" aria-label="Profile at a glance" data-track-section="profile">
         <ul className="profile__grid">
           <li className="profile__card paper paper--pad reveal">
             <p className="micro">
@@ -138,7 +138,7 @@ export default async function Home() {
       </section>
 
       {/* ── No.02 — WORKS ── */}
-      <section className="wrap section works" aria-labelledby="works-title">
+      <section className="wrap section works" aria-labelledby="works-title" data-track-section="works">
         <SectionHead
           no="No.02"
           label="Works"
@@ -152,7 +152,7 @@ export default async function Home() {
         />
         <div className="works__grid">
           {works.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={projects.length - i} featured={i === 0} latest={i === 0} />
+            <ProjectCard key={p.id} project={p} index={projects.length - i} featured={i === 0} latest={i === 0} from="home-works" />
           ))}
           {works.length < 3 ? <ComingSoonCard /> : null}
         </div>
@@ -160,7 +160,7 @@ export default async function Home() {
 
       {/* ── No.03 — TOOLBOX ── */}
       {toolbox.length ? (
-        <section className="section toolbox" aria-labelledby="toolbox-title">
+        <section className="section toolbox" aria-labelledby="toolbox-title" data-track-section="toolbox">
           <div className="wrap">
             <SectionHead no="No.03" label="Toolbox" title="Toolbox" id="toolbox-title" intro="The tools behind the published projects. The number shows how many projects use each one." />
           </div>
@@ -174,7 +174,7 @@ export default async function Home() {
 
       {/* ── No.04 — CERTIFICATIONS (hidden while empty) ── */}
       {certs.length ? (
-        <section className="wrap section certs" aria-labelledby="certs-title">
+        <section className="wrap section certs" aria-labelledby="certs-title" data-track-section="certifications">
           <SectionHead
             no="No.04"
             label="Certifications"
@@ -205,7 +205,7 @@ export default async function Home() {
       ) : null}
 
       {/* ── No.05 — NEWS ── */}
-      <section className="wrap section news" id="news" aria-labelledby="news-title">
+      <section className="wrap section news" id="news" aria-labelledby="news-title" data-track-section="news">
         <SectionHead no={certs.length ? "No.05" : "No.04"} label="News" title="News" id="news-title" />
         {updates.length ? (
           <ol className="newslist">
@@ -229,7 +229,7 @@ export default async function Home() {
       </section>
 
       {/* ── Contact banner ── */}
-      <section className="wrap section--tight">
+      <section className="wrap section--tight" data-track-section="contact">
         <div className="cbanner reveal">
           <div className="cbanner__text">
             <p className="micro">Contact</p>

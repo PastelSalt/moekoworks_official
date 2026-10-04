@@ -78,7 +78,7 @@ export function VerticalText({ lines, className = "" }: { lines: string[]; class
 }
 
 /** Text circling a white flower, slowly turning. Optional link (the "VISIT ✿" badge). */
-export function RotatingBadge({ id, text, href, label, className = "", size = 132 }: { id: string; text: string; href?: string; label?: string; className?: string; size?: number }) {
+export function RotatingBadge({ id, text, href, label, className = "", size = 132, track }: { id: string; text: string; href?: string; label?: string; className?: string; size?: number; track?: { t: string; id?: number; tg?: string } }) {
   const body = (
     <>
       <svg className="badge__ring" viewBox="0 0 200 200" width={size} height={size} aria-hidden="true" focusable="false">
@@ -100,7 +100,14 @@ export function RotatingBadge({ id, text, href, label, className = "", size = 13
   if (href) {
     const external = /^https?:/.test(href);
     return (
-      <a className={`badge badge--link ${className}`} href={href} aria-label={label ?? text} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} style={{ "--badge": `${size}px` } as CSSProperties}>
+      <a
+        className={`badge badge--link ${className}`}
+        href={href}
+        aria-label={label ?? text}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...(track ? { "data-track": track.t, "data-track-id": track.id, "data-track-target": track.tg } : {})}
+        style={{ "--badge": `${size}px` } as CSSProperties}
+      >
         {body}
       </a>
     );

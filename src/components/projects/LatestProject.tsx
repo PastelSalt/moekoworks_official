@@ -17,12 +17,13 @@ export function LatestProject({ project }: { project: ProjectSummary }) {
   const href = `/history/${project.slug}`;
   const live = primaryLink(project);
   return (
-    <section className="latest wrap" aria-labelledby="latest-title" style={accentVars(project)}>
+    <section className="latest wrap" aria-labelledby="latest-title" style={accentVars(project)} data-track-section="latest">
       <div className="latest__grid">
         <div className="latest__media arrive arrive--drop" style={{ "--a": 0.8 } as CSSProperties}>
           <DeviceFrame kind="browser" url={live?.kind === "live" ? live.url : undefined} className="latest__frame">
             {project.preview ? (
               <PreviewVideo
+                trackId={project.id}
                 mode="inview"
                 src={cldVideo.mp4(project.preview.publicId)}
                 webm={cldVideo.webm(project.preview.publicId)}
@@ -44,7 +45,9 @@ export function LatestProject({ project }: { project: ProjectSummary }) {
             {project.publishedAt ? <time dateTime={isoDate(project.publishedAt)}>{dotDate(project.publishedAt)}</time> : null}
           </p>
           <h2 id="latest-title" className="latest__title">
-            <Link href={href}>{project.title}</Link>
+            <Link href={href} data-track="project_open" data-track-id={project.id} data-track-target="home-latest">
+              {project.title}
+            </Link>
           </h2>
           <p className="latest__tagline">{project.tagline}</p>
           <ul className="chips">
@@ -54,7 +57,7 @@ export function LatestProject({ project }: { project: ProjectSummary }) {
               <StatusChip lifecycle={project.lifecycle} />
             </li>
           </ul>
-          <Link className="more" href={href} aria-label={`More about ${project.title}`}>
+          <Link className="more" href={href} aria-label={`More about ${project.title}`} data-track="project_open" data-track-id={project.id} data-track-target="home-latest">
             for more information »
           </Link>
         </div>
@@ -66,6 +69,7 @@ export function LatestProject({ project }: { project: ProjectSummary }) {
             href={live.url}
             label={`Visit ${project.title} (opens in a new tab)`}
             className="latest__badge badge--accent arrive--stick"
+            track={{ t: "project_link_click", id: project.id, tg: live.kind }}
             size={124}
           />
         ) : null}

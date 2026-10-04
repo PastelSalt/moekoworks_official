@@ -74,7 +74,7 @@ export function MobileBar() {
             <ul className="sheet__socials">
               {site.socials.map((s) => (
                 <li key={s.id}>
-                  <a href={s.href} {...(s.id === "email" ? {} : { target: "_blank", rel: "noopener noreferrer me" })}>
+                  <a href={s.href} data-track="outbound_click" data-track-target={s.id} {...(s.id === "email" ? {} : { target: "_blank", rel: "noopener noreferrer me" })}>
                     <SocialIcon id={s.id} size={20} />
                     <span>{s.label}</span>
                   </a>

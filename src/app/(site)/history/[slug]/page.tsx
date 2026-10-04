@@ -133,7 +133,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
   };
 
   return (
-    <article className="project" style={accentVars(p)}>
+    <article className="project" style={accentVars(p)} data-track-view={`project:${p.id}`}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
       {/* ── Key-visual hero ── */}
@@ -167,7 +167,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
               {p.startedOn ? <li className="chip chip--white">{timeline(p.startedOn, p.finishedOn, p.lifecycle)}</li> : null}
             </ul>
             <div className="phero__cta arrive" style={{ "--a": 1.6 } as CSSProperties}>
-              {live ? <Ticket link={live} compact /> : <ComingSoonTicket />}
+              {live ? <Ticket link={live} compact projectId={p.id} /> : <ComingSoonTicket />}
               <a className="more" href="#overview">
                 read more <ChevronDown size={16} aria-hidden="true" />
               </a>
@@ -177,13 +177,13 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
           <div className="phero__media arrive arrive--drop" style={{ "--a": 0.6 } as CSSProperties}>
             <DeviceFrame kind="browser" url={live?.kind === "live" ? live.url : undefined} className="phero__frame">
               {p.preview ? (
-                <PreviewVideo mode="inview" src={cldVideo.mp4(p.preview.publicId)} webm={cldVideo.webm(p.preview.publicId)} poster={heroMedia ? undefined : cldVideo.poster(p.preview.publicId)} className="phero__video" label={`Preview of ${p.title}`} />
+                <PreviewVideo trackId={p.id} mode="inview" src={cldVideo.mp4(p.preview.publicId)} webm={cldVideo.webm(p.preview.publicId)} poster={heroMedia ? undefined : cldVideo.poster(p.preview.publicId)} className="phero__video" label={`Preview of ${p.title}`} />
               ) : null}
               {heroMedia ? <CldImg media={heroMedia} sizes="(min-width: 1100px) 56vw, 100vw" className="phero__img" priority /> : <span className="phero__art" aria-hidden="true" />}
             </DeviceFrame>
             <Tape tone="pink" className="phero__tape phero__tape--a arrive--stick" />
             <Tape tone="butter" className="phero__tape phero__tape--b arrive--stick" />
-            {live?.kind === "live" ? <RotatingBadge id="visit-badge" text="VISIT ✿ VISIT ✿ VISIT ✿ VISIT ✿ " href={live.url} label={`Visit ${p.title} (opens in a new tab)`} className="phero__badge badge--accent arrive--stick" size={120} /> : null}
+            {live?.kind === "live" ? <RotatingBadge id="visit-badge" text="VISIT ✿ VISIT ✿ VISIT ✿ VISIT ✿ " href={live.url} label={`Visit ${p.title} (opens in a new tab)`} className="phero__badge badge--accent arrive--stick" size={120} track={{ t: "project_link_click", id: p.id, tg: live.kind }} /> : null}
           </div>
         </div>
         <GiantWord tone="white" className="phero__giant arrive--giant">
@@ -199,7 +199,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
           </Link>
           <p className="pbar__title">{p.title}</p>
           {live ? (
-            <a className="pbar__visit" href={live.url} target="_blank" rel="noopener noreferrer">
+            <a className="pbar__visit" href={live.url} target="_blank" rel="noopener noreferrer" data-track="project_link_click" data-track-id={p.id} data-track-target={live.kind}>
               {live.kind === "live" ? "Visit" : "Open"} <span aria-hidden="true">↗</span>
               <span className="visually-hidden"> {p.title} (opens in a new tab)</span>
             </a>
@@ -328,6 +328,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
               caption: m.caption ?? undefined,
               width: m.width,
               height: m.height,
+              track: { t: "image_open" as const, id: p.id, tg: String(m.id) },
             }))}
           >
             <ul className={`gallery__grid ${p.gallery.length === 1 ? "gallery__grid--one" : ""}`}>
@@ -349,7 +350,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
       {/* ── ACCESS ── */}
       <section className="wrap section access" aria-labelledby="access-title">
         <SectionHead label="Access" title="Access" id="access-title" />
-        <div className="access__tickets">{p.links.length ? p.links.map((l) => <Ticket key={l.url} link={l} />) : <ComingSoonTicket />}</div>
+        <div className="access__tickets">{p.links.length ? p.links.map((l) => <Ticket key={l.url} link={l} projectId={p.id} />) : <ComingSoonTicket />}</div>
       </section>
 
       {/* ── CREDITS & DISCLAIMER ── */}
@@ -381,7 +382,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
       {/* ── Previous / next ── */}
       <nav className="wrap section pnav" aria-label="More projects">
         {newer ? (
-          <Link className="pnav__link pnav__link--prev paper" href={`/history/${newer.slug}`}>
+          <Link className="pnav__link pnav__link--prev paper" href={`/history/${newer.slug}`} data-track="project_open" data-track-id={newer.id} data-track-target="prev">
             <span className="micro">
               <ArrowLeft size={14} aria-hidden="true" /> Newer project
             </span>
@@ -394,7 +395,7 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
           Back to History
         </Link>
         {older ? (
-          <Link className="pnav__link pnav__link--next paper" href={`/history/${older.slug}`}>
+          <Link className="pnav__link pnav__link--next paper" href={`/history/${older.slug}`} data-track="project_open" data-track-id={older.id} data-track-target="next">
             <span className="micro">
               Older project <ArrowRight size={14} aria-hidden="true" />
             </span>

@@ -8,14 +8,14 @@ import { CldImg, StatusChip, TechIcons } from "./bits";
 import { PreviewVideo } from "./PreviewVideo";
 
 /** WORKS card: cover, hover video, No. badge, title, one-liner, tech icons, date. The whole card is one link. */
-export function ProjectCard({ project, index, featured = false, latest = false }: { project: ProjectSummary; index: number; featured?: boolean; latest?: boolean }) {
+export function ProjectCard({ project, index, featured = false, latest = false, from = "history" }: { project: ProjectSummary; index: number; featured?: boolean; latest?: boolean; from?: string }) {
   const href = `/history/${project.slug}`;
   return (
     <article className={`pcard ${featured ? "pcard--featured" : ""} reveal`} data-hover-host style={accentVars(project)}>
       <div className="pcard__media">
         {project.cover ? <CldImg media={project.cover} sizes={featured ? "(min-width: 900px) 60vw, 100vw" : "(min-width: 900px) 30vw, 100vw"} className="pcard__img" /> : <div className="pcard__art" aria-hidden="true" />}
         {project.preview || project.hover ? (
-          <PreviewVideo mode="hover" className="pcard__video" src={hoverUrl(project)!} poster={project.cover || !project.preview ? undefined : cldVideo.poster(project.preview.publicId)} />
+          <PreviewVideo trackId={project.id} mode="hover" className="pcard__video" src={hoverUrl(project)!} poster={project.cover || !project.preview ? undefined : cldVideo.poster(project.preview.publicId)} />
         ) : null}
         <span className="pcard__no" aria-hidden="true">
           {no(index)}
@@ -37,7 +37,9 @@ export function ProjectCard({ project, index, featured = false, latest = false }
           {project.publishedAt ? <time dateTime={isoDate(project.publishedAt)}>{dotDate(project.publishedAt)}</time> : null}
         </p>
         <h3 className="pcard__title">
-          <Link href={href}>{project.title}</Link>
+          <Link href={href} data-track="project_open" data-track-id={project.id} data-track-target={from}>
+            {project.title}
+          </Link>
         </h3>
         <p className="pcard__tagline">{project.tagline}</p>
         <div className="pcard__foot">

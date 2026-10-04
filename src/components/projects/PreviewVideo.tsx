@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { isCalm, onMotionChange, saveData } from "@/lib/motion";
+import { track } from "@/lib/track";
 
 type Props = {
   src: string;
@@ -11,13 +12,15 @@ type Props = {
   mode: "hover" | "inview";
   className?: string;
   label?: string;
+  /** project id for video_play / video_complete statistics */
+  trackId?: number;
 };
 
 /**
  * One preview video, three uses (plan §9.6): hover previews in lists, the Latest card (in view) and the project hero.
  * Muted, looping, poster first, preload none. Calm mode, Save-Data or a hidden tab keep the poster.
  */
-export function PreviewVideo({ src, webm, poster, mode, className = "", label }: Props) {
+export function PreviewVideo({ src, webm, poster, mode, className = "", label, trackId }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -41,6 +44,28 @@ export function PreviewVideo({ src, webm, poster, mode, className = "", label }:
       if (reset) video.currentTime = 0;
     };
     const cleanups: (() => void)[] = [];
+
+    // statistics: a play counts after 1 s of hover or 3 s of autoplay; completion at 95 %
+    let played = false;
+    let completed = false;
+    let watched = 0;
+    let lastT = 0;
+    const onTime = () => {
+      const t = video.currentTime;
+      if (t > lastT && t - lastT < 1.5) watched += t - lastT;
+      lastT = t;
+      if (!trackId) return;
+      if (!played && watched >= (mode === "hover" ? 1 : 3)) {
+        played = true;
+        track({ t: "video_play", id: trackId, tg: mode === "hover" ? "hover" : "auto" });
+      }
+      if (!completed && video.duration && t / video.duration >= 0.95) {
+        completed = true;
+        track({ t: "video_complete", id: trackId, tg: mode === "hover" ? "hover" : "auto" });
+      }
+    };
+    video.addEventListener("timeupdate", onTime);
+    cleanups.push(() => video.removeEventListener("timeupdate", onTime));
 
     if (mode === "hover") {
       const host = (video.closest("[data-hover-host]") as HTMLElement | null) ?? video;
@@ -72,7 +97,7 @@ export function PreviewVideo({ src, webm, poster, mode, className = "", label }:
       pause();
       cleanups.forEach((fn) => fn());
     };
-  }, [mode]);
+  }, [mode, trackId]);
 
   return (
     <video ref={ref} className={`pvideo ${className}`} muted loop playsInline preload="none" poster={poster} aria-label={label} data-playing="0" disablePictureInPicture>

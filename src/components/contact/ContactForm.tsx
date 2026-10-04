@@ -10,6 +10,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { Flower } from "@/components/decor/Decor";
 import { flowerBurst } from "@/lib/confetti";
 import { site } from "@/lib/site";
+import { track } from "@/lib/track";
 import { type ContactState, contactToken, sendMessage } from "@/server/actions/contact";
 
 type FieldProps = { name: "name" | "email" | "subject" | "message"; label: string; type?: string; autoComplete?: string; max: number; multiline?: boolean; value?: string; error?: string };
@@ -51,6 +52,7 @@ function Form({ onSent }: { onSent: () => void }) {
   const arm = () => {
     if (armed.current) return;
     armed.current = true;
+    track({ t: "contact_start" });
     if (ref.current) ref.current.value = document.referrer;
     contactToken()
       .then((t) => {
@@ -131,6 +133,7 @@ export function ContactForm() {
         <Form
           key={round}
           onSent={() => {
+            track({ t: "contact_submit" });
             setSent(true);
             flowerBurst(card.current);
           }}

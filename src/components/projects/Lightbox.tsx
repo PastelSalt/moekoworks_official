@@ -3,8 +3,17 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { type ReactNode, useCallback, useRef, useState } from "react";
 import { getLenis } from "@/lib/motion";
+import { track } from "@/lib/track";
 
-export type LightboxItem = { src: string; srcSet?: string; alt: string; caption?: string; width?: number | null; height?: number | null };
+export type LightboxItem = {
+  src: string;
+  srcSet?: string;
+  alt: string;
+  caption?: string;
+  width?: number | null;
+  height?: number | null;
+  track?: { t: "image_open" | "certificate_open"; id?: number; tg?: string };
+};
 
 /**
  * Lightbox for galleries and certificates. Tiles stay server-rendered: any descendant with `data-lb="<index>"`
@@ -15,10 +24,12 @@ export function Lightbox({ items, children, className = "", label = "Image viewe
   const [index, setIndex] = useState<number | null>(null);
 
   const open = useCallback((i: number) => {
+    const t = items[i]?.track;
+    if (t) track(t);
     setIndex(i);
     dialog.current?.showModal();
     getLenis()?.stop();
-  }, []);
+  }, [items]);
   const go = (step: number) => setIndex((i) => (i === null ? i : (i + step + items.length) % items.length));
   const item = index === null ? null : items[index];
 

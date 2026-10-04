@@ -9,6 +9,7 @@ import { MotionRoot } from "./MotionRoot";
 import { PageTop } from "./PageTop";
 import { Sidebar } from "./Sidebar";
 import { Splash } from "./Splash";
+import { Tracker } from "./Tracker";
 
 /** The public frame: splash, sidebar (desktop) or top bar (mobile), main column, footer, PAGE TOP, motion. */
 export function SiteShell({ children }: { children: ReactNode }) {
@@ -30,6 +31,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       </div>
       <PageTop />
       <MotionRoot />
+      <Tracker />
     </>
   );
 }

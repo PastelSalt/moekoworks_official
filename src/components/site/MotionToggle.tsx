@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { deviceReduces, motionMode, onMotionChange, setMotionOff } from "@/lib/motion";
+import { track } from "@/lib/track";
 
 const subscribe = (cb: () => void) => onMotionChange(cb);
 
@@ -17,7 +18,10 @@ export function MotionToggle({ className = "" }: { className?: string }) {
       aria-pressed={on}
       disabled={device}
       title={device ? "Your device asks for less motion" : undefined}
-      onClick={() => setMotionOff(on)}
+      onClick={() => {
+        setMotionOff(on);
+        track({ t: "motion_toggle", tg: on ? "off" : "on" });
+      }}
     >
       <span className="motion-toggle__label">Motion</span>
       <span className="motion-toggle__track" aria-hidden="true">

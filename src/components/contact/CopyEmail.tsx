@@ -2,6 +2,7 @@
 
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
+import { track } from "@/lib/track";
 
 export function CopyEmail({ email }: { email: string }) {
   const [copied, setCopied] = useState(false);
@@ -12,6 +13,7 @@ export function CopyEmail({ email }: { email: string }) {
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(email);
+          track({ t: "copy_email" });
           setCopied(true);
           window.setTimeout(() => setCopied(false), 2000);
         } catch {
