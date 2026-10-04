@@ -6,6 +6,7 @@
 1. Read this file, then `CLAUDE.md`. Don't re-ask decided questions (plan §0, §24, §26.1).
 2. Check real state: `git status`, `git log --oneline -10`, and that files listed as done exist.
 3. Continue from "Current focus". Update this file after every completed item; commit small and often.
+4. New project to add? Use [`NEW-PROJECT-PLAYBOOK.md`](NEW-PROJECT-PLAYBOOK.md).
 
 ## Status
 | Phase | Status | Notes |

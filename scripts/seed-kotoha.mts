@@ -156,7 +156,8 @@ if (techId.size !== stack.length) throw new Error("some technologies are missing
 
 const [row] = await db
   .insert(schema.projects)
-  .values({ ...project, publishedAt: new Date() })
+  // drafts get no publish date: it is set when Kyle publishes (Latest = newest publish date)
+  .values({ ...project, publishedAt: project.status === "published" ? new Date() : null })
   .onConflictDoUpdate({
     target: schema.projects.slug,
     set: { ...project, updatedAt: sql`now()`, publishedAt: sql`coalesce(${schema.projects.publishedAt}, now())` },

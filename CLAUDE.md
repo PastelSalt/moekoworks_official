@@ -4,6 +4,8 @@
 
 Portfolio of Kyle Zoleta under the name **Moesoft (Moeko Software and Technologies)**. The plan and every decision live in
 `PRELIMENARYPLAN.md` (v0.3). Progress and the resume protocol live in `docs/PROGRESS.md`. Read both before changing anything.
+**Adding a new project/website to the portfolio?** Follow `docs/NEW-PROJECT-PLAYBOOK.md` step by step (intake, capture,
+admin shots, Cloudinary upload, seed, verify, ship) — it has the exact scripts, IDs and gotchas.
 
 ## Stack
 Next.js 16.3 App Router (classic caching model: pre-rendered pages + `revalidatePath` after admin saves; Cache Components
