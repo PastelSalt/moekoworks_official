@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Flower, Sticker } from "@/components/decor/Decor";
-import { cldVideo } from "@/lib/cloudinary";
+import { cldVideo, hoverUrl } from "@/lib/cloudinary";
 import { accentVars } from "@/lib/color";
 import { CATEGORY_LABEL, dotDate, isoDate, no } from "@/lib/format";
 import type { ProjectSummary } from "@/server/queries/public";
@@ -14,8 +14,8 @@ export function ProjectCard({ project, index, featured = false, latest = false }
     <article className={`pcard ${featured ? "pcard--featured" : ""} reveal`} data-hover-host style={accentVars(project)}>
       <div className="pcard__media">
         {project.cover ? <CldImg media={project.cover} sizes={featured ? "(min-width: 900px) 60vw, 100vw" : "(min-width: 900px) 30vw, 100vw"} className="pcard__img" /> : <div className="pcard__art" aria-hidden="true" />}
-        {project.preview ? (
-          <PreviewVideo mode="hover" className="pcard__video" src={cldVideo.hover(project.preview.publicId)} poster={project.cover ? undefined : cldVideo.poster(project.preview.publicId)} />
+        {project.preview || project.hover ? (
+          <PreviewVideo mode="hover" className="pcard__video" src={hoverUrl(project)!} poster={project.cover || !project.preview ? undefined : cldVideo.poster(project.preview.publicId)} />
         ) : null}
         <span className="pcard__no" aria-hidden="true">
           {no(index)}
@@ -25,7 +25,7 @@ export function ProjectCard({ project, index, featured = false, latest = false }
             Latest
           </Sticker>
         ) : null}
-        {project.preview ? (
+        {project.preview || project.hover ? (
           <span className="pcard__hint" aria-hidden="true">
             <Flower tone="white" size={12} /> Hover to preview
           </span>

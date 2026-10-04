@@ -39,6 +39,8 @@ export type ProjectSummary = {
   accentOn: string | null;
   cover: Media | null;
   preview: Media | null;
+  /** Optional short ~480p loop for hover previews; otherwise the first 8 s of the preview are used. */
+  hover: Media | null;
   tech: Tech[];
   links: Link[];
 };
@@ -110,6 +112,7 @@ async function loadSummaries(rows: (typeof schema.projects.$inferSelect)[]): Pro
       accentOn: p.accentOn,
       cover: own.find((m) => m.role === "cover") ?? own.find((m) => m.role === "gallery" && m.kind === "image") ?? null,
       preview: own.find((m) => m.role === "preview" && m.kind === "video") ?? null,
+      hover: own.find((m) => m.role === "hover" && m.kind === "video") ?? null,
       tech: tech.filter((t) => t.projectId === p.id),
       links: links.filter((l) => l.projectId === p.id),
     };

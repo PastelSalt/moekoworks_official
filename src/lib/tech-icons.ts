@@ -35,6 +35,7 @@ import {
   siPython,
   siQt,
   siReact,
+  siSharp,
   siSqlite,
   siSupabase,
   siTailwindcss,
@@ -43,6 +44,7 @@ import {
   siUnity,
   siVercel,
   siVite,
+  siYoutube,
   siZod,
 } from "simple-icons";
 
@@ -84,6 +86,7 @@ const ICONS: Record<string, { path: string; hex: string }> = {
   python: siPython,
   qt: siQt,
   react: siReact,
+  sharp: siSharp,
   sqlite: siSqlite,
   supabase: siSupabase,
   tailwindcss: siTailwindcss,
@@ -92,6 +95,7 @@ const ICONS: Record<string, { path: string; hex: string }> = {
   unity: siUnity,
   vercel: siVercel,
   vite: siVite,
+  youtube: siYoutube,
   zod: siZod,
 };
 

@@ -4,7 +4,7 @@ import { Flower, GiantWord, Sticker } from "@/components/decor/Decor";
 import { CldImg, StatusChip, TechIcons } from "@/components/projects/bits";
 import { HoverPreview } from "@/components/projects/HoverPreview";
 import { PageHead } from "@/components/site/PageHead";
-import { cldImage, cldVideo } from "@/lib/cloudinary";
+import { cldImage, cldVideo, hoverUrl } from "@/lib/cloudinary";
 import { accentVars } from "@/lib/color";
 import { CATEGORY_LABEL, dotDate, isoDate, no, pad2, yearOf } from "@/lib/format";
 import { getPublishedProjects, type ProjectSummary } from "@/server/queries/public";
@@ -77,7 +77,7 @@ export default async function HistoryPage() {
                         className="hrow reveal"
                         data-row
                         data-title={p.title}
-                        data-preview={p.preview ? cldVideo.hover(p.preview.publicId) : undefined}
+                        data-preview={hoverUrl(p)}
                         data-poster={p.cover ? cldImage(p.cover.publicId, { w: 640 }) : p.preview ? cldVideo.poster(p.preview.publicId) : undefined}
                         style={accentVars(p)}
                       >
