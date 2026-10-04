@@ -11,7 +11,6 @@ export default async function ChangePasswordPage() {
   return (
     <main className="admin-auth">
       <div className="admin-auth__card">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img className="admin-auth__logo" src="/brand/moesoft-logo.svg" alt="Moesoft" width={210} height={66} />
         <p className="admin-auth__label">{forced ? "Please set your own password" : "Change password"}</p>
         {forced && (

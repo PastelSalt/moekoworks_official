@@ -1,0 +1,108 @@
+// Tech logos (Simple Icons, CC0) by `technologies.icon_key`. Server-side only, so unused icons never reach the browser.
+import {
+  siAndroid,
+  siAndroidstudio,
+  siChartdotjs,
+  siCloudflare,
+  siCloudinary,
+  siCss,
+  siDart,
+  siDocker,
+  siDrizzle,
+  siElectron,
+  siExpo,
+  siFfmpeg,
+  siFigma,
+  siFirebase,
+  siFlutter,
+  siGit,
+  siGithub,
+  siGodotengine,
+  siGreensock,
+  siHtml5,
+  siJavascript,
+  siJetpackcompose,
+  siKotlin,
+  siLinux,
+  siLucide,
+  siMui,
+  siMysql,
+  siNeon,
+  siNextdotjs,
+  siNodedotjs,
+  siPhp,
+  siPostgresql,
+  siPython,
+  siQt,
+  siReact,
+  siSqlite,
+  siSupabase,
+  siTailwindcss,
+  siTauri,
+  siTypescript,
+  siUnity,
+  siVercel,
+  siVite,
+  siZod,
+} from "simple-icons";
+
+export type TechIcon = { path: string; hex: string };
+
+const ICONS: Record<string, { path: string; hex: string }> = {
+  android: siAndroid,
+  androidstudio: siAndroidstudio,
+  chartdotjs: siChartdotjs,
+  cloudflare: siCloudflare,
+  cloudinary: siCloudinary,
+  css: siCss,
+  dart: siDart,
+  docker: siDocker,
+  drizzle: siDrizzle,
+  electron: siElectron,
+  expo: siExpo,
+  ffmpeg: siFfmpeg,
+  figma: siFigma,
+  firebase: siFirebase,
+  flutter: siFlutter,
+  git: siGit,
+  github: siGithub,
+  godotengine: siGodotengine,
+  greensock: siGreensock,
+  html5: siHtml5,
+  javascript: siJavascript,
+  jetpackcompose: siJetpackcompose,
+  kotlin: siKotlin,
+  linux: siLinux,
+  lucide: siLucide,
+  mui: siMui,
+  mysql: siMysql,
+  neon: siNeon,
+  nextdotjs: siNextdotjs,
+  nodedotjs: siNodedotjs,
+  php: siPhp,
+  postgresql: siPostgresql,
+  python: siPython,
+  qt: siQt,
+  react: siReact,
+  sqlite: siSqlite,
+  supabase: siSupabase,
+  tailwindcss: siTailwindcss,
+  tauri: siTauri,
+  typescript: siTypescript,
+  unity: siUnity,
+  vercel: siVercel,
+  vite: siVite,
+  zod: siZod,
+};
+
+/** Brand colours that are too pale to read on white get a darker stand-in (icons stay recognisable). */
+const READABLE: Record<string, string> = { javascript: "#C9B300", drizzle: "#7FA524", unity: "#222222", neon: "#1BA97A" };
+
+export function techIcon(key: string | null | undefined): TechIcon | null {
+  if (!key) return null;
+  const icon = ICONS[key];
+  if (!icon) return null;
+  return { path: icon.path, hex: READABLE[key] ?? `#${icon.hex}` };
+}
+
+export const TECH_ICON_KEYS = Object.keys(ICONS).sort();

@@ -1,0 +1,51 @@
+/* Project cards, tech icons (shared by Home, History and the project pages). */
+@layer components {
+  .pcard {
+    position: relative; display: flex; flex-direction: column; min-width: 0; background: var(--paper); border-radius: var(--r-card); box-shadow: var(--shadow-paper);
+    transition: translate var(--t-pop) var(--ease-pop), box-shadow var(--t-pop) var(--ease-out);
+  }
+  .pcard:hover { translate: 0 -4px; box-shadow: var(--shadow-lift); }
+  .pcard:has(.pcard__title a:focus-visible) { box-shadow: var(--focus-ring), var(--shadow-lift); }
+  .pcard__media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--r-card) var(--r-card) 0 0; background: var(--project-tint-50); }
+  .pcard--featured .pcard__media { aspect-ratio: 16 / 9; }
+  .pcard__img, .pcard__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .pcard__img { transition: scale 0.9s var(--ease-out); }
+  .pcard:hover .pcard__img { scale: 1.04; }
+  .pcard__video { opacity: 0; transition: opacity 0.4s var(--ease-out); }
+  .pcard__video[data-playing="1"] { opacity: 1; }
+  .pcard__art { position: absolute; inset: 0; background: url("/brand/pattern.svg") 0 0 / 480px, linear-gradient(140deg, var(--project-tint-100), var(--white)); }
+  .pcard__no {
+    position: absolute; top: 12px; left: 14px; z-index: 1; padding: 6px 10px 5px; border-radius: 10px; background: var(--white); color: var(--ink);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.16em; box-shadow: 0 2px 8px -2px rgb(143 31 85 / 0.3);
+  }
+  .pcard__latest { position: absolute; top: 12px; right: 14px; z-index: 1; }
+  .pcard__hint {
+    position: absolute; left: 14px; bottom: 12px; z-index: 1; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
+    border-radius: 999px; background: rgb(46 42 54 / 0.72); color: var(--white); font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; transition: opacity var(--t-pop);
+  }
+  .pcard:hover .pcard__hint, .pcard:focus-within .pcard__hint { opacity: 0; }
+  @media (hover: none) { .pcard__hint { display: none; } }
+  .pcard__body { display: grid; gap: 8px; align-content: start; flex: 1; padding: 18px 20px 20px; }
+  .pcard__title { margin: 0; font-size: var(--fs-h3); line-height: 1.15; }
+  .pcard__title a { color: var(--ink); text-decoration: none; }
+  .pcard__title a::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: var(--r-card); }
+  .pcard__title a:focus-visible { box-shadow: none; }
+  .pcard:hover .pcard__title a { color: var(--project-accent-strong); }
+  .pcard__tagline { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .pcard__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
+  .pcard--soon {
+    display: grid; place-items: center; min-height: 280px; box-shadow: none;
+    background: repeating-linear-gradient(45deg, var(--pink-50) 0 14px, var(--white) 14px 28px); border: 2px dashed var(--pink-300);
+  }
+  .pcard--soon:hover { translate: none; box-shadow: none; }
+  .pcard__soon { display: grid; justify-items: center; gap: 8px; padding: 24px; text-align: center; }
+  .pcard__soon-text { margin: 0; font-size: var(--fs-h3); font-weight: 700; }
+
+  .techicons { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .techicons li {
+    display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px;
+    background: color-mix(in oklch, var(--tc, var(--ink)) 10%, white); color: var(--tc, var(--ink)); font-size: 11px; font-weight: 700;
+  }
+  .techicons .techicons__more { width: auto; padding: 0 8px; background: var(--gray-100); color: var(--ink-soft); }
+}

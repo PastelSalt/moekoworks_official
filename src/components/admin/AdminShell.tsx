@@ -50,7 +50,6 @@ export function AdminShell({ children, unread = 0 }: { children: React.ReactNode
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%", bgcolor: "background.paper" }}>
       <Box sx={{ p: 2.5, pb: 1 }}>
         <Link href="/admin" aria-label="Dashboard">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/moesoft-logo.svg" alt="Moesoft" width={180} height={56} />
         </Link>
         <p className="admin-label" style={{ marginTop: 6 }}>Admin</p>

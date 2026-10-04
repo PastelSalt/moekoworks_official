@@ -1,0 +1,220 @@
+import { MonitorSmartphone, Palette, Server, Workflow } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Flower, Sticker, Tape } from "@/components/decor/Decor";
+import { CldImg, TechChip } from "@/components/projects/bits";
+import { Lightbox } from "@/components/projects/Lightbox";
+import { PageHead } from "@/components/site/PageHead";
+import { SectionHead } from "@/components/site/SectionHead";
+import { cldImage, cldSrcSet } from "@/lib/cloudinary";
+import { isoDate, longDate, pad2 } from "@/lib/format";
+import { site } from "@/lib/site";
+import { getPublishedCertifications, getToolbox } from "@/server/queries/public";
+import "@/styles/pages.css";
+
+export const revalidate = 600;
+
+export const metadata: Metadata = {
+  title: "About",
+  description: "Who Kyle Zoleta is, what Moesoft makes, the toolbox and certifications.",
+  alternates: { canonical: "/about" },
+};
+
+const MAKES = [
+  { icon: Palette, title: "Creative websites", body: "Fan sites, VTuber, character and anime-themed sites, galleries and event pages that move smoothly and get the little details right.", tone: "pink", main: true },
+  { icon: Server, title: "The backends behind them", body: "Admin panels, databases, sign-in, uploads and analytics, so content can be updated without touching code.", tone: "blue" },
+  { icon: MonitorSmartphone, title: "Beyond the browser", body: "Mobile apps, and smaller desktop tools when a project needs them.", tone: "lilac" },
+  { icon: Workflow, title: "Systems work", body: "Figuring out how things should work, connecting the pieces, and keeping them running.", tone: "butter" },
+] as const;
+
+const CATEGORY_ORDER: [string, string][] = [
+  ["language", "Languages"],
+  ["framework", "Frameworks"],
+  ["library", "Libraries"],
+  ["runtime", "Runtimes"],
+  ["database", "Databases"],
+  ["cloud", "Cloud & hosting"],
+  ["service", "Services"],
+  ["platform", "Platforms"],
+  ["tool", "Tools"],
+  ["design", "Design"],
+  ["other", "Other"],
+];
+
+export default async function AboutPage() {
+  const [certs, toolbox] = await Promise.all([getPublishedCertifications(), getToolbox()]);
+  const groups = CATEGORY_ORDER.map(([key, label]) => ({ key, label, items: toolbox.filter((t) => t.category === key) })).filter((g) => g.items.length);
+
+  return (
+    <>
+      <PageHead
+        label="About"
+        title="About Moesoft"
+        giant="ABOUT"
+        micro={
+          <>
+            <span>
+              <b>No.01</b> Profile
+            </span>
+            <span>Since {site.since}</span>
+            <span>PH · GMT+8</span>
+          </>
+        }
+      >
+        <p>The person, the toolbox and the certificates behind Moesoft.</p>
+      </PageHead>
+
+      {/* No.01 — PROFILE */}
+      <section className="wrap section about-profile" aria-labelledby="profile-title">
+        <SectionHead no="No.01" label="Profile" title="Profile" id="profile-title" />
+        <div className="about-profile__grid">
+          <div className="paper paper--pad about-profile__intro reveal">
+            <Tape tone="pink" className="about-profile__tape" />
+            <p className="about-profile__hello">Hi, I&apos;m {site.owner} ✿</p>
+            <p>
+              Moesoft (Moeko Software and Technologies) is the name I make things under. I build websites from the first sketch to launch day, and I&apos;m happiest when a project has personality: a character, a fandom, a
+              world worth showing off.
+            </p>
+            <p>Behind the playful side there&apos;s a dependable one. Most of my strength is in the backend, in systems analysis, integration and operations, so everything keeps working long after launch.</p>
+          </div>
+          <dl className="facts paper reveal">
+            <div>
+              <dt>Name</dt>
+              <dd>{site.owner}</dd>
+            </div>
+            <div>
+              <dt>Makes things as</dt>
+              <dd>
+                Moesoft <span className="facts__soft">({site.legalName})</span>
+              </dd>
+            </div>
+            <div>
+              <dt>What I do</dt>
+              <dd>Creative websites, and the systems behind them</dd>
+            </div>
+            <div>
+              <dt>Focus</dt>
+              <dd>Backend · Systems analysis · Integration · Operations</dd>
+            </div>
+            <div>
+              <dt>Also</dt>
+              <dd>Mobile apps · Desktop tools</dd>
+            </div>
+            <div>
+              <dt>Based in</dt>
+              <dd>Philippines (GMT+8)</dd>
+            </div>
+            <div>
+              <dt>Since</dt>
+              <dd>{site.since}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      {/* No.02 — WHAT I MAKE */}
+      <section className="wrap section--tight makes" aria-labelledby="makes-title">
+        <SectionHead no="No.02" label="What I make" title="What I make" id="makes-title" />
+        <ul className="makes__grid">
+          {MAKES.map((m, i) => (
+            <li key={m.title} className={`makes__tile makes__tile--${m.tone} paper reveal`}>
+              <span className="makes__no" aria-hidden="true">
+                {pad2(i + 1)}
+              </span>
+              <span className="makes__icon" aria-hidden="true">
+                <m.icon size={26} strokeWidth={1.9} />
+              </span>
+              <h3 className="makes__title">{m.title}</h3>
+              <p className="makes__body">{m.body}</p>
+              {"main" in m && m.main ? (
+                <Sticker tone="butter" tilt={8} className="makes__sticker" decorative>
+                  Main
+                </Sticker>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* No.03 — TOOLBOX */}
+      <section className="wrap section toolbox-groups" aria-labelledby="toolbox-title">
+        <SectionHead no="No.03" label="Toolbox" title="Toolbox" id="toolbox-title" intro="What I build with, grouped by kind. A number shows how many published projects use it." />
+        {groups.length ? (
+          <div className="toolbox-groups__grid">
+            {groups.map((g) => (
+              <div key={g.key} className="toolbox-groups__group paper paper--pad reveal">
+                <p className="micro">
+                  <b>{pad2(g.items.length)}</b> {g.label}
+                </p>
+                <ul className="toolbox-groups__list">
+                  {g.items.map((t) => (
+                    <li key={t.id}>
+                      <TechChip tech={t} count={t.projects || undefined} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="note">
+            <Flower size={18} /> The toolbox is being unpacked ✿
+          </p>
+        )}
+      </section>
+
+      {/* No.04 — CERTIFICATIONS */}
+      <section className="wrap section certifications" id="certifications" aria-labelledby="certs-title">
+        <SectionHead no="No.04" label="Certifications" title="Certifications" id="certs-title" intro="Courses and certifications I've completed, newest first." />
+        {certs.length ? (
+          <Lightbox
+            className="certgrid"
+            label="Certificate viewer"
+            items={certs.map((c) => ({
+              src: cldImage(c.media.publicId, { w: 1600 }),
+              srcSet: cldSrcSet(c.media.publicId, [800, 1200, 1600, 2000]),
+              alt: c.media.altText ?? `Certificate: ${c.title}`,
+              caption: `${c.title} · obtained ${longDate(c.obtainedOn)}`,
+              width: c.media.width,
+              height: c.media.height,
+            }))}
+          >
+            <ul className="certgrid__list">
+              {certs.map((c, i) => (
+                <li key={c.id} className="cert paper reveal">
+                  <Tape tone={(["pink", "blue", "lilac", "butter"] as const)[i % 4]} className="cert__tape" />
+                  <button type="button" className="cert__open" data-lb={i} aria-label={`View certificate: ${c.title}`}>
+                    <span className="cert__frame">
+                      <CldImg media={{ ...c.media, altText: c.media.altText ?? `Certificate: ${c.title}` }} sizes="(min-width: 900px) 30vw, 90vw" maxWidth={1200} />
+                    </span>
+                  </button>
+                  <div className="cert__body">
+                    <h3 className="cert__title">{c.title}</h3>
+                    <p className="micro">
+                      Obtained <time dateTime={isoDate(c.obtainedOn)}>{longDate(c.obtainedOn)}</time>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Lightbox>
+        ) : (
+          <p className="note">
+            <Flower size={18} /> Certificates will appear here soon ✿
+          </p>
+        )}
+      </section>
+
+      <section className="wrap section--tight about-next">
+        <div className="about-next__row">
+          <Link className="btn" href="/history">
+            See my projects →
+          </Link>
+          <Link className="btn btn--blue" href="/contact">
+            Ask me something
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}

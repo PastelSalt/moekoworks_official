@@ -1,0 +1,85 @@
+/* Motion (plan §7). One tempo: 120 BPM → var(--beat) = 500 ms. Only transform / opacity animate.
+   Arrival choreography waits for the splash (html[data-splash="show"] pauses it). Calm mode keeps the page still. */
+@layer motion {
+  @keyframes ms-spin { to { rotate: 1turn; } }
+  @keyframes ms-drift { to { transform: translate3d(0, 960px, 0); } }
+  @keyframes ms-breathe { to { transform: scale(1.07) rotate(2deg); } }
+  @keyframes ms-pop-letter { from { opacity: 0; transform: translateY(0.55em) scale(0.6) rotate(-10deg); } 60% { opacity: 1; } }
+  @keyframes ms-draw { from { transform: scaleX(0); } }
+  @keyframes ms-rise { from { opacity: 0; transform: translateY(36px); } }
+  @keyframes ms-fade { from { opacity: 0; } }
+  @keyframes ms-drop { from { opacity: 0; transform: translateY(-28px) rotate(-3deg) scale(0.97); } 60% { opacity: 1; } }
+  @keyframes ms-stick { from { opacity: 0; transform: scale(1.35) rotate(-14deg); } 60% { opacity: 1; } }
+  @keyframes ms-slide-in { from { transform: translateX(-100%); } }
+  @keyframes ms-giant-rise { from { opacity: 0; transform: translateY(0.22em); } }
+  @keyframes ms-twinkle { 0%, 100% { transform: scale(0.6) rotate(0deg); opacity: 0.45; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+  @keyframes ms-float { 50% { transform: translateY(-10px) rotate(6deg); } }
+  @keyframes ms-bob { 50% { transform: translateY(6px); } }
+  @keyframes ms-reveal { from { opacity: 0; transform: translateY(44px) scale(0.97); } }
+  @keyframes ms-reveal-pop { from { opacity: 0; transform: scale(0.72) rotate(-7deg); } 70% { opacity: 1; } }
+  @keyframes ms-parallax { from { transform: translateY(60px); } to { transform: translateY(-60px); } }
+
+  /* ── always-on loops (full motion only) ── */
+  :root[data-motion="full"] .stage__pattern { animation: ms-drift 140s linear infinite; }
+  :root[data-motion="full"] .stage__wash { animation: ms-breathe calc(var(--beat) * 24) var(--ease-in-out) infinite alternate; }
+  :root[data-motion="full"] .stage__wash--blue { animation-delay: calc(var(--beat) * -10); }
+  :root[data-motion="full"] .badge__ring { animation: ms-spin 18s linear infinite; }
+  :root[data-motion="full"] .badge--link:hover .badge__ring { animation-duration: 6s; }
+  :root[data-motion="full"] .twinkle { animation: ms-twinkle calc(var(--beat) * 4) var(--ease-in-out) infinite; animation-delay: calc(var(--d, 0) * 1s); }
+  :root[data-motion="full"] .float { animation: ms-float calc(var(--beat) * 6) var(--ease-in-out) infinite; animation-delay: calc(var(--d, 0) * 1s); }
+  :root[data-motion="full"] .bob { animation: ms-bob calc(var(--beat) * 3) var(--ease-in-out) infinite; }
+  :root[data-motion="full"] .splash__bg::after { animation: ms-drift 90s linear infinite; }
+
+  /* ── arrival (plays on load; paused under the splash so it starts when the stage is revealed) ── */
+  :root[data-motion="full"] .arrive { animation: ms-rise var(--t-glide) var(--ease-out) both; animation-delay: calc(var(--beat) * var(--a, 0)); }
+  :root[data-motion="full"] .arrive--drop { animation-name: ms-drop; animation-timing-function: var(--ease-pop); }
+  :root[data-motion="full"] .arrive--stick { animation: ms-stick var(--t-move) var(--ease-pop) both; animation-delay: calc(var(--beat) * var(--a, 0)); }
+  :root[data-motion="full"] .arrive--fade { animation-name: ms-fade; }
+  :root[data-motion="full"] .arrive--giant { animation: ms-giant-rise calc(var(--beat) * 3) var(--ease-out) both; animation-delay: calc(var(--beat) * var(--a, 0)); }
+  :root[data-motion="full"] .arrive--draw { animation: ms-draw calc(var(--beat) * 2) var(--ease-out) both; animation-delay: calc(var(--beat) * var(--a, 0)); }
+  :root[data-motion="full"] .pop--load .pop__c { animation: ms-pop-letter var(--t-move) var(--ease-pop) both; animation-delay: calc(var(--beat) * var(--a, 0.4) + var(--i) * 34ms); }
+  /* the sidebar slides in only when the splash is skipped (after the splash, the flying logo is the arrival) */
+  @media (min-width: 900px) {
+    :root[data-motion="full"][data-splash="skip"] .sidebar { animation: ms-slide-in var(--t-glide) var(--ease-out) both; }
+  }
+  :root[data-splash="show"] :is(.arrive, .arrive--stick, .arrive--giant, .arrive--draw, .pop--load .pop__c) { animation-play-state: paused; }
+
+  /* ── letter pops on scroll (JS adds .pop--wait below the fold, then .is-in) ── */
+  :root[data-motion="full"] .pop--wait:not(.is-in) .pop__c { opacity: 0; }
+  :root[data-motion="full"] .pop--wait.is-in .pop__c { animation: ms-pop-letter var(--t-move) var(--ease-pop) both; animation-delay: calc(var(--i) * 34ms); }
+  :root[data-motion="full"] .shead:has(.pop--wait.is-in) .shead__rule { animation: ms-draw calc(var(--beat) * 2) var(--ease-out) both; }
+  :root[data-motion="full"] .shead:has(.pop--wait:not(.is-in)) .shead__rule { transform: scaleX(0); }
+
+  /* ── scroll-driven life (native CSS, progressive enhancement, like kotoha) ── */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports ((animation-timeline: view()) and (animation-range: entry)) {
+      :root[data-motion="full"] .reveal { animation: ms-reveal linear backwards; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+      :root[data-motion="full"] .reveal-pop { animation: ms-reveal-pop linear backwards; animation-timeline: view(); animation-range: entry 10% cover 30%; }
+      :root[data-motion="full"] .parallax { animation: ms-parallax linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    }
+  }
+
+  /* velocity lean: MotionRoot sets --lean on <html> (−2…2) while scrolling */
+  .lean { rotate: calc(var(--rest-rot, 0deg) + var(--lean, 0) * 1deg); }
+
+  /* cursor sparkles */
+  .sparkle-layer { position: fixed; inset: 0; z-index: 990; pointer-events: none; overflow: hidden; }
+  .sparkle-layer svg { position: absolute; top: 0; left: 0; opacity: 0; will-change: transform, opacity; }
+
+  /* dialogs (menu sheet, lightbox) */
+  .sheet, .lightbox {
+    opacity: 0; transform: translateY(14px) scale(0.985);
+    transition-property: opacity, transform, display, overlay; transition-duration: 0.34s; transition-timing-function: var(--ease-out); transition-behavior: allow-discrete;
+  }
+  .sheet[open], .lightbox[open] { opacity: 1; transform: none; }
+  @starting-style { .sheet[open], .lightbox[open] { opacity: 0; transform: translateY(14px) scale(0.985); } }
+
+  /* ── calm mode: still page, short fades only ── */
+  :root[data-motion="calm"] *, :root[data-motion="calm"] *::before, :root[data-motion="calm"] *::after { transition-duration: 0.15s !important; }
+  :root[data-motion="calm"] .lean { rotate: var(--rest-rot, 0deg); }
+  :root[data-motion="calm"] .sheet, :root[data-motion="calm"] .lightbox { transform: none; }
+  :root[data-motion="calm"] ::view-transition-group(*), :root[data-motion="calm"] ::view-transition-old(*), :root[data-motion="calm"] ::view-transition-new(*) { animation: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  }
+}

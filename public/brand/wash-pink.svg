@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="760" viewBox="0 0 900 760"><defs><radialGradient id="a" r="0.5"><stop offset="0" stop-color="#FFB4E3" stop-opacity=".30"/><stop offset=".62" stop-color="#FFB4E3" stop-opacity=".42"/><stop offset=".86" stop-color="#F27FB8" stop-opacity=".55"/><stop offset=".97" stop-color="#F27FB8" stop-opacity=".18"/><stop offset="1" stop-color="#F27FB8" stop-opacity="0"/></radialGradient>
+<radialGradient id="b" r="0.5"><stop offset="0" stop-color="#FFB4E3" stop-opacity=".18"/><stop offset=".7" stop-color="#FFB4E3" stop-opacity=".26"/><stop offset=".9" stop-color="#F27FB8" stop-opacity=".34"/><stop offset="1" stop-color="#F27FB8" stop-opacity="0"/></radialGradient><filter id="w" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="3" seed="4" result="n"/>
+<feDisplacementMap in="SourceGraphic" in2="n" scale="150" xChannelSelector="R" yChannelSelector="G" result="d"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="7" result="g"/>
+<feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.9 1.25" result="gm"/>
+<feComposite in="d" in2="gm" operator="in" result="grain"/>
+<feGaussianBlur in="grain" stdDeviation="0.8"/>
+</filter></defs><g filter="url(#w)"><ellipse cx="150" cy="110" rx="420" ry="300" transform="rotate(-12 150 110)" fill="url(#a)"/><ellipse cx="430" cy="60" rx="260" ry="170" transform="rotate(8 430 60)" fill="url(#b)"/><ellipse cx="70" cy="380" rx="200" ry="250" transform="rotate(4 70 380)" fill="url(#a)"/><ellipse cx="300" cy="280" rx="170" ry="120" transform="rotate(-20 300 280)" fill="url(#b)"/></g></svg>

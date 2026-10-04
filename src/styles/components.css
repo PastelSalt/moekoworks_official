@@ -1,0 +1,204 @@
+/* Shared public components: stage, labels, titles, chips, buttons, paper, stickers, tape, badge, marquee, giant words. */
+@layer components {
+  /* ── Containers ────────────────────────────────────────────────────── */
+  .wrap { width: 100%; max-width: calc(var(--content-max) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+  .section { position: relative; padding-block: var(--section-y); }
+  .section--tight { padding-block: calc(var(--section-y) * 0.6); }
+
+  /* ── Pattern stage (Miku Expo key-visual ground, pastel) ───────────── */
+  .stage {
+    position: relative; isolation: isolate; overflow: hidden;
+    background: linear-gradient(150deg, var(--pink-100) 0%, #fdf2f9 40%, #f6f6fd 64%, var(--blue-100) 100%);
+  }
+  .stage__bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .stage__pattern { position: absolute; inset: -960px 0 0; background: url("/brand/pattern.svg") 0 0 / 960px 960px repeat; }
+  .stage__wash { position: absolute; width: min(64vw, 860px); aspect-ratio: 900 / 760; background: center / contain no-repeat; }
+  .stage__wash--pink { top: -12%; left: -12%; background-image: url("/brand/wash-pink.svg"); }
+  .stage__wash--blue { right: -12%; bottom: -14%; background-image: url("/brand/wash-blue.svg"); }
+  .stage--short .stage__wash { width: min(52vw, 640px); }
+  .stage--accent { background: linear-gradient(150deg, var(--project-tint-100), var(--paper) 50%, color-mix(in oklch, var(--project-accent-2, var(--blue-300)) 18%, white)); }
+
+  /* ── Micro-labels & data chips (dense, Japanese-web) ───────────────── */
+  .micro { margin: 0; font-size: 11px; font-weight: 700; line-height: 1.45; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); }
+  .micro b, .micro .no { color: var(--pink-700); font-weight: 700; }
+  .micro--row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+  .micro--row > * + *::before { content: "·"; margin-right: 14px; color: var(--pink-400); }
+  .micro--row.micro--bare > * + *::before { content: none; }
+
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: var(--r-chip);
+    background: var(--gray-100); color: var(--ink); font-size: 11px; font-weight: 700; line-height: 1; letter-spacing: 0.12em;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .chip--pink { background: var(--pink-100); color: var(--pink-800); }
+  .chip--blue { background: var(--blue-100); color: var(--blue-800); }
+  .chip--lilac { background: var(--lilac-100); color: var(--violet-700); }
+  .chip--white { background: var(--white); box-shadow: inset 0 0 0 1px var(--gray-200); }
+  .chip--accent { background: var(--project-tint-100); color: var(--project-accent-strong); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gray-400); flex: none; }
+  .dot--live { background: #2e9e5b; box-shadow: 0 0 0 3px rgb(46 158 91 / 0.18); }
+  .dot--build { background: #e0a92e; box-shadow: 0 0 0 3px rgb(224 169 46 / 0.2); }
+
+  /* ── Titles ────────────────────────────────────────────────────────── */
+  /* Section head: "No.02 — WORKS" micro-label, tracked title, long underline (Miku Expo) */
+  .shead { position: relative; display: grid; gap: 8px; margin-bottom: clamp(24px, 3.6vw, 44px); }
+  .shead__label { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 11.5px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-soft); }
+  .shead__no { color: var(--pink-700); }
+  .shead__dash { width: 26px; height: 2px; border-radius: 2px; background: var(--pink-400); }
+  .shead__row { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; }
+  .shead__title { margin: 0; font-size: var(--fs-h2); font-weight: 700; line-height: var(--lh-tight); letter-spacing: 0.14em; text-transform: uppercase; }
+  .shead__rule { position: relative; display: block; height: 2px; margin-top: 4px; background: var(--ink); border-radius: 2px; transform-origin: left; }
+  .shead__rule::before { content: ""; position: absolute; left: 0; top: -2px; width: 44px; height: 6px; border-radius: 6px; background: var(--pink-400); }
+  .shead__intro { max-width: 62ch; margin: 6px 0 0; color: var(--ink-soft); }
+
+  /* Letter-pop (kotoha): see motion.css for the animation */
+  .pop { display: inline; }
+  .pop__w { display: inline-block; white-space: nowrap; }
+  .pop__c { display: inline-block; }
+
+  /* ── Links & buttons ───────────────────────────────────────────────── */
+  .more {
+    position: relative; display: inline-flex; align-items: center; gap: 0.5em; padding-bottom: 7px;
+    color: var(--ink); font-weight: 700; letter-spacing: 0.16em; text-decoration: none; text-transform: lowercase;
+  }
+  .more::after { content: ""; position: absolute; left: 0; bottom: 0; width: 24px; height: 3px; border-radius: 3px; background: var(--pink-500); transition: width var(--t-move) var(--ease-out); }
+  .more:hover::after, .more:focus-visible::after { width: 100%; }
+  .more--caps { text-transform: uppercase; font-size: 13px; letter-spacing: 0.2em; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px;
+    border: 2px solid var(--outline); border-radius: var(--r-pill); background: var(--pink-300); color: var(--ink);
+    font: 700 15px/1 var(--font); letter-spacing: 0.04em; text-decoration: none; cursor: pointer; white-space: nowrap;
+    box-shadow: 3px 4px 0 var(--lilac-300);
+    transition: translate var(--t-tap) var(--ease-out), box-shadow var(--t-tap) var(--ease-out), background-color var(--t-pop);
+  }
+  .btn:hover { translate: -1px -2px; box-shadow: 5px 6px 0 var(--lilac-300); background: var(--pink-400); }
+  .btn:active { translate: 2px 3px; box-shadow: 1px 1px 0 var(--lilac-300); }
+  .btn--blue { background: var(--blue-300); }
+  .btn--blue:hover { background: var(--blue-400); }
+  .btn--white { background: var(--white); }
+  .btn--white:hover { background: var(--pink-50); }
+  .btn--accent { background: var(--project-accent); color: var(--project-on-accent); }
+  .btn--accent:hover { background: color-mix(in oklch, var(--project-accent) 85%, var(--ink)); }
+  .btn[aria-disabled="true"], .btn:disabled { opacity: 0.55; cursor: not-allowed; translate: none; box-shadow: none; }
+
+  /* ── Paper, stickers, tape ─────────────────────────────────────────── */
+  .paper { position: relative; background: var(--paper); border-radius: var(--r-card); box-shadow: var(--shadow-paper); }
+  .paper--pad { padding: clamp(20px, 2.6vw, 32px); }
+  .paper--dots { background-image: radial-gradient(rgb(180 42 108 / 0.07) 1px, transparent 1.2px); background-size: 22px 22px; }
+  .paper--lilac { background-color: var(--lilac-100); }
+
+  .sticker {
+    display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px 6px; border: var(--outline-sticker); border-radius: var(--r-pill);
+    background: var(--pink-300); color: var(--ink); font-size: 12px; font-weight: 700; line-height: 1; letter-spacing: 0.16em; text-transform: uppercase;
+    box-shadow: var(--shadow-sticker); rotate: var(--tilt, -6deg); white-space: nowrap;
+  }
+  .sticker--blue { background: var(--blue-300); }
+  .sticker--lilac { background: var(--lilac-300); }
+  .sticker--butter { background: var(--butter-300); }
+  .sticker--white { background: var(--white); }
+  .sticker--ink { background: var(--ink); color: var(--white); box-shadow: 4px 5px 0 var(--pink-300); }
+
+  .tape {
+    position: absolute; z-index: 2; width: 104px; height: 28px; pointer-events: none;
+    background: repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.4) 0 6px, transparent 6px 12px), rgb(255 180 227 / 0.78);
+    clip-path: polygon(0 0, 100% 0, 97% 20%, 100% 40%, 97% 60%, 100% 80%, 97% 100%, 3% 100%, 0 80%, 3% 60%, 0 40%, 3% 20%);
+    filter: drop-shadow(0 1px 1px rgb(143 31 85 / 0.15));
+  }
+  .tape--blue { background-color: rgb(160 207 252 / 0.8); }
+  .tape--lilac { background-color: rgb(226 168 242 / 0.78); }
+  .tape--butter { background-color: rgb(248 217 90 / 0.75); }
+
+  /* ── Rotating text badge ───────────────────────────────────────────── */
+  .badge { position: relative; display: inline-grid; place-items: center; width: var(--badge, 132px); height: var(--badge, 132px); border-radius: 50%; color: var(--ink); text-decoration: none; flex: none; }
+  .badge__ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .badge__disc { fill: var(--white); stroke: var(--outline); stroke-width: 2.5; }
+  .badge__text { font-family: var(--font); font-size: 17px; font-weight: 700; letter-spacing: 0.06em; fill: var(--ink); }
+  .badge__core { position: relative; width: 40%; }
+  .badge__core img { width: 100%; height: auto; }
+  .badge--link { filter: drop-shadow(4px 5px 0 var(--lilac-300)); transition: scale var(--t-pop) var(--ease-pop); }
+  .badge--link:hover { scale: 1.06; }
+  .badge--link .badge__disc { fill: var(--pink-300); }
+  .badge--accent .badge__disc { fill: var(--project-accent); }
+  .badge--accent .badge__text { fill: var(--project-on-accent); }
+
+  /* ── Marquee ribbon ────────────────────────────────────────────────── */
+  .marquee { position: relative; overflow: hidden; padding-block: 14px; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .marquee__track { display: flex; width: max-content; will-change: transform; }
+  .marquee__group { display: flex; flex: none; align-items: center; gap: 12px; padding-right: 12px; }
+  .ribbon { background: var(--ink); color: var(--white); rotate: -1.2deg; margin-inline: -2%; padding-block: 12px; mask-image: none; }
+  .ribbon__item { display: inline-flex; align-items: center; gap: 14px; font-size: clamp(14px, 1.3vw, 18px); font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; white-space: nowrap; }
+
+  /* ── Giant outlined words ──────────────────────────────────────────── */
+  .giant {
+    position: absolute; pointer-events: none; user-select: none; z-index: 0;
+    font-family: var(--font-logo); font-size: var(--fs-giant); font-weight: 400; line-height: 0.8; letter-spacing: 0.01em; white-space: nowrap;
+    color: rgb(255 255 255 / 0.28); -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.95); paint-order: stroke fill;
+  }
+  .giant--pink { color: transparent; -webkit-text-stroke-color: var(--pink-200); }
+  .giant--blue { color: transparent; -webkit-text-stroke-color: var(--blue-200); }
+  .giant--accent { color: transparent; -webkit-text-stroke-color: color-mix(in oklch, var(--project-accent) 50%, white); }
+
+  /* ── Vertical text (HSL) ───────────────────────────────────────────── */
+  .vtext { display: flex; flex-direction: row-reverse; gap: 4px; pointer-events: none; }
+  .vtext__line { writing-mode: vertical-rl; text-orientation: upright; font-size: 14px; font-weight: 700; line-height: 1; letter-spacing: 0.04em; color: var(--pink-500); text-transform: uppercase; }
+  .vtext__line--blue { color: var(--blue-500); }
+
+  /* ── Tech chips ────────────────────────────────────────────────────── */
+  .tech {
+    --tc: var(--ink); display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 10px; border-radius: var(--r-chip);
+    background: color-mix(in oklch, var(--tc) 9%, white); color: var(--ink); font-size: 13px; font-weight: 700; white-space: nowrap;
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--tc) 16%, white);
+  }
+  .tech svg { color: var(--tc); flex: none; }
+  .tech__mono { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 6px; background: var(--tc); color: var(--white); font-size: 10px; }
+  .tech--lg { height: 44px; padding: 0 16px 0 12px; font-size: 15px; border-radius: 14px; }
+  .tech__count { margin-left: 2px; padding: 2px 6px; border-radius: 8px; background: var(--white); color: var(--ink-soft); font-size: 10.5px; letter-spacing: 0.06em; }
+
+  /* ── Media frames ──────────────────────────────────────────────────── */
+  .frame { position: relative; overflow: hidden; border-radius: var(--r-card); background: var(--white); box-shadow: var(--shadow-paper); }
+  .frame img, .frame video { width: 100%; height: 100%; object-fit: cover; }
+  .frame--browser { padding-top: 30px; border: 2px solid var(--outline); box-shadow: var(--shadow-sticker); }
+  .frame--browser::before {
+    content: ""; position: absolute; inset: 0 0 auto; height: 30px; background: var(--white); border-bottom: 2px solid var(--outline);
+  }
+  .frame__dots { position: absolute; top: 7px; left: 12px; z-index: 1; display: flex; gap: 5px; }
+  .frame__url {
+    position: absolute; top: 6px; left: 50%; translate: -50% 0; z-index: 1; max-width: 55%; height: 18px; padding: 0 12px; border-radius: 999px;
+    background: var(--gray-100); color: var(--ink-soft); font-size: 10.5px; font-weight: 700; line-height: 18px; letter-spacing: 0.04em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .frame--phone { border-radius: 34px; border: 7px solid var(--outline); box-shadow: var(--shadow-sticker); }
+
+  /* ── Empty / notes ─────────────────────────────────────────────────── */
+  .note { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 16px; background: var(--pink-50); color: var(--ink-soft); font-size: 14px; }
+  .prose { max-width: 70ch; }
+  .prose > * { margin-block: 0 1em; }
+  .prose h3 { margin-top: 1.6em; font-size: var(--fs-h3); line-height: 1.25; }
+  .prose h4 { margin-top: 1.4em; font-size: 1.1em; }
+  .prose ul, .prose ol { padding-left: 1.3em; }
+  .prose li + li { margin-top: 0.35em; }
+  .prose li::marker { color: var(--pink-500); }
+  .prose blockquote { margin-inline: 0; padding: 12px 18px; border-left: 4px solid var(--pink-300); border-radius: 0 14px 14px 0; background: var(--pink-50); color: var(--ink-soft); }
+  .prose code { padding: 0.1em 0.4em; border-radius: 6px; background: var(--gray-100); font-size: 0.92em; }
+  .prose a { color: var(--pink-700); font-weight: 700; }
+}
+
+/* ── Inner-page head (Miku Expo title + long underline + page label, on a short stage band) ── */
+@layer components {
+  .phead { display: grid; align-content: end; min-height: clamp(330px, 36vw, 460px); padding: clamp(96px, 10vw, 140px) 0 clamp(36px, 4.4vw, 60px); }
+  .phead__label {
+    position: absolute; z-index: 2; top: clamp(20px, 2.6vw, 36px); right: var(--gutter); margin: 0; display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--ink);
+  }
+  .phead__inner { position: relative; z-index: 2; display: grid; gap: 12px; }
+  .phead__micro b { color: var(--pink-700); }
+  .phead__title { margin: 0; font-size: var(--fs-h1); font-weight: 700; line-height: 1.1; letter-spacing: 0.16em; text-transform: uppercase; }
+  .phead__rule { position: relative; z-index: 2; display: block; width: min(64%, 820px); height: 2px; margin-top: 18px; background: var(--ink); transform-origin: left; }
+  .phead__rule::after { content: ""; position: absolute; top: -4px; right: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--pink-500); box-shadow: 0 0 0 3px var(--white); }
+  .phead__lead { position: relative; z-index: 2; margin-top: 22px; }
+  .phead__lead > p { max-width: 64ch; margin: 0; padding: 16px 22px; border-radius: 20px; background: rgb(255 255 255 / 0.84); box-shadow: var(--shadow-paper); color: var(--ink-soft); }
+  .phead__giant { right: -0.04em; bottom: -0.22em; font-size: clamp(110px, 3rem + 13vw, 290px); }
+  @media (max-width: 899px) { .phead { padding-top: 72px; } .phead__label { top: 18px; font-size: 11px; } }
+}
