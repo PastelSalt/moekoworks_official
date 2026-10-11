@@ -12,7 +12,8 @@
     "db:migrate": "drizzle-kit migrate",
     "admin:seed": "tsx scripts/admin-seed.mts",
     "seed:tech": "tsx scripts/seed-tech.mts",
-    "seed:kotoha": "tsx scripts/seed-kotoha.mts"
+    "seed:kotoha": "tsx scripts/seed-kotoha.mts",
+    "seed:hanon": "tsx scripts/seed-hanon.mts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",

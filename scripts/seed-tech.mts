@@ -1,4 +1,4 @@
-// Tech catalog seed (idempotent upsert by slug). Only technologies actually used in Kotoha or in this site.
+// Tech catalog seed (idempotent upsert by slug). Only technologies actually used in a portfolio project or in this site.
 //   npm run seed:tech [-- --dry-run]
 import { sql } from "drizzle-orm";
 import { db, schema } from "./_db.mts";
@@ -27,6 +27,7 @@ export const TECH: T[] = [
   { slug: "nodejs", name: "Node.js", category: "runtime", iconKey: "nodedotjs", url: "https://nodejs.org/" },
   { slug: "postgresql", name: "PostgreSQL", category: "database", iconKey: "postgresql", url: "https://www.postgresql.org/" },
   { slug: "neon", name: "Neon", category: "database", iconKey: "neon", url: "https://neon.com/" },
+  { slug: "pglite", name: "PGlite", category: "database", color: "#5D5869", url: "https://pglite.dev/" },
   { slug: "vercel", name: "Vercel", category: "cloud", iconKey: "vercel", url: "https://vercel.com/" },
   { slug: "cloudinary", name: "Cloudinary", category: "service", iconKey: "cloudinary", url: "https://cloudinary.com/" },
   { slug: "youtube", name: "YouTube embeds", category: "service", iconKey: "youtube", url: "https://developers.google.com/youtube" },

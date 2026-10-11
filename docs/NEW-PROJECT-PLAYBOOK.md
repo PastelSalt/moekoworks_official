@@ -74,9 +74,13 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
   `src/lib/cloudinary.ts`; never next/image (rule `@next/next/no-img-element` is off on purpose).
 - Motion: Lenis (desktop + full motion), CSS scroll-driven reveals, server-split letter pops, cursor sparkles,
   canvas-confetti; calm mode via `html[data-motion]`. Splash via `html[data-splash = show|done|skip]`.
-- Tooling: Node 24, `tsx` for scripts (scripts are **`.mts`** with explicit `.ts` imports), Playwright-core
-  driving **`/usr/bin/google-chrome-stable`** (no browser download), ffmpeg 9 (libx264, libvpx-vp9),
-  ImageMagick 7 (`magick`), `gh` logged in as PastelSalt.
+- Tooling: Node 24+ (26 on the current machine), `tsx` for scripts (scripts are **`.mts`** with explicit `.ts`
+  imports), Playwright-core driving **`/usr/bin/google-chrome-stable`** (no browser download), `gh` logged in
+  as PastelSalt. Since the move to `~/Desktop/Moesoft/moesoft_official` (2026-10-11) the machine has no system
+  ffmpeg / ImageMagick: `ffmpeg-static` + `ffprobe-static` installed with npm in the scratchpad
+  (`<scratch>/tools`, binary at `node_modules/ffmpeg-static/ffmpeg`, no `drawtext` filter) work, and stills /
+  contact sheets use the repo's `sharp` (`createRequire(<repo>/package.json)("sharp")`).
+  `scripts/capture/encode-hanon.sh` already works this way (`FFMPEG=<path> ./encode-hanon.sh`).
 
 ### 2.2 Accounts & IDs
 | What | Value |
@@ -91,6 +95,7 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
 | Cloudinary | cloud `dijqsw0k8`; folders `moesoft-official/{projects/<slug>,certifications,site}`; presets `moesoft_images_signed`, `moesoft_videos_signed` (signed, `disallow_public_id`, `unique_filename`, `overwrite: false`) |
 | Video preset eager list | `c_limit,q_auto,vc_h264,w_1280/mp4` · `c_limit,q_auto,vc_vp9,w_1280/webm` · `c_limit,du_8,q_auto,vc_h264,w_854/mp4` · `c_limit,q_auto,so_auto,w_1280/jpg` |
 | Kotoha | live https://kotoha-fansite.vercel.app/ · repo `PastelSalt/kotoha-fansite` (may be private; clone with `gh`) |
+| Hanon | live https://hanon-fansite.vercel.app/ · repo `PastelSalt/hanon-fansite` · Neon `broad-flower-24329862` (branch `main` = `br-falling-water-az0enons`, db `hanon`) · tracking `/api/track` (same code base as Kotoha) |
 
 ### 2.3 Environment variables (names only — values live in `.env.local` and Vercel)
 `NEXT_PUBLIC_SITE_URL`, `SITE_TIMEZONE` (Asia/Manila), `DATABASE_URL` (pooled), `DATABASE_URL_UNPOOLED`
@@ -111,7 +116,7 @@ Check names without decrypting: Vercel MCP `filter_project_envs` (never pass `de
 | Public queries | `src/server/queries/public.ts` (React `cache()`d) |
 | Admin | `src/app/admin/(panel)/*`, `src/components/admin/*`, actions in `src/server/admin/*` |
 | Formatting / colour / markdown | `src/lib/{format,color,markdown,cloudinary,tech-icons,op-icons}.ts(x)` |
-| Seeds & capture | `scripts/seed-tech.mts`, `scripts/seed-kotoha.mts`, `scripts/capture/{kotoha.mts,encode.sh}`, outputs in `scripts/capture/out/` (git-ignored) |
+| Seeds & capture | `scripts/seed-tech.mts`, `scripts/seed-{kotoha,hanon}.mts`, `scripts/capture/{kotoha,hanon}.mts`, `encode.sh` / `encode-hanon.sh`, `uploads-from-db.mts`; outputs in `scripts/capture/out/` (git-ignored) |
 
 ### 2.5 How a project becomes pages
 Tables: `projects` (1 row) → `project_links`, `project_technologies` (→ `technologies`), `project_operations`,
@@ -346,6 +351,10 @@ npm run seed:<slug> -- --replace    # re-run after changes (pre-publish)
 ```
 Media are inserted first (returning ids), then operations reference their screenshot ids.
 
+**Lost `uploads.json`?** (`scripts/capture/out/` is git-ignored, so a new machine or a moved repo loses it.)
+Rebuild it from the project's media rows before a `--replace`:
+`npx tsx scripts/capture/uploads-from-db.mts <project slug> <out folder>` (e.g. `kotoha-fansite kotoha`).
+
 ### 8.3 Alt text & captions (required before publishing)
 Every image needs alt text (publish is blocked otherwise). Write what's on screen ("Admin panel: the fan-art
 gallery with a drop zone for uploads and credit editing."); captions are short and optional.
@@ -394,7 +403,8 @@ Deleting a media item deletes the row **and** the Cloudinary file.
 ### 11.1 Screenshot helper (`<scratch>/shot.mjs`)
 ```js
 // node shot.mjs <path> <name> [w=1440] [h=900] [--scroll=<css selector|px>] [--mobile] [--full] [--live]
-import { chromium } from "/home/moeko/Documents/moesoft_official/node_modules/playwright-core/index.mjs";
+import { createRequire } from "node:module";
+const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
 const [, , path = "/", name = "shot", w = "1440", h = "900", ...flags] = process.argv;
 const has = (f) => flags.includes(f);
 const base = has("--live") ? "https://moesoft.vercel.app" : "http://localhost:3000";
@@ -424,7 +434,8 @@ await b.close();
 ### 11.2 Frame-rate probe (decide the capture size)
 ```js
 // node fps.mjs <w> <h> gpu|cpu  → prints frames per second of a 9 s screencast of the target site
-import { chromium } from "/home/moeko/Documents/moesoft_official/node_modules/playwright-core/index.mjs";
+import { createRequire } from "node:module";
+const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
 const [, , w, h, mode] = process.argv;
 const args = mode === "gpu" ? ["--ignore-gpu-blocklist", "--use-gl=angle", "--use-angle=gl", "--enable-gpu-rasterization"] : [];
 const b = await chromium.launch({ executablePath: "/usr/bin/google-chrome-stable", headless: true, args });
@@ -449,7 +460,7 @@ Write `<scratch>/endcard.html`, screenshot at 1280×720 into `scripts/capture/ou
 html,body{margin:0;width:1280px;height:720px;overflow:hidden;font-family:Fredoka,sans-serif}
 .card{position:relative;width:1280px;height:720px;display:grid;place-items:center;
   background:linear-gradient(150deg,<accent tint>,#fffdfe 48%,<accent-2 tint>)}
-.card::before{content:"";position:absolute;inset:0;background:url(/home/moeko/Documents/moesoft_official/public/brand/pattern.svg) 0 0/720px;opacity:.9}
+.card::before{content:"";position:absolute;inset:0;background:url(/home/moeko/Desktop/Moesoft/moesoft_official/public/brand/pattern.svg) 0 0/720px;opacity:.9}
 .inner{position:relative;display:grid;justify-items:center;gap:14px;padding:44px 64px 40px;border-radius:32px;
   background:rgba(255,255,255,.86);border:2px solid #1e1a24;box-shadow:0 22px 50px -26px rgba(143,31,85,.45)}
 .label{font-size:15px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#5d5869}
@@ -459,16 +470,17 @@ h1{margin:0;font-size:64px;line-height:1;color:#2e2a36}
 .by img{width:190px}
 </style></head><body><div class="card"><div class="inner">
 <div class="label">Project · No.0N ✿</div><h1><Project title></h1><div class="url"><host></div>
-<div class="by">by <img src="/home/moeko/Documents/moesoft_official/public/brand/moesoft-logo.svg" alt=""></div>
+<div class="by">by <img src="/home/moeko/Desktop/Moesoft/moesoft_official/public/brand/moesoft-logo.svg" alt=""></div>
 </div></div></body></html>
 ```
 
 ### 11.4 Admin capture template (local copy on port 3100)
 ```js
 import { readFileSync } from "node:fs";
-import { chromium } from "/home/moeko/Documents/moesoft_official/node_modules/playwright-core/index.mjs";
+import { createRequire } from "node:module";
+const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
 const login = JSON.parse(readFileSync("<scratch>/test-login.json", "utf8"));
-const OUT = "/home/moeko/Documents/moesoft_official/scripts/capture/out/<slug>/admin/";
+const OUT = "/home/moeko/Desktop/Moesoft/moesoft_official/scripts/capture/out/<slug>/admin/";
 const b = await chromium.launch({ executablePath: "/usr/bin/google-chrome-stable", headless: true, args: ["--ignore-gpu-blocklist", "--use-gl=angle", "--use-angle=gl"] });
 const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 }, locale: "en-US", reducedMotion: "reduce" });
 const page = await ctx.newPage();
@@ -493,7 +505,7 @@ await b.close();
 # (order of name=file pairs must match the order of entries you signed)
 import json, subprocess, sys
 signed, slug, pairs = json.load(open(sys.argv[1])), sys.argv[2], [a.split("=", 1) for a in sys.argv[3:]]
-OUT = f"/home/moeko/Documents/moesoft_official/scripts/capture/out/{slug}"
+OUT = f"/home/moeko/Desktop/Moesoft/moesoft_official/scripts/capture/out/{slug}"
 try: results = json.load(open(f"{OUT}/uploads.json"))
 except FileNotFoundError: results = {}
 for entry, (name, path) in zip(signed, pairs):
@@ -649,7 +661,17 @@ point first), the cron rollup and the dashboard card. Admins (cookie), bots and 
 - Kotoha capture traps: the long News section swallows wheel glides; the language switch is JS-rendered; the
   loader is removed from the DOM; block `/api/track`; the first desktop frame (~1.2 s) is blank.
 
-## 15. Worked example — Kotoha Fan Site (what "done" looked like)
+## 15. Worked examples
+
+### Hanon Fan Site (2026-10-11, project id 5)
+- Same code base as Kotoha, so `hanon.mts` is `kotoha.mts` with `SITE`/`OUT` changed (same selectors, same
+  `/api/track` block). Capture: 8 desktop + 2 phone shots, 1027 frames / 30 s screencast.
+- Edit `[0.6–23.6] ⨯fade 0.4⨯ [26.4–30.3] ⨯fade 0.5⨯ end card 2.2 s` → 28 s, 5.6 MB; hover 5.5–13.5 s (0.54 MB).
+- Accents `#79B5FF` (Hanon's bright brand blue; her image colour `#B7D7EF` is too pale as a fill) / `#FFD66B`
+  (penguin gold). 15 tech (new: PGlite), 23 operations (11 visitor · 6 admin · 6 system), 12 media.
+- Published at Kyle's request. Admin screenshots not added yet (see PROGRESS.md).
+
+### Kotoha Fan Site (what "done" looked like)
 - Record: title "Kotoha Fan Site", slug `kotoha-fansite`, tagline 150 chars, 3-paragraph description,
   category web, platforms web, lifecycle live, role "Solo developer: design, front end, back end, admin
   panel, analytics", started 2026-09-26, accents `#FE9FB9` / `#63A23D` (strong `#B55171`, on-accent ink),

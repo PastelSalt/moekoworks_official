@@ -21,6 +21,8 @@
 | P7 Messages | ✅ done (`dev`) | inbox with folders, search, bulk actions, detail, reply via e-mail (9/9 e2e) |
 | P8 Kotoha seed & media | ✅ done | 8 desktop + 2 phone shots, 29 s preview + 8 s hover loop, **7 admin shots (S4 done: temporary Neon branch `br-dawn-resonance-b3uw8bd6` created, anonymised, used, deleted; local copy + env removed)**; `seed:tech` (23) + `seed:kotoha` (19 media, admin shots on the For admins cards) |
 | Design checkpoint ✋ | ✅ approved 2026-10-04 | Kyle: design OK, copy OK, Facebook link OK, Cloudinary key + secret added (Vercel production + `.env.local`); signed upload + delete verified |
+| Hanon Fan Site ✅ | ✅ 2026-10-11 | Added from https://hanon-fansite.vercel.app (project id 5, **published**, now Latest): 8 desktop + 2 phone shots, 28 s preview + 8 s hover, 15 tech (new: PGlite), 23 operations. `scripts/capture/hanon.mts`, `encode-hanon.sh`, `seed-hanon.mts`. **Admin screenshots still to do** (see Owner to-dos) |
+| Kotoha refresh | ✅ 2026-10-11 | Seed updated for the Kotoha repo's 2026-10-09 changes: Lenis + section glides gone (op "Scroll freely"), performance-pass op, sister-site op, birthday/debut dates, AiceClass as history; re-run with `--replace`. Card 04 "Never lose anything" still has no screenshot (needs an admin Archive shot) |
 | P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
 | P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moesoft.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers; Kyle removes `moesoft-web` |
 
@@ -40,11 +42,19 @@
 - The scratchpad was wiped during a pause: the logo/pattern/wash generator scripts are gone (their outputs in `public/brand/` are final).
 
 ## Capture & seed commands
+- Repo moved to `~/Desktop/Moesoft/moesoft_official` (2026-10-11). `.env.local` was recreated with the DB URLs only
+  (Cloudinary key/secret and the admin seed values are not in it). Capture outputs were lost: rebuild
+  `uploads.json` with `npx tsx scripts/capture/uploads-from-db.mts <slug> <folder>`.
+- `npx tsx scripts/capture/hanon.mts [--shots|--video]` → `FFMPEG=<ffmpeg-static path> scripts/capture/encode-hanon.sh` → `npm run seed:hanon -- --replace`.
 - `npx tsx scripts/capture/kotoha.mts [--shots|--video]` → `scripts/capture/out/kotoha/` (git-ignored), then `scripts/capture/encode.sh`.
 - Upload: sign with the Cloudinary MCP `sign-upload`, POST with curl (deterministic public IDs, `overwrite`, eager for videos) → `uploads.json`.
 - `npm run seed:tech`, `npm run seed:kotoha -- --dry-run | --replace`.
 
 ## Owner to-dos
+- **Admin screenshots (Hanon's "For admins" cards + Kotoha card 04 "Never lose anything")**: the 2026-10-11 session
+  couldn't take them — signing in to the temporary database copies needs a throwaway login on them, which the
+  session's safety check blocked. Temporary Neon branches `moesoft-screenshots-tmp` exist on both fan-site projects
+  (Kotoha `br-misty-tooth-b300dboz`, Hanon `br-square-dew-aza0pkgr`); delete them if the shots are taken another way.
 - First login on the live site (`/admin`) → set your own password (the seed password is temporary).
 - Optional: add the Cloudinary key + secret to the **Preview** environment too if you want uploads on preview builds.
 - Submit `https://moesoft.vercel.app/sitemap.xml` in Google Search Console; remove the old `moesoft-web` project when ready.
