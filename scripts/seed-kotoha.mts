@@ -114,6 +114,8 @@ const media: [string, string, string, string, string | null][] = [
   ["admin-gallery", "operation", "browser", "Admin panel: the fan-art gallery with a drop zone for uploads and credit editing.", null],
   ["admin-accounts", "operation", "browser", "Admin panel: account management, where the owner creates admin accounts.", null],
   ["admin-account", "operation", "browser", "Admin panel: changing the password, with the live password rules.", null],
+  // captured later from a local copy on an in-memory database (two items archived there for the shot)
+  ["admin-archive", "operation", "browser", "Admin panel: the Archive, listing removed items with when, who and why, each with a Restore button.", null],
 ];
 
 // operation title → screenshot shown in its card
@@ -121,6 +123,7 @@ const opMedia: Record<string, string> = {
   "Sign in safely": "admin-account",
   "Publish content": "admin-videos",
   "Upload fan art": "admin-gallery",
+  "Never lose anything": "admin-archive",
   "Manage the team": "admin-accounts",
   "Watch the numbers": "admin-dashboard",
 };

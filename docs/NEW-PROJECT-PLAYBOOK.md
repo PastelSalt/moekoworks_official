@@ -262,7 +262,23 @@ How `kotoha.mts --video` works (keep this design):
 
 ---
 
-## 6. Step 4 — Admin screenshots via a temporary Neon branch ("S4" procedure)
+## 6. Step 4 — Admin screenshots
+
+### 6.0 Preferred (since 2026-10-11): local copy on an in-memory database
+No branch, no real database, nothing to tear down on Neon. Works for any site on the Kotoha/Hanon code base:
+```bash
+node scripts/capture/admin-local.mjs <site repo> https://<site>.vercel.app 3100 <scratch>/login.json   # background
+node scripts/capture/admin-shots.mjs <scratch>/login.json scripts/capture/out/<slug>/admin 3100
+```
+`admin-local.mjs` loads the site's migrations + seed into PGlite, copies its published gallery from the public
+API, creates a local test owner `owner` and starts the site's own `scripts/dev-server.js`. `admin-shots.mjs`
+signs in, archives the oldest news item and video in that copy (so the Archive page isn't empty) and captures
+dashboard, statistics, videos, gallery, archive, activity, accounts and account. Limitation: no visitor data,
+so the dashboard/statistics shots are empty; leave them out. Hanon's repo already has the `lib/db.js` hook;
+Kotoha needs a scratch clone with the one-line hook (see the header of `admin-local.mjs`). Delete the login
+file afterwards.
+
+### 6.1 Older procedure: temporary Neon branch ("S4")
 
 Used for Kotoha's 7 admin shots. **Ask Kyle first** (it creates/deletes a branch on that project's DB).
 Never touch the production branch; never show real usernames.

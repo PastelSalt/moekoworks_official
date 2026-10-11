@@ -108,10 +108,24 @@ const media: [string, string, string, string, string | null][] = [
   ["loader", "gallery", "browser", "Loading screen with a duo artwork, the Hanon logo, two four-point stars and a “Did you know?” fact.", "Loader: artwork, turning stars and real progress."],
   ["phone-home", "gallery", "phone", "Hanon Fan Site on a phone: logo, unit tags, social links, stream countdown, weekly schedule and the fan art of the moment.", "On a phone: Home."],
   ["phone-gallery", "gallery", "phone", "Fan-art gallery on a phone in two columns.", "On a phone: the gallery."],
+  // admin panel: captured from a local copy on an in-memory database with a local test owner shown as "owner"
+  ["admin-videos", "operation", "browser", "Admin panel: the Latest Videos list with edit, unpublish and archive actions.", null],
+  ["admin-gallery", "operation", "browser", "Admin panel: the fan-art gallery with a drop zone for uploads and credit editing.", null],
+  ["admin-archive", "operation", "browser", "Admin panel: the Archive, listing removed items with when, who and why, each with a Restore button.", null],
+  ["admin-accounts", "operation", "browser", "Admin panel: account management, where the owner creates admin accounts.", null],
+  ["admin-activity", "operation", "browser", "Admin panel: the activity log listing sign-ins and archived items.", null],
+  ["admin-account", "operation", "browser", "Admin panel: changing the password, with the live password rules.", null],
 ];
 
-// operation title → screenshot shown in its card (admin shots: none yet)
-const opMedia: Record<string, string> = {};
+// operation title → screenshot shown in its card
+const opMedia: Record<string, string> = {
+  "Sign in safely": "admin-account",
+  "Publish content": "admin-videos",
+  "Upload fan art": "admin-gallery",
+  "Never lose anything": "admin-archive",
+  "Manage the team": "admin-accounts",
+  "Watch the numbers": "admin-activity",
+};
 
 type Upload = { public_id: string; version: number; format: string; width: number; height: number; bytes: number; duration?: number; resource_type: string; dominant?: string | null };
 const uploads: Record<string, Upload> = JSON.parse(readFileSync(join(import.meta.dirname, "capture", "out", "hanon", "uploads.json"), "utf8"));
