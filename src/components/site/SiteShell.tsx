@@ -3,6 +3,7 @@ import "@/styles/shell.css";
 import "@/styles/components.css";
 import "@/styles/projects.css";
 import "@/styles/motion.css";
+import { FlowerFall } from "@/components/decor/FlowerFall";
 import { Footer } from "./Footer";
 import { MobileBar } from "./MobileBar";
 import { MotionRoot } from "./MotionRoot";
@@ -11,7 +12,7 @@ import { Sidebar } from "./Sidebar";
 import { Splash } from "./Splash";
 import { Tracker } from "./Tracker";
 
-/** The public frame: splash, sidebar (desktop) or top bar (mobile), main column, footer, PAGE TOP, motion. */
+/** The public frame: splash, falling background flowers, sidebar (desktop) or top bar (mobile), main column, footer, PAGE TOP, motion. */
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
     <>
@@ -19,6 +20,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <Splash />
+      <FlowerFall />
       <div className="site" id="top">
         <Sidebar />
         <div className="site__col">

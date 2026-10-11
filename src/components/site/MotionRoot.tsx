@@ -3,7 +3,7 @@
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { SHAPES } from "@/components/decor/shapes";
+import { FLOWER_VIEWBOX, SHAPES } from "@/components/decor/shapes";
 import { getLenis, isCalm, onMotionChange, setLenis, setScrollVelocity, wireMotionPrefs } from "@/lib/motion";
 
 const MAX_LEAN = 2; // degrees
@@ -125,6 +125,7 @@ export function MotionRoot() {
       next = (next + 1) % pool.length;
       const [shape, fill] = SPARKS[Math.floor(Math.random() * SPARKS.length)];
       path.setAttribute("d", SHAPES[shape]);
+      svg.setAttribute("viewBox", shape === "flower" ? FLOWER_VIEWBOX : "0 0 24 24");
       path.setAttribute("fill", fill);
       path.setAttribute("stroke", "#2E2A36");
       path.setAttribute("stroke-width", shape === "spark" ? "0" : "1.2");

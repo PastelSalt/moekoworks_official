@@ -57,7 +57,7 @@ export function ComingSoonCard() {
     <div className="pcard pcard--soon reveal-pop" aria-label="More projects on the way">
       <div className="pcard__soon">
         <Flower tone="pink" size={56} outline className="float" />
-        <p className="pcard__soon-text">More projects on the way ✿</p>
+        <p className="pcard__soon-text">More projects on the way&nbsp;✿</p>
         <p className="micro">Stay tuned</p>
       </div>
     </div>

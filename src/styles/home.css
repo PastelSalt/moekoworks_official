@@ -122,6 +122,15 @@
   /* ── WORKS ── */
   .works__grid { display: grid; gap: clamp(16px, 2vw, 28px); grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pcard--featured { grid-column: span 2; }
+  /* desktop: the featured card spans two rows, so the next card and the "more projects" card stack beside it instead
+     of one card stretching to the featured height; spare height goes to the second row and the featured artwork */
+  @media (min-width: 1001px) {
+    .works__grid { grid-template-rows: auto 1fr; }
+    .works__grid > .pcard--featured { grid-row: span 2; }
+    .works__grid > .pcard--featured .pcard__media { flex: 1 0 auto; }
+    .works__grid > .pcard--featured .pcard__body { flex: 0 0 auto; }
+    .works__grid > .pcard--soon { min-height: 200px; }
+  }
   @media (max-width: 1000px) { .works__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .works__grid { grid-template-columns: 1fr; } .pcard--featured { grid-column: auto; } }
 

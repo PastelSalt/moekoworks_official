@@ -1,6 +1,6 @@
 // Decorative building blocks of the "Bloom Expo" look (plan §6.1). All aria-hidden: content never depends on them.
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import { SHAPES } from "./shapes";
+import { FLOWER_VIEWBOX, SHAPES } from "./shapes";
 
 type Tone = "pink" | "blue" | "lilac" | "butter" | "white" | "ink";
 const TONES: Record<Tone, [string, string]> = {
@@ -12,11 +12,12 @@ const TONES: Record<Tone, [string, string]> = {
   ink: ["var(--ink)", "var(--pink-300)"],
 };
 
-/** The logo's five-petal flower as a tiny inline icon. */
+/** The logo's five-petal flower as a tiny inline icon. The petals overhang the 24 × 24 path box (x −0.44…24.44,
+ *  y −0.81…23.35) and the outline adds half its width, so the viewBox is padded or the edges get clipped flat. */
 export function Flower({ tone = "pink", size = 18, outline = false, className, style }: { tone?: Tone; size?: number; outline?: boolean; className?: string; style?: CSSProperties }) {
   const [petals, centre] = TONES[tone];
   return (
-    <svg className={className} style={style} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <svg className={className} style={style} width={size} height={size} viewBox={FLOWER_VIEWBOX} aria-hidden="true" focusable="false">
       <path d={SHAPES.flower} fill={petals} stroke={outline ? "var(--outline)" : "none"} strokeWidth={outline ? 1.6 : 0} strokeLinejoin="round" />
       <path d={SHAPES.flowerCentre} fill={centre} stroke={outline ? "var(--outline)" : "none"} strokeWidth={outline ? 1.3 : 0} />
     </svg>
