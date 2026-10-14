@@ -13,7 +13,7 @@ try {
   const ctx = await b.newContext({ viewport: { width: +w, height: +h } });
   await ctx.route(/\/api\/track/, (r) => r.fulfill({ status: 204 }));
   await ctx.addInitScript(
-    ({ noLean, noLenis, noFall }) => {
+    ({ noLean, noLenis }) => {
       try {
         sessionStorage.setItem("ms_splash", "1");
         localStorage.setItem("ms_nt", "1");
@@ -27,18 +27,14 @@ try {
           return o.call(this, p, ...r);
         };
       }
-      if (noFall)
-        document.addEventListener("DOMContentLoaded", () => {
-          const s = document.createElement("style");
-          s.textContent = ".flowerfall{display:none!important}";
-          document.head.append(s);
-        });
     },
-    { noLean, noLenis, noFall },
+    { noLean, noLenis },
   );
   const page = await ctx.newPage();
   const cdp = await ctx.newCDPSession(page);
   await page.goto(url, { waitUntil: "networkidle", timeout: 120000 });
+  // after hydration: React rebuilds <head> and drops styles injected before it
+  if (noFall) await page.addStyleTag({ content: ".flowerfall{display:none!important}" });
   await page.waitForTimeout(2500);
 
   const info = await page.evaluate(() => ({ nodes: document.getElementsByTagName("*").length, anims: document.getAnimations().length, running: document.getAnimations().filter((a) => a.playState === "running").length }));

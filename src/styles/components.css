@@ -125,7 +125,7 @@
 
   /* ── Marquee ribbon ────────────────────────────────────────────────── */
   .marquee { position: relative; overflow: hidden; padding-block: 14px; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-  .marquee__track { display: flex; width: max-content; will-change: transform; }
+  .marquee__track { display: flex; width: max-content; } /* animated on the compositor by Marquee.tsx */
   .marquee__group { display: flex; flex: none; align-items: center; gap: 12px; padding-right: 12px; }
   .ribbon { background: var(--ink); color: var(--white); rotate: -1.2deg; margin-inline: -2%; padding-block: 12px; mask-image: none; }
   .ribbon__item { display: inline-flex; align-items: center; gap: 14px; font-size: clamp(14px, 1.3vw, 18px); font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; white-space: nowrap; }

@@ -32,6 +32,13 @@ export const theme = createTheme({
     h6: { fontWeight: 700 },
   },
   components: {
+    // CssBaseline's `*, *::before, *::after { box-sizing: inherit }` makes every element's style depend on its parent,
+    // and with it Chrome restarted the compositor animations (falling flowers, stage) on every frame: ~0.5–0.8 s of
+    // style work per second on an idle page. Same computed result as before (html is border-box, so everything
+    // inherited border-box), declared directly; MUI's own class rules (e.g. inputs) still win. PERFORMANCE_PLAN §7.
+    MuiCssBaseline: {
+      styleOverrides: { "*, *::before, *::after": { boxSizing: "border-box" } },
+    },
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: {

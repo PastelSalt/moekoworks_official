@@ -62,19 +62,41 @@ export function saveData() {
 
 // ── Smooth scroll (Lenis, desktop only) ───────────────────────────────
 let lenis: Lenis | null = null;
-export const setLenis = (instance: Lenis | null) => {
+let wakeLenis = () => {};
+/** MotionRoot registers Lenis plus a `wake` that starts its frame loop (it only runs while scrolling). */
+export const setLenis = (instance: Lenis | null, wake: () => void = () => {}) => {
   lenis = instance;
+  wakeLenis = wake;
 };
 export const getLenis = () => lenis;
 
 export function scrollToY(y: number) {
-  if (lenis) lenis.scrollTo(y, { duration: 1.2 });
-  else window.scrollTo({ top: y, behavior: isCalm() ? "auto" : "smooth" });
+  if (lenis) {
+    lenis.scrollTo(y, { duration: 1.2 });
+    wakeLenis();
+  } else window.scrollTo({ top: y, behavior: isCalm() ? "auto" : "smooth" });
 }
 
-// ── Scroll velocity (px/ms, + = down), smoothed; drives --lean and the marquees ─────
+// ── Scroll velocity (px/ms, + = down), smoothed; drives the marquees ─────
+// MotionRoot runs the only scroll ticker (one rAF loop, only while scrolling) and publishes the velocity here.
+// Nothing per-frame is ever written on <html>: a root custom property restyles the whole page (PERFORMANCE_PLAN).
 let velocity = 0;
+let lastScroll = 0;
+const velocityListeners = new Set<(v: number) => void>();
 export const scrollVelocity = () => velocity;
 export const setScrollVelocity = (v: number) => {
   velocity = v;
+  velocityListeners.forEach((cb) => cb(v));
 };
+/** Subscribe to the smoothed scroll velocity (called once per frame while scrolling, then with 0). */
+export function onScrollVelocity(cb: (v: number) => void) {
+  velocityListeners.add(cb);
+  return () => {
+    velocityListeners.delete(cb);
+  };
+}
+export const markScrolled = () => {
+  lastScroll = performance.now();
+};
+/** Milliseconds since the page last scrolled (Infinity before the first scroll). */
+export const sinceScroll = () => (lastScroll ? performance.now() - lastScroll : Infinity);

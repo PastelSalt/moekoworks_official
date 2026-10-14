@@ -4,9 +4,7 @@ import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { FLOWER_VIEWBOX, SHAPES } from "@/components/decor/shapes";
-import { getLenis, isCalm, onMotionChange, setLenis, setScrollVelocity, wireMotionPrefs } from "@/lib/motion";
-
-const MAX_LEAN = 2; // degrees
+import { getLenis, isCalm, markScrolled, onMotionChange, setLenis, setScrollVelocity, wireMotionPrefs } from "@/lib/motion";
 
 // Cursor-sparkle palette: [shape, fill]
 const SPARKS: [keyof typeof SHAPES, string][] = [
@@ -20,47 +18,67 @@ const SPARKS: [keyof typeof SHAPES, string][] = [
 ];
 
 /**
- * Owns the site-wide motion: smooth wheel (Lenis, desktop + full motion), scroll velocity → --lean,
- * cursor sparkles (desktop mouse), and the letter pops of section titles. Reveals and parallax are CSS.
+ * Owns the site-wide motion: smooth wheel (Lenis, desktop + full motion), the one scroll ticker (velocity for the
+ * marquees), pausing animations far off screen, cursor sparkles (desktop mouse) and the letter pops of section
+ * titles. Reveals, parallax and the PAGE TOP ring are CSS.
  */
 export function MotionRoot() {
   const pathname = usePathname();
 
   // Lenis on fine pointers in full motion; native scrolling everywhere else (plan §7.6).
+  // Its frame loop runs only while a smooth scroll is in progress (woken by the wheel or a programmatic scrollTo),
+  // not forever: an always-running requestAnimationFrame loop makes Chrome re-sample every CSS animation on the
+  // main thread each frame, even on an idle page (PERFORMANCE_PLAN P4, option A). Same scrolling feel.
   useEffect(() => {
     wireMotionPrefs();
     const fine = window.matchMedia("(pointer: fine)");
     let lenis: Lenis | null = null;
+    let raf = 0;
+    let busyAt = 0;
+    const loop = (t: number) => {
+      if (!lenis) return void (raf = 0);
+      lenis.raf(t);
+      if (lenis.isScrolling) busyAt = t;
+      raf = t - busyAt < 250 ? requestAnimationFrame(loop) : 0; // settle a little after the glide ends
+    };
+    const wake = () => {
+      if (raf || !lenis) return;
+      busyAt = performance.now();
+      raf = requestAnimationFrame(loop);
+    };
     const sync = () => {
       const want = !isCalm() && fine.matches;
       if (want && !lenis) {
-        lenis = new Lenis({ autoRaf: true, lerp: 0.11, prevent: (node) => Boolean(node.closest?.("dialog, [data-lenis-prevent]")) });
-        setLenis(lenis);
+        lenis = new Lenis({ autoRaf: false, lerp: 0.11, prevent: (node) => Boolean(node.closest?.("dialog, [data-lenis-prevent]")) });
+        setLenis(lenis, wake);
         if (document.documentElement.dataset.splash === "show") lenis.stop();
       } else if (!want && lenis) {
+        cancelAnimationFrame(raf);
+        raf = 0;
         lenis.destroy();
         lenis = null;
         setLenis(null);
       }
     };
+    window.addEventListener("wheel", wake, { passive: true, capture: true });
     sync();
     const off = onMotionChange(sync);
     fine.addEventListener("change", sync);
     return () => {
       off();
       fine.removeEventListener("change", sync);
+      window.removeEventListener("wheel", wake, { capture: true });
+      cancelAnimationFrame(raf);
       lenis?.destroy();
       setLenis(null);
     };
   }, []);
 
-  // Scroll velocity (smoothed px/ms) → --lean on <html>; settles back to 0 when scrolling stops.
+  // The one scroll ticker: smoothed velocity (px/ms) for the marquees, only while scrolling; settles back to 0.
   useEffect(() => {
-    const root = document.documentElement;
     let lastY = window.scrollY;
     let lastT = performance.now();
     let velocity = 0;
-    let lean = 0;
     let raf = 0;
     const frame = (t: number) => {
       const y = window.scrollY;
@@ -68,14 +86,13 @@ export function MotionRoot() {
       velocity += ((y - lastY) / dt - velocity) * 0.25;
       lastY = y;
       lastT = t;
-      lean += (Math.max(-MAX_LEAN, Math.min(MAX_LEAN, velocity * 1.4)) - lean) * 0.12;
-      const settled = Math.abs(lean) < 0.01 && Math.abs(velocity) < 0.003;
-      if (settled) velocity = lean = 0;
+      const settled = Math.abs(velocity) < 0.003;
+      if (settled) velocity = 0;
       setScrollVelocity(velocity);
-      root.style.setProperty("--lean", lean.toFixed(3));
       raf = settled ? 0 : requestAnimationFrame(frame);
     };
     const wake = () => {
+      markScrolled();
       if (raf || isCalm()) return;
       lastY = window.scrollY;
       lastT = performance.now();
@@ -86,9 +103,8 @@ export function MotionRoot() {
       if (mode === "calm") {
         cancelAnimationFrame(raf);
         raf = 0;
-        velocity = lean = 0;
+        velocity = 0;
         setScrollVelocity(0);
-        root.style.setProperty("--lean", "0");
       }
     });
     return () => {
@@ -149,6 +165,23 @@ export function MotionRoot() {
       layer.remove();
     };
   }, []);
+
+  // Per page: sections more than a screen away pause their animations (.is-far). Pausing keeps each animation's
+  // phase, so nothing jumps when it comes back; off-screen loops simply stop costing frames (PERFORMANCE_PLAN P3).
+  useEffect(() => {
+    const blocks = Array.from(document.querySelectorAll<HTMLElement>("#main > *, .site__col > footer"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.target.classList.toggle("is-far", !e.isIntersecting);
+      },
+      { rootMargin: "100% 0px" },
+    );
+    for (const el of blocks) io.observe(el);
+    return () => {
+      io.disconnect();
+      for (const el of blocks) el.classList.remove("is-far");
+    };
+  }, [pathname]);
 
   // Per page: stop any running smooth scroll, then arm letter pops for titles below the fold.
   useEffect(() => {

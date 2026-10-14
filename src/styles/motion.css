@@ -17,8 +17,8 @@
   @keyframes ms-bob { 50% { transform: translateY(6px); } }
   @keyframes ms-reveal { from { opacity: 0; transform: translateY(44px) scale(0.97); } }
   @keyframes ms-reveal-pop { from { opacity: 0; transform: scale(0.72) rotate(-7deg); } 70% { opacity: 1; } }
-  @keyframes ms-fall { from { transform: translate3d(0, -12vh, 0); } to { transform: translate3d(0, 108vh, 0); } }
-  @keyframes ms-fall-spin { to { transform: rotate(var(--spin)); } }
+  @keyframes ms-fall { from { translate: 0 -12vh; } to { translate: 0 108vh; } }
+  @keyframes ms-fall-spin { to { rotate: var(--spin); } }
   @keyframes ms-sway { from { transform: translateX(calc(var(--sway) * -0.5)); } to { transform: translateX(calc(var(--sway) * 0.5)); } }
   @keyframes ms-parallax { from { transform: translateY(60px); } to { transform: translateY(-60px); } }
 
@@ -62,22 +62,26 @@
     }
   }
 
-  /* velocity lean: MotionRoot sets --lean on <html> (−2…2) while scrolling */
-  .lean { rotate: calc(var(--rest-rot, 0deg) + var(--lean, 0) * 1deg); }
+
+  /* sections more than a screen away (MotionRoot adds .is-far): paused, not removed, so they resume exactly */
+  :root[data-motion="full"] :is(.is-far, .is-far *) { animation-play-state: paused !important; }
 
   /* falling outline flowers behind the page (FlowerFall): fixed, under all content, composited transforms only */
   .flowerfall { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; contain: strict; }
-  .flowerfall__item { position: absolute; top: 0; left: var(--x); opacity: var(--o); transform: translate3d(0, var(--y), 0); }
-  .flowerfall__sway, .flowerfall__flower { display: block; }
-  .flowerfall__flower { width: var(--size); height: var(--size); transform: rotate(calc(var(--spin) * 0.3)); }
-  :root[data-motion="full"] .flowerfall__item { animation: ms-fall var(--fall) linear var(--delay) infinite; will-change: transform; }
-  :root[data-motion="full"] .flowerfall__sway { animation: ms-sway var(--sway-t) var(--ease-in-out) infinite alternate; }
-  :root[data-motion="full"] .flowerfall__flower { animation: ms-fall-spin var(--fall) linear var(--delay) infinite; }
-  @media (max-width: 760px) { .flowerfall__item:nth-child(even) { display: none; } }
+  .flowerfall__defs { position: absolute; width: 0; height: 0; }
+  .flowerfall__item { position: absolute; top: 0; left: var(--x); display: block; opacity: var(--o); translate: 0 var(--y); }
+  .flowerfall__spin { display: block; rotate: calc(var(--spin) * 0.3); }
+  .flowerfall__flower { display: block; width: var(--size); height: var(--size); }
+  /* outer: fall (`translate`) + sway (`transform`), two translations that add up; inner: spin (`rotate`). HTML elements
+     only: Chrome keeps these on the compositor (not for SVG elements, nor for additive animations) */
+  :root[data-motion="full"] .flowerfall__item { animation: ms-fall var(--fall) linear var(--delay) infinite, ms-sway var(--sway-t) var(--ease-in-out) infinite alternate; }
+  :root[data-motion="full"] .flowerfall__spin { animation: ms-fall-spin var(--fall) linear var(--delay) infinite; }
+  :root[data-splash="show"] :is(.flowerfall__item, .flowerfall__spin) { animation-play-state: paused; }
+  @media (max-width: 760px) { .flowerfall__item:nth-of-type(even) { display: none; } }
 
   /* cursor sparkles */
   .sparkle-layer { position: fixed; inset: 0; z-index: 990; pointer-events: none; overflow: hidden; }
-  .sparkle-layer svg { position: absolute; top: 0; left: 0; opacity: 0; will-change: transform, opacity; }
+  .sparkle-layer svg { position: absolute; top: 0; left: 0; opacity: 0; } /* promoted only while its animation runs */
 
   /* dialogs (menu sheet, lightbox) */
   .sheet, .lightbox {
@@ -89,7 +93,6 @@
 
   /* ── calm mode: still page, short fades only ── */
   :root[data-motion="calm"] *, :root[data-motion="calm"] *::before, :root[data-motion="calm"] *::after { transition-duration: 0.15s !important; }
-  :root[data-motion="calm"] .lean { rotate: var(--rest-rot, 0deg); }
   :root[data-motion="calm"] .sheet, :root[data-motion="calm"] .lightbox { transform: none; }
   :root[data-motion="calm"] ::view-transition-group(*), :root[data-motion="calm"] ::view-transition-old(*), :root[data-motion="calm"] ::view-transition-new(*) { animation: none !important; }
   @media (prefers-reduced-motion: reduce) {

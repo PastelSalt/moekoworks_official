@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { isCalm, onMotionChange, saveData } from "@/lib/motion";
+import { isCalm, onMotionChange, saveData, sinceScroll } from "@/lib/motion";
 import { track } from "@/lib/track";
 
 type Props = {
@@ -69,9 +69,16 @@ export function PreviewVideo({ src, webm, poster, mode, className = "", label, t
 
     if (mode === "hover") {
       const host = (video.closest("[data-hover-host]") as HTMLElement | null) ?? video;
+      // A card scrolling under a resting mouse also fires pointerenter: wait until scrolling has paused, so videos
+      // don't start downloading and decoding mid-scroll. Real hovering behaves as before (PERFORMANCE_PLAN P3).
+      const tryPlay = () => {
+        const wait = 150 - sinceScroll();
+        if (wait > 0) timer = window.setTimeout(tryPlay, wait);
+        else play();
+      };
       const enter = () => {
         window.clearTimeout(timer);
-        timer = window.setTimeout(play, 150);
+        timer = window.setTimeout(tryPlay, 150);
       };
       const leave = () => pause(true);
       host.addEventListener("pointerenter", enter);

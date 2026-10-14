@@ -4,7 +4,8 @@
 > **Constraint (Kyle): nothing may be removed or changed visually. Every fix is in the code only:** same
 > elements, same colours, same motion. Where a fix *could* be noticed (scroll feel, blur), it is listed as a
 > separate decision for Kyle (§5), not done silently.
-> Status: **plan only, no code changed yet.** Execute phase by phase after Kyle's OK; measure after each phase.
+> Status: **executed 2026-10-14** with the recommended decisions (D1 = A keep Lenis, D2 = keep the blurs,
+> D3 = pause far-away animations). Results and what was learned: **§7**.
 
 ---
 
@@ -132,11 +133,84 @@ before/after screenshots (§4.3) → commit on `dev`. Merge to `main` only with 
 
 | Metric (Home, 1920×1080, this laptop, quiet) | Now | Target |
 |---|---|---|
-| Scroll fps, Lenis on | 9–26 (noisy) | **≥ 50** |
-| p95 frame time | 50–216 ms | ≤ 33 ms |
-| Calm mode fps (ceiling) | 59 | unchanged |
-| Running animations when idle | ≥ 78 (flowers) + loops + marquee | ≤ 30, all compositor-only |
-| Idle CPU (page untouched, 10 s) | to measure (P0) | ≤ 10 % of one core |
-| Visual difference | — | **none** |
+| Scroll fps, Lenis on | 9–26 (noisy) | **≥ 50** → ✅ 53.5 (Home), 59.6 (About), 59.5 (Kotoha page) |
+| p95 frame time | 50–216 ms | ≤ 33 ms → ✅ 33.3 ms (Home), 16.8 ms (About, Kotoha page) |
+| Calm mode fps (ceiling) | 59 | unchanged ✅ |
+| Running animations when idle | ≥ 78 (flowers) + loops + marquee | all compositor-only ✅ (78 flower animations on HTML elements, nothing restarting) |
+| Idle CPU (page untouched, 10 s) | 86–93 % of one core | ≤ 10 % → ✅ About 9 %; Home 35 %, Kotoha page 45 % (autoplaying preview video + animated hero logo, see §7.4) |
+| Visual difference | — | **none** ✅ (pixel diff, §7.3) |
 
-_(Fill in after each phase.)_
+---
+
+## 7. Execution report (2026-10-14)
+
+Measured on this laptop (Ryzen 3 3250U / Vega 3, 73–78 °C, Kyle's Chrome open), production builds of the old
+(`0eae918`) and new code side by side (`next start` on :3200 / :3300), runs alternated old/new.
+
+### 7.1 What changed (code only)
+
+| Phase | Change | Files |
+|---|---|---|
+| P1 | `--lean` no longer written on `<html>`; unused `.lean` rules removed. One scroll ticker (MotionRoot) publishes the velocity (`onScrollVelocity`) | `MotionRoot.tsx`, `lib/motion.ts`, `motion.css` |
+| P1 | Marquee = one compositor Web Animation (−50 % loop), scroll speed → `updatePlaybackRate` (reverse when scrolling up), paused off screen / hidden / calm | `Marquee.tsx`, `components.css` |
+| P1 | PAGE TOP ring = CSS scroll-driven animation (`scroll(root)`); button shown by an IntersectionObserver on a sentinel 60vh down; JS fallback only without scroll timelines | `PageTop.tsx`, `shell.css` |
+| P2 | Falling flowers: HTML spans only, outer span = fall (`translate`) + sway (`transform`), inner span = spin (`rotate`); the outline is one `<symbol>` + `<use>`; paused under the splash. Identical motion (pixel-identical frames) | `FlowerFall.tsx`, `motion.css` |
+| P3 | `.is-far`: sections > 1 screen away pause their animations (`animation-play-state`, so they resume exactly) | `MotionRoot.tsx`, `motion.css` |
+| P3 | Hover preview videos wait until scrolling has paused 150 ms before starting | `PreviewVideo.tsx` |
+| P3 | Permanent `will-change` removed from the sparkle pool and the marquee track | `motion.css`, `components.css` |
+| §7.2 | **MUI CssBaseline `box-sizing: inherit` → `border-box`** (theme `styleOverrides`) | `theme/theme.ts` |
+| P4 (A) | Lenis kept, but its frame loop only runs while a smooth scroll is in progress (woken by the wheel and `scrollToY`), not forever | `MotionRoot.tsx`, `lib/motion.ts` |
+
+### 7.2 The surprising causes (worth remembering for every site)
+
+1. **MUI `CssBaseline`'s `*, *::before, *::after { box-sizing: inherit }` made Chrome restart the compositor
+   animations every frame** (`PendingAnimations::notifyCompositorAnimationStarted` ~26× per frame). Found by
+   bisecting the real page as static HTML: removing just that rule took idle style work from ~470 to 0.3 ms/s.
+   The override declares `border-box` directly (same computed values: `html` is border-box and nothing on the
+   public site uses content-box; MUI's own class rules such as inputs still win inside `@layer mui`).
+2. **Chrome won't composite** individual transform properties (`translate`/`rotate`) on **SVG elements**
+   (failure code 524288), nor **additive** animations (`animation-composition: add`, code 16). The first P2
+   attempt used both and was worse; HTML spans fixed it. Decode failures from the trace's `Animation` events
+   (`compositeFailed` bitmask: 1 disabled, 16 non-replace composite, 32 invalid compositing state, 64
+   incompatible animations, 8192 unsupported property, 131072 no visible change, 524288 SVG + independent
+   transform).
+3. **Any always-running `requestAnimationFrame` loop** (Lenis `autoRaf`, the old marquee) makes Chrome run a main
+   frame every vsync, and each main frame re-samples every running CSS animation: on this page 70–150 ms/s of
+   style work while idle. Loops must stop when nothing moves.
+4. `--lean` on `<html>` (known from Kotoha) was ~70 % of the style work during scrolling.
+
+### 7.3 Verification
+
+- Behaviour: flowers fall/sway/turn (full) and stay still (calm); marquee drifts left at ~34 px/s, speeds up,
+  reverses on scroll-up and keeps the last direction; PAGE TOP appears after 60 % of the first screen, its ring
+  follows the scroll, the click glides to the top; Lenis glides and settles; far sections are paused; no console
+  errors.
+- **Pixels:** old vs new, Home / About / History / Kotoha page, desktop + phone, calm + full motion (every CSS
+  animation frozen at the same time): 19 of 20 screenshots identical. The 20th differs only in the turning
+  flowers *inside* the hero logo image (an SVG image's own animation can't be frozen by the test), not a change.
+- `npm run typecheck`, `npm run lint`, `npm run build` pass.
+
+### 7.4 Numbers (old → new)
+
+| Page | Scroll fps (Lenis on) | Slow frames (> 33 ms) | Idle main thread (ms per s) |
+|---|---|---|---|
+| Home | 29.6 → **53.5** | 104 → 19 | 862 → 346 |
+| About | 35.4 → **59.6** | 38 → 1 | 933 → **87** |
+| Kotoha project page | 21.5 → **59.5** | 766–873 → 3–7 | 907 → 447 |
+
+Scroll-pass main-thread work (Home, `trace.mjs`): style 14.8 s → 5.2 s (after P1/P2), layers 163 → 96.
+
+**Still open (leads, not done):** idle Home / project pages keep ~100 ms/s of style work and more task time from
+the autoplaying preview video and the hero's animated logo image (an SVG image animates on the main thread);
+both are visible features. A hydrated page also costs ~100 ms/s more than the same DOM loaded without scripts
+with nothing running in JS: cause not found yet.
+
+### 7.5 Harness lessons
+
+- **Styles injected before hydration are silently dropped** (React rebuilds `<head>`): add test styles with
+  `page.addStyleTag` after load (fixed in `bench.mjs` / `trace.mjs`; `idle.mjs` added). Always assert the
+  experiment took effect (e.g. computed `display`) before trusting a number.
+- After `next build`, **restart `next start`**: an old server keeps serving pages whose CSS files the build
+  deleted (unstyled page, fake "fast" numbers). `ss -ltnp | grep :3300` finds it (`lsof` may not).
+- `scripts/perf/idle.mjs` = idle cost; `bench.mjs` = scroll fps; `trace.mjs` = main-thread split + layers.
+

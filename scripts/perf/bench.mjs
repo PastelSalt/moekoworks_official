@@ -42,7 +42,7 @@ async function run(name) {
   }, {});
   const ctx = await b.newContext({ viewport: { width: +w, height: +h }, userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36" });
   await ctx.route(/\/api\/track/, (r) => r.fulfill({ status: 204 }));
-  await ctx.addInitScript(({ css, js, motion }) => {
+  await ctx.addInitScript(({ js, motion }) => {
     try {
       sessionStorage.setItem("ms_splash", "1");
       localStorage.setItem("ms_nt", "1");
@@ -74,21 +74,14 @@ async function run(name) {
       });
       new MutationObserver(() => document.querySelectorAll(".marquee__track").forEach((t) => (t.style.__mq = true))).observe(document, { subtree: true, childList: true });
     }
-    if (css) {
-      const add = () => {
-        const s = document.createElement("style");
-        s.textContent = css;
-        document.head.append(s);
-      };
-      if (document.head) add();
-      else document.addEventListener("DOMContentLoaded", add);
-    }
   }, e);
   const page = await ctx.newPage();
   const cdp = await ctx.newCDPSession(page);
   if (+cpu > 1) await cdp.send("Emulation.setCPUThrottlingRate", { rate: +cpu });
   try {
     await page.goto(url, { waitUntil: "networkidle", timeout: 120000 });
+    // test styles go in after hydration: React rebuilds <head> and silently drops styles injected earlier
+    if (e.css) await page.addStyleTag({ content: e.css });
     await page.waitForTimeout(2500);
     const motion = await page.evaluate(() => document.documentElement.dataset.motion + (document.documentElement.classList.contains("lenis") ? "+lenis" : ""));
     await page.evaluate(() => {

@@ -1,5 +1,7 @@
 // Outline flowers drifting down behind the page (owner request 2026-10-11): a fixed layer under all content, so it
 // only shows on the bare canvas between sections. Pure CSS (motion.css); calm mode leaves them scattered and still.
+// Performance (PERFORMANCE_PLAN P2): HTML elements only (Chrome won't run individual-transform animations of SVG
+// elements or additive animations on the compositor), two per flower, every animation compositor-only.
 import type { CSSProperties } from "react";
 import { FLOWER_VIEWBOX, SHAPES } from "./shapes";
 
@@ -31,15 +33,22 @@ const FLOWERS = Array.from({ length: COUNT }, (_, i) => {
   };
 });
 
+/** Per flower: an outer span that falls (`translate`) and sways (`transform`, both translations, so they simply
+ *  add up) and an inner span that turns (`rotate`): the same motion as before. The outline is drawn once (<symbol>). */
 export function FlowerFall() {
   return (
     <div className="flowerfall" aria-hidden="true">
+      <svg className="flowerfall__defs" width="0" height="0" focusable="false">
+        <symbol id="ff-flower" viewBox={FLOWER_VIEWBOX}>
+          <path d={SHAPES.flower} fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+          <path d={SHAPES.flowerCentre} fill="none" stroke="currentColor" strokeWidth="1.1" />
+        </symbol>
+      </svg>
       {FLOWERS.map((f, i) => (
-        <span key={i} className="flowerfall__item" style={f.style}>
-          <span className="flowerfall__sway">
-            <svg className="flowerfall__flower" viewBox={FLOWER_VIEWBOX} focusable="false">
-              <path d={SHAPES.flower} fill="none" stroke={f.stroke} strokeWidth="1.3" strokeLinejoin="round" />
-              <path d={SHAPES.flowerCentre} fill="none" stroke={f.stroke} strokeWidth="1.1" />
+        <span key={i} className="flowerfall__item" style={{ ...f.style, color: f.stroke }}>
+          <span className="flowerfall__spin">
+            <svg className="flowerfall__flower" focusable="false">
+              <use href="#ff-flower" />
             </svg>
           </span>
         </span>

@@ -163,7 +163,14 @@
   .pagetop[data-show="1"] { opacity: 1; visibility: visible; translate: 0 0; scale: 1; transition-delay: 0s; }
   .pagetop__ring { position: absolute; inset: 0; width: 100%; height: 100%; rotate: -90deg; }
   .pagetop__track { fill: var(--white); stroke: var(--pink-100); stroke-width: 6; }
-  .pagetop__bar { fill: none; stroke: var(--pink-500); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--progress)); }
+  .pagetop__bar { fill: none; stroke: var(--pink-500); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--progress, 0)); }
+  /* the ring follows the page scroll with no JavaScript (PageTop.tsx keeps a fallback for older browsers) */
+  @keyframes ms-progress { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @supports (animation-timeline: scroll()) {
+    .pagetop__bar { animation: ms-progress linear both; animation-timeline: scroll(root block); }
+  }
+  /* 60 % of the first screen down the document: once it has scrolled above the viewport, the button shows */
+  .pagetop__sentinel { position: absolute; top: 60vh; left: 0; width: 1px; height: 1px; pointer-events: none; visibility: hidden; }
   .pagetop__flower { position: relative; width: 46px; height: 46px; transition: rotate var(--t-glide) var(--ease-pop); }
   .pagetop__flower img { width: 100%; height: 100%; }
   .pagetop:hover .pagetop__flower { rotate: 144deg; }
