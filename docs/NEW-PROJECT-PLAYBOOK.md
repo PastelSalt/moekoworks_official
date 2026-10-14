@@ -207,6 +207,9 @@ Publish now or draft?               after launch: draft unless Kyle says publish
   → **Record video at 1280×720** (the site never delivers more than 1280 px wide anyway); take
   **screenshots at 1920×1080** (stills don't need fps).
 - `ctx.route("**/api/track**", r => r.abort())` (or the target's analytics endpoint) — **always**.
+- **On the current laptop (Vega 3) the forced GPU flags break hardware video decoding** (every `<video>` fails with
+  `MEDIA_ERR_DECODE`, the frame stays white): add `--disable-accelerated-video-decode` (GPU rendering stays on).
+  Not a site bug: normal Chrome plays the videos.
 - Phone shots: `{ viewport: {width: 390, height: 844}, deviceScaleFactor: 3, isMobile: true, hasTouch: true,
   userAgent: <Android Chrome UA> }` so `(pointer: coarse)` matches (Lenis/hover effects switch off).
 
@@ -678,6 +681,14 @@ point first), the cron rollup and the dashboard card. Admins (cookie), bots and 
   loader is removed from the DOM; block `/api/track`; the first desktop frame (~1.2 s) is blank.
 
 ## 15. Worked examples
+
+### Moesoft Portfolio (2026-10-14, project id 10): this site as a project
+- `scripts/capture/moesoft.mts` (captures production with `ms_nt`, emulated fine pointer so Lenis/hover previews
+  work; the splash shot uses a fresh session), `encode-moesoft.sh` (5 cuts + end card → 23 s, 3.9 MB),
+  `seed-moesoft.mts`. 13 stills (10 desktop + 3 phone), no admin shots and **no "For admins" operations** (owner).
+- Dated by the owner: `started_on` **and** `published_at` = 2026-01-20 (the seed pins `PUBLISHED_AT`), so it is
+  the oldest project: No.01; Kotoha became No.02, Hanon No.03 (still Latest).
+- New tech: Simple Icons (logo added to `tech-icons.ts`), Playwright (monogram), FFmpeg.
 
 ### Hanon Fan Site (2026-10-11, project id 5)
 - Same code base as Kotoha, so `hanon.mts` is `kotoha.mts` with `SITE`/`OUT` changed (same selectors, same

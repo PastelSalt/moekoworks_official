@@ -19,6 +19,7 @@ export const TECH: T[] = [
   { slug: "lenis", name: "Lenis", category: "library", color: "#FF98A2", url: "https://lenis.darkroom.engineering/" },
   { slug: "canvas-confetti", name: "canvas-confetti", category: "library", color: "#E95399", url: "https://github.com/catdad/canvas-confetti" },
   { slug: "lucide", name: "Lucide", category: "library", iconKey: "lucide", url: "https://lucide.dev/" },
+  { slug: "simple-icons", name: "Simple Icons", category: "library", iconKey: "simpleicons", url: "https://simpleicons.org/" },
   { slug: "animate-css", name: "Animate.css", category: "library", color: "#8B5CF6", url: "https://animate.style/" },
   { slug: "drizzle", name: "Drizzle ORM", category: "library", iconKey: "drizzle", url: "https://orm.drizzle.team/" },
   { slug: "zod", name: "Zod", category: "library", iconKey: "zod", url: "https://zod.dev/" },
@@ -33,6 +34,8 @@ export const TECH: T[] = [
   { slug: "youtube", name: "YouTube embeds", category: "service", iconKey: "youtube", url: "https://developers.google.com/youtube" },
   // tools
   { slug: "sharp", name: "sharp", category: "tool", iconKey: "sharp", url: "https://sharp.pixelplumbing.com/" },
+  { slug: "playwright", name: "Playwright", category: "tool", color: "#2EAD33", url: "https://playwright.dev/" },
+  { slug: "ffmpeg", name: "FFmpeg", category: "tool", iconKey: "ffmpeg", url: "https://ffmpeg.org/" },
   { slug: "git", name: "Git", category: "tool", iconKey: "git", url: "https://git-scm.com/" },
 ];
 
