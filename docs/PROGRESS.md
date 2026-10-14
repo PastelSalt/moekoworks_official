@@ -23,6 +23,7 @@
 | Design checkpoint ✋ | ✅ approved 2026-10-04 | Kyle: design OK, copy OK, Facebook link OK, Cloudinary key + secret added (Vercel production + `.env.local`); signed upload + delete verified |
 | Hanon Fan Site ✅ | ✅ 2026-10-11 | Added from https://hanon-fansite.vercel.app (project id 5, **published**, now Latest): 8 desktop + 2 phone shots, 28 s preview + 8 s hover, 15 tech (new: PGlite), 23 operations. `scripts/capture/hanon.mts`, `encode-hanon.sh`, `seed-hanon.mts`. 6 admin shots on the "For admins" cards (local in-memory copy, see playbook §6.0) |
 | Kotoha refresh | ✅ 2026-10-11 | Seed updated for the Kotoha repo's 2026-10-09 changes: Lenis + section glides gone (op "Scroll freely"), performance-pass op, sister-site op, birthday/debut dates, AiceClass as history; re-run with `--replace`. Card 04 "Never lose anything" now shows the admin Archive (local in-memory copy) |
+| Performance pass | 📝 plan 2026-10-14 | [`PERFORMANCE_PLAN.md`](PERFORMANCE_PLAN.md): code-only fixes (no visual change), waiting for Kyle's OK + decisions D1–D3. Harness: `scripts/perf/{bench,trace}.mjs` |
 | P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
 | P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moesoft.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers; Kyle removes `moesoft-web` |
 
