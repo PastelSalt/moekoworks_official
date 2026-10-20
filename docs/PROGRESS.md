@@ -26,7 +26,7 @@
 | Moeko Works Portfolio | ✅ 2026-10-14 | This site added as a project (id 10, published, dated 2026-01-20 → No.01): 23 s preview, 13 stills, 17 tech, 11 visitor + 7 behind-the-scenes cards, no admin cards. `scripts/capture/moekoworks.mts`, `encode-moekoworks.sh`, `seed-moekoworks.mts` |
 | Performance pass | ✅ 2026-10-14 (`dev`) | [`PERFORMANCE_PLAN.md`](PERFORMANCE_PLAN.md) §7: no visual change (pixel-checked). Scroll 30→54 fps (Home), 35→60 (About), 22→60 (Kotoha page); idle CPU About 93→9 %. Key fixes: no per-frame `--lean`, compositor marquee/flowers, MUI `box-sizing: inherit` override, Lenis loop only while scrolling. Harness `scripts/perf/{bench,trace,idle}.mjs` |
 | P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
-| P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moekoworks.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers; Kyle removes `moesoft-web` |
+| P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moekoworks.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers |
 
 ## Incident log
 ### 2026-10-20 — EMERGENCY: brand renamed to **Moeko Works** (major)
@@ -70,7 +70,7 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 
 **Cleanup pass, part 2 (2026-10-20) — done:**
 - Cloudinary: `moekoworks` tag on all 53 assets (+ the 2 certificate images), old `moesoft` / `moesoft-portfolio` tags removed;
-  0 assets, tags or folders left with the old name. Old preset `moesoft_images_signed` deleted.
+  0 assets, tags or folders left with the old name. Old presets `moesoft_{images,videos}_signed` deleted. The old site `moesoft-web` no longer exists (Vercel has no such project; its address 404s).
 - Live check: 358 media URLs across 6 pages, all 200.
 - Neon: database renamed `moesoft` → `moekoworks`; `moesoft_owner` password reset by Kyle (the leaked one is dead).
   The role name stays: Neon roles can't grant/re-own each other (`permission denied to grant role`), so a rename would
@@ -78,18 +78,15 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 - Vercel env: `DATABASE_URL` (new db + password), `CLOUDINARY_ROOT_FOLDER` = `moekoworks-official`,
   `CLOUDINARY_PRESET_{IMAGES,VIDEOS}` = `moekoworks_{images,videos}_signed` (they had overridden the code defaults
   with the old names since 2026-10-04), redeployed. Verified: production writes analytics events again.
-- Docs: old infra names rewritten in `PRELIMENARYPLAN.md`, the playbook and here (only `moesoft-web`, `moesoft_owner`
+- Docs: old infra names rewritten in `PRELIMENARYPLAN.md`, the playbook and here (only `moesoft_owner`
   and history lines keep the old name). Merged branch `claude/kind-mccarthy-89dx0w` deleted (local + origin).
 
 **Still on Kyle:**
-1. Cloudinary: delete the old preset `moesoft_videos_signed` (unused now; the auto-mode checker blocked me).
-   Settings → Upload → Upload presets.
-2. Vercel: delete the old project `moesoft-web` (still online with the old brand): project → Settings → General → Delete.
-3. Delete the downloaded Neon `.env` / `env.txt` file from Downloads (it holds the DB password).
-4. Canva design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
-5. Re-run the Facebook/X/LinkedIn OG debuggers; resubmit the sitemap (new domain) in Search Console.
-6. Sign in to the admin again (session cookie renamed).
-7. In ~1 week: OK to delete the Neon backup branches `before-rebrand-2026-10-20` and `before-media-move-2026-10-20`.
+1. Delete the downloaded Neon `.env` / `env.txt` file from Downloads (it holds the DB password).
+2. Canva design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
+3. Re-run the Facebook/X/LinkedIn OG debuggers; resubmit the sitemap (new domain) in Search Console.
+4. Sign in to the admin again (session cookie renamed).
+5. In ~1 week: OK to delete the Neon backup branches `before-rebrand-2026-10-20` and `before-media-move-2026-10-20`.
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
@@ -119,4 +116,4 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 - **Rebrand follow-ups:** see "Incident log" → 2026-10-20, "Still open".
 - First login on the live site (`/admin`) → set your own password (the seed password is temporary).
 - Optional: add the Cloudinary key + secret to the **Preview** environment too if you want uploads on preview builds.
-- Submit `https://moekoworks.vercel.app/sitemap.xml` in Google Search Console; remove the old `moesoft-web` project when ready.
+- Submit `https://moekoworks.vercel.app/sitemap.xml` in Google Search Console.

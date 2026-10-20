@@ -89,7 +89,7 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
 | Vercel project | `moekoworks` (renamed 2026-10-20) · `prj_iiroJzD4wL9Iw2ImeYHrxBZX05k3` · team `team_iTXgjBMqb9YpVCwrSPc0UKWO` (scope `pastelsalts-projects`) · Hobby · region `sin1` |
 | Production URL | https://moekoworks.vercel.app |
 | Preview of `dev` | `moekoworks-git-dev-pastelsalts-projects.vercel.app` (Vercel SSO: Kyle's login) |
-| Old site | Vercel project `moesoft-web` — Kyle removes it himself; never touch it |
+| Old site | Removed (checked 2026-10-20: no such Vercel project, its address 404s) |
 | Neon (Moeko Works) | project `shy-rice-98401386`, Singapore, PG 17, database `moekoworks` (role `moesoft_owner`: Neon cannot rename/re-own it, kept on purpose) |
 | Neon (Kotoha) | project `odd-base-44136456`, default branch `main` (`br-tiny-credit-b3dga6s5`), database `kotoha`, role `kotoha_owner` |
 | Cloudinary | cloud `dijqsw0k8`; folders `moekoworks-official/{projects/<slug>,certifications,site}`; presets `moekoworks_images_signed`, `moekoworks_videos_signed` (code defaults since the 2026-10-20 rebrand — until Kyle creates them, the old presets/folder are what the account has; see PROGRESS.md incident log) (signed, `disallow_public_id`, `unique_filename`, `overwrite: false`) |
