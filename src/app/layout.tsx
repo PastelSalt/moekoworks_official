@@ -8,10 +8,11 @@ import "@/theme/base.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `${site.name} — ${site.tagline.toLowerCase()}`, template: `%s · ${site.name}` },
-  description: "Creative websites and the systems behind them: projects and certifications by Kyle Zoleta.",
+  title: { default: `${site.name} — ${site.tagline}`, template: `%s · ${site.name}` },
+  description: `${site.name} is the portfolio of ${site.owner}: creative websites and the systems behind them, with every project and certification.`,
   applicationName: site.name,
-  authors: [{ name: site.owner }],
+  authors: [{ name: site.owner, url: site.url }],
+  creator: site.owner,
   openGraph: { type: "website", siteName: site.name, locale: "en_US" },
   twitter: { card: "summary_large_image" },
 };

@@ -18,7 +18,7 @@ export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: { absolute: "Moeko Works — a portfolio by Kyle Zoleta" },
-  description: "Creative websites and the systems behind them: projects, notes and certifications by Kyle Zoleta.",
+  description: "Moeko Works is the portfolio of Kyle Zoleta: creative websites and the systems behind them, with every project, note and certification.",
   alternates: { canonical: "/" },
 };
 
@@ -32,17 +32,42 @@ export default async function Home() {
   const works = projects.slice(0, 5);
   const lastUpdate = updates[0]?.date;
 
-  const jsonLd = [
-    { "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: site.url, description: site.intro },
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: site.owner,
-      url: site.url,
-      description: "Makes creative websites and the systems behind them, as Moeko Works.",
-      sameAs: site.socials.filter((s) => s.id !== "email").map((s) => s.href),
-    },
-  ];
+  // One linked graph so search engines tie the brand, the site and the person together (Google's site name + knowledge panel).
+  const base = site.url.replace(/\/$/, "");
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${base}/#website`,
+        name: site.name,
+        alternateName: [`${site.name} by ${site.owner}`, `${site.owner} portfolio`],
+        url: `${base}/`,
+        description: site.intro,
+        inLanguage: "en",
+        author: { "@id": `${base}/#person` },
+        publisher: { "@id": `${base}/#person` },
+      },
+      {
+        "@type": "Person",
+        "@id": `${base}/#person`,
+        name: site.owner,
+        url: `${base}/`,
+        jobTitle: "Web developer",
+        description: `Makes creative websites and the systems behind them, as ${site.name}.`,
+        brand: { "@type": "Brand", name: site.name },
+        sameAs: site.socials.filter((s) => s.id !== "email").map((s) => s.href),
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": `${base}/#profile`,
+        url: `${base}/`,
+        name: `${site.name} — ${site.tagline}`,
+        isPartOf: { "@id": `${base}/#website` },
+        mainEntity: { "@id": `${base}/#person` },
+      },
+    ],
+  };
 
   return (
     <>
