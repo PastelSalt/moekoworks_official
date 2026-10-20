@@ -81,12 +81,10 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 - Docs: old infra names rewritten in `PRELIMENARYPLAN.md`, the playbook and here (only `moesoft_owner`
   and history lines keep the old name). Merged branch `claude/kind-mccarthy-89dx0w` deleted (local + origin).
 
-**Still on Kyle:**
-1. Delete the downloaded Neon `.env` / `env.txt` file from Downloads (it holds the DB password).
-2. Canva design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
-3. Re-run the Facebook/X/LinkedIn OG debuggers; resubmit the sitemap (new domain) in Search Console.
-4. Sign in to the admin again (session cookie renamed).
-5. In ~1 week: OK to delete the Neon backup branches `before-rebrand-2026-10-20` and `before-media-move-2026-10-20`.
+**Closed 2026-10-20.** Kyle deleted the downloaded Neon `.env`, signed in to the admin again and re-ran the OG checks.
+Both Neon backup branches (`before-rebrand-2026-10-20`, `before-media-move-2026-10-20`) deleted at his request.
+Search Console: not set up, so no sitemap resubmission (the site still serves `/sitemap.xml`).
+**Only open item:** Canva design `DAG9mW5bZm8` still shows the old wordmark (Kyle handles it himself, no rush).
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
