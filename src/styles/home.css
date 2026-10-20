@@ -73,6 +73,11 @@
     .hero__sticker--purple { display: none; }
     .hero__inner { padding-top: 120px; }
   }
+  /* the wide wordmark fills the row here: corner badge, no purple sticker over the tagline */
+  @media (min-width: 900px) and (max-width: 1339px) {
+    .hero__badge { top: 18px; right: 18px; --badge: 104px !important; }
+    .hero__sticker--purple { display: none; }
+  }
 
   /* ── LATEST PROJECT (Miku Expo featured card, overlapping the stage) ── */
   .latest { position: relative; z-index: 3; margin-top: clamp(-210px, -15vw, -110px); }
