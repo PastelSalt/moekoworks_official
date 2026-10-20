@@ -63,8 +63,8 @@ established company that has nothing to do with him. Every public trace of it ha
    otherwise admin uploads fail. Existing media still carry the old folder name in their URLs; moving them (rename
    public_ids + update `media_assets.public_id`) is a separate, approved-first job.
 5. **E-mail** `moekosoftware@outlook.com` still reads as "Moeko Software": give me a new address to switch to.
-6. Optional renames: ~~GitHub repo~~ (done 2026-10-20: `PastelSalt/moekoworks_official`), Neon project/database/role, the
-   local folder `~/Desktop/Moesoft/`, the old Vercel project `moesoft-web` (still online with the old name).
+6. Optional renames: ~~GitHub repo~~ (done 2026-10-20: `PastelSalt/moekoworks_official`), Neon project/database/role, ~~the
+   local folder~~ (done 2026-10-20: `Documents/MoekoWorks/moekoworks_official`), the old Vercel project `moesoft-web` (still online with the old name).
 7. After deploy: re-run the Facebook/X/LinkedIn OG debuggers and resubmit the sitemap in Search Console.
 
 ## Decisions taken during execution
