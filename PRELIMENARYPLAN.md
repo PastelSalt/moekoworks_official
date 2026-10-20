@@ -293,10 +293,10 @@ Your wireframes only tell me **which pages and content** you want: Home with the
 ### 2.8 Accounts & quotas (read-only checks)
 | Service | What exists | Plan for Moeko Works |
 |---|---|---|
-| **Vercel** (`pastelsalt`, `pastelsalts-projects`) | `kotoha-fansite` (Git) and `moesoft-web` (old site, you'll remove it) | **New project `moesoft` → `moekoworks.vercel.app`** on **Hobby**: a portfolio is personal use. Region `sin1`. |
-| **Neon** (Free) | `kotoha-fansite`: `aws-ap-southeast-1`, PG 17, 0.25 CU, 6 h history | New project **`moesoft-official`** (Singapore), **one production database** |
-| **Cloudinary** (Free, shared with Kotoha) | 25 credits/month, 0.96 % used. Limits: image 10 MB · video 100 MB · 25 MP | Root folder **`moesoft-official/`** + 2 signed presets |
-| **GitHub** (`PastelSalt`) | `kotoha-fansite` temporarily public for this review | **`PastelSalt/moesoft_official`, private** |
+| **Vercel** (`pastelsalt`, `pastelsalts-projects`) | `kotoha-fansite` (Git) and `moesoft-web` (old site, you'll remove it) | **New project `moekoworks` → `moekoworks.vercel.app`** on **Hobby**: a portfolio is personal use. Region `sin1`. |
+| **Neon** (Free) | `kotoha-fansite`: `aws-ap-southeast-1`, PG 17, 0.25 CU, 6 h history | New project **`moekoworks-official`** (Singapore), **one production database** |
+| **Cloudinary** (Free, shared with Kotoha) | 25 credits/month, 0.96 % used. Limits: image 10 MB · video 100 MB · 25 MP | Root folder **`moekoworks-official/`** + 2 signed presets |
+| **GitHub** (`PastelSalt`) | `kotoha-fansite` temporarily public for this review | **`PastelSalt/moekoworks_official`, private** |
 | **This machine** | No Node, no `gh`, no SSH key, no git identity | Start-up items **S1/S2** (§26) |
 
 ---
@@ -1004,7 +1004,7 @@ A single **zod** schema per entity, shared by the client form (react-hook-form +
   - Plus a **Published / Draft** switch. Alt text = the title (editable).
 - **List:** thumbnail cards sorted by date (newest first), with edit, and archive/restore (no hard delete).
 - **Public:** About → "Certifications;" grid. Each card is a paper frame with washi tape, the title and "Obtained 12 Mar 2026"; clicking opens a lightbox at full resolution. Tracked as `certificate_open`.
-- **Storage:** Cloudinary `moesoft-official/certifications/` and the `certifications` table (§15).
+- **Storage:** Cloudinary `moekoworks-official/certifications/` and the `certifications` table (§15).
 - Not added (as you said, no complex API): issuer, credential URL, verification links. 🟡 These can be added later if you want.
 ---
 
@@ -1198,7 +1198,7 @@ flowchart LR
 
 ### 14.4 Folder structure
 ```
-moesoft_official/
+moekoworks_official/
 ├─ PRELIMENARYPLAN.md
 ├─ assets/                    source brand files (moekoworks_logo.png, references/, logo.svg when available)
 ├─ docs/                      RUNBOOK.md · ADMIN_GUIDE.md · DECISIONS.md
@@ -1527,7 +1527,7 @@ create table analytics_salts (
 -- create table site_updates  (id bigint generated always as identity primary key, published_on date not null, title text not null, link_url text, project_id bigint references projects(id), status text not null default 'published');
 ```
 
-DB roles (🟡): `moesoft_app` (DML only, used by the site) and `moesoft_migrator` (DDL, used for migrations).
+DB roles (🟡): `moekoworks_app` (DML only, used by the site) and `moekoworks_migrator` (DDL, used for migrations).
 
 ---
 
@@ -1535,7 +1535,7 @@ DB roles (🟡): `moesoft_app` (DML only, used by the site) and `moesoft_migrato
 
 ### 16.1 Folders
 ```
-moesoft-official/
+moekoworks-official/
 ├─ site/                         logo variants, OG fallbacks
 ├─ certifications/               certificate images (admin uploads)
 └─ projects/<slug>/
@@ -1543,13 +1543,13 @@ moesoft-official/
    ├─ videos/                    preview video(s)
    └─ og/                        custom OG images
 ```
-Tags: `moesoft`, `project:<slug>`, `role:<role>`. These drive cleanup and search. Check whether the account uses **dynamic folders** (`asset_folder`) or fixed folders (`folder`) in P0 and sign accordingly.
+Tags: `moekoworks`, `project:<slug>`, `role:<role>`. These drive cleanup and search. Check whether the account uses **dynamic folders** (`asset_folder`) or fixed folders (`folder`) in P0 and sign accordingly.
 
 ### 16.2 Signed upload presets (created in P0)
 | Preset | Resource | Settings |
 |---|---|---|
-| `moekoworks_images_signed` | image | signed; unique filename; no client public_id; allowed `jpg,jpeg,png,webp,avif,gif,heic,heif`; tags `moesoft`; `colors: true` (accent suggestions) |
-| `moekoworks_videos_signed` | video | signed; allowed `mp4,webm,mov,m4v`; **eager, async:** MP4 H.264 width ≤ 1280 · WebM VP9 width ≤ 1280 · poster JPG (`so_auto`); tags `moesoft` |
+| `moekoworks_images_signed` | image | signed; unique filename; no client public_id; allowed `jpg,jpeg,png,webp,avif,gif,heic,heif`; tags `moekoworks`; `colors: true` (accent suggestions) |
+| `moekoworks_videos_signed` | video | signed; allowed `mp4,webm,mov,m4v`; **eager, async:** MP4 H.264 width ≤ 1280 · WebM VP9 width ≤ 1280 · poster JPG (`so_auto`); tags `moekoworks` |
 
 ### 16.3 Limits (from your account) & client handling
 - **Images:** ≤ 10 MB, ≤ 25 MP. Larger files are auto-shrunk to WebP in the browser (canvas) before upload. HEIC is accepted.
@@ -1560,7 +1560,7 @@ Tags: `moesoft`, `project:<slug>`, `role:<role>`. These drive cleanup and search
 - **Video:** `…/video/upload/f_mp4,vc_h264,q_auto,w_1280/<id>.mp4` + `…/f_webm,vc_vp9,q_auto,w_1280/<id>.webm`. Poster: `…/so_auto,f_auto,q_auto,w_1280/<id>.jpg`.
 
 ### 16.5 Deletion & orphans
-Deleting from the admin destroys the asset. The daily cron lists `moesoft`-tagged assets that have no DB row and are older than 24 h, then deletes them (dry-run log first).
+Deleting from the admin destroys the asset. The daily cron lists `moekoworks`-tagged assets that have no DB row and are older than 24 h, then deletes them (dry-run log first).
 
 ### 16.6 Credit budget (Free: 25 credits/month, shared with Kotoha)
 | Item | Estimate |
@@ -1612,12 +1612,12 @@ Scheduled at 16:30 UTC (= 00:30 Asia/Manila). Each run:
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | all | `https://moekoworks.vercel.app` |
 | `SITE_TIMEZONE` | server | `Asia/Manila` |
-| `DATABASE_URL` | server | Neon **pooled**, `moesoft_app` role |
+| `DATABASE_URL` | server | Neon **pooled**, `moekoworks_app` role |
 | `DATABASE_URL_UNPOOLED` | CLI | Neon direct, migrations/seed |
 | `CLOUDINARY_CLOUD_NAME` / `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | server / client | same value |
 | `CLOUDINARY_API_KEY` | server | |
 | `CLOUDINARY_API_SECRET` 🔒 | server | never sent to the client |
-| `CLOUDINARY_ROOT_FOLDER` | server | `moesoft-official` |
+| `CLOUDINARY_ROOT_FOLDER` | server | `moekoworks-official` |
 | `CLOUDINARY_PRESET_IMAGES` / `CLOUDINARY_PRESET_VIDEOS` | server | `moekoworks_images_signed` / `moekoworks_videos_signed` |
 | `ADMIN_SEED_USERNAME` 🔒 | CLI (`.env.local` only) | your handle, **not committed** |
 | `ADMIN_SEED_PASSWORD` 🔒 | CLI (`.env.local` only) | **your default password; not committed**; remove after first login |
@@ -1643,10 +1643,10 @@ Scheduled at 16:30 UTC (= 00:30 Asia/Manila). Each run:
 
 ### 19.2 Setup checklist (Phase 0)
 1. **Install Node 24 LTS** (you run it, as it needs sudo): `sudo pacman -S nodejs-lts-krypton npm` (24.21.0 is available) (**S1**).
-2. **GitHub** (**S2**): you create the empty private repo `PastelSalt/moesoft_official` and give this machine push access (`gh auth login` or an SSH key); then `git init` with a repo-local author (your name + GitHub noreply e-mail).
-3. **Neon** (**S3**): create project `moesoft-official` in `aws-ap-southeast-1` (PG 17) with one production database; roles `moesoft_app` (DML) and `moesoft_migrator` (DDL); a restore point before every schema change.
-4. **Cloudinary** (**S3**): create the two signed presets and the `moesoft-official/` folders.
-5. **Vercel:** new project **`moesoft`** → `moekoworks.vercel.app` (if the name is taken, Vercel adds a suffix and we pick another), on the **Hobby** plan (a portfolio is personal use) (**S3**).
+2. **GitHub** (**S2**): you create the empty private repo `PastelSalt/moekoworks_official` and give this machine push access (`gh auth login` or an SSH key); then `git init` with a repo-local author (your name + GitHub noreply e-mail).
+3. **Neon** (**S3**): create project `moekoworks-official` in `aws-ap-southeast-1` (PG 17) with one production database; roles `moekoworks_app` (DML) and `moekoworks_migrator` (DDL); a restore point before every schema change.
+4. **Cloudinary** (**S3**): create the two signed presets and the `moekoworks-official/` folders.
+5. **Vercel:** new project **`moekoworks`** → `moekoworks.vercel.app` (if the name is taken, Vercel adds a suffix and we pick another), on the **Hobby** plan (a portfolio is personal use) (**S3**).
    - framework Next.js, Node 24.x, **functions region `sin1`**
    - env vars per environment
    - Git integration
@@ -1808,7 +1808,7 @@ scripts/capture/encode.sh
 ### 21.8 Upload & seed procedure
 1. Capture to `scripts/capture/out/kotoha/` (git-ignored), then **send you the files for review** ✋.
 2. `npm run seed:kotoha -- --dry-run` lists every upload and upsert.
-3. With your OK: upload to `moesoft-official/projects/kotoha-fansite/…` (deterministic public_ids). Then upsert the project, links, technologies, operations and media, publish, and refresh the cache tags.
+3. With your OK: upload to `moekoworks-official/projects/kotoha-fansite/…` (deterministic public_ids). Then upsert the project, links, technologies, operations and media, publish, and refresh the cache tags.
 4. Check the live project page, its OG image and the statistics events.
 
 ### 21.9 Local copy of Kotoha for the admin screenshots (option B)
@@ -1827,7 +1827,7 @@ Effort: **S** ≈ 1 working session · **M** ≈ 2–3 · **L** ≈ 4+. ✋ = yo
 
 | Phase | Key deliverables | Acceptance criteria | Size | Needs from you |
 |---|---|---|---|---|
-| **P0** Start-up | Node 24, private repo + push access, Neon project, Cloudinary presets/folders, Vercel project `moesoft`, `.env.local`/Vercel env (credentials as env only), `CLAUDE.md`, `docs/PROGRESS.md` | `node -v` = 24.x; first push works; a signed test upload works; a hello-world preview deploys | S | **S1, S2, S3** |
+| **P0** Start-up | Node 24, private repo + push access, Neon project, Cloudinary presets/folders, Vercel project `moekoworks`, `.env.local`/Vercel env (credentials as env only), `CLAUDE.md`, `docs/PROGRESS.md` | `node -v` = 24.x; first push works; a signed test upload works; a hello-world preview deploys | S | **S1, S2, S3** |
 | **P1** Foundations | Next 16 + TS + ESLint/Prettier; MUI + Emotion + CSS layers; tokens/theme/fonts (Fredoka + Lilita One); layouts; security headers; `proxy.ts`; pre-paint motion script | Lint/type/build green; headers present; no motion flicker | M | — |
 | **P2** Shell & design system | **Splash loader** (6 SVG layers), white fixed sidebar, Miku Expo mobile MENU bar, pattern stage, watercolor corners, giant words, badge, vertical text, page titles, micro-labels, cards with hover video, History list with floating preview, marquee, PAGE TOP, footer; dev-only `/dev/design` | Matches the references at 1440 / 900 / 390 px; smooth on a mid laptop. **Design checkpoint** ✋ | L | Your review |
 | **P3** Data & auth | Drizzle schema/migrations (restore point first); seeds; login, forced change, Change password page (kotoha rules), sessions, lockout, rate limits, activity log | E2E: first login → forced change → dashboard → change password again | M | — |
@@ -1895,7 +1895,7 @@ Effort: **S** ≈ 1 working session · **M** ≈ 2–3 · **L** ≈ 4+. ✋ = yo
 | DEC-24 | Certifications module (image, title, date) shown on About + Home strip | your answer |
 | DEC-25 | Latest = newest published; hover previews in lists + hero video on project pages | your answer |
 | DEC-26 | **One production database** (kotoha model) with restore points before schema changes | your answer |
-| DEC-27 | Vercel project `moesoft` on Hobby; private repo `PastelSalt/moesoft_official`; no custom domain | your answers |
+| DEC-27 | Vercel project `moekoworks` on Hobby; private repo `PastelSalt/moekoworks_official`; no custom domain | your answers |
 | DEC-28 | Notifications: inbox badge only; e-mail later | your answer |
 | DEC-29 | No 2FA, single owner, simple sessions | your answer |
 | DEC-30 | Content archived, never hard-deleted (with the listed exceptions) | your rule |
@@ -2102,7 +2102,7 @@ Same as before:
 | 11.1 | Stack | ✅ known | — |
 | 11.2 | Data model | ✅ known | — |
 | 11.3 | API | ✅ known | — |
-| 11.4 | Vercel project 'moesoft' | ✅ known | — |
+| 11.4 | Vercel project 'moekoworks' | ✅ known | — |
 | 11.5 | Hobby plan fits a portfolio | ✅ known | — |
 | 11.6 | No custom domain | ✅ known | — |
 | 11.7 | Single production database | ✅ known | — |
@@ -2154,8 +2154,8 @@ Same as before:
 | # | Start-up item | My recommendation · confidence | Points |
 |---|---|---|---:|
 | **S1** | **Install Node 24 LTS** (needs your sudo password, so you run it): `sudo pacman -S nodejs-lts-krypton npm`. Version 24.21.0 is in your repos. | Use pacman. · High | 0.65 |
-| **S2** | **GitHub push access:** (1) create the empty **private** repo `PastelSalt/moesoft_official` on github.com, then (2) give this machine access, with either `sudo pacman -S github-cli` + `gh auth login` (you log in in the browser), or an SSH key added to GitHub. | `gh`: easiest, and it lets me open PRs later. · Medium-high | 0.69 |
-| **S3** | **OK to create the cloud resources** through the connectors: Neon project `moesoft-official` (Singapore); Cloudinary folder `moesoft-official/` + 2 signed upload presets; Vercel project `moesoft` (Hobby) with env vars and the Git connection. Your credentials go only into env. | Yes, all three in P0. · High | 0.35 |
+| **S2** | **GitHub push access:** (1) create the empty **private** repo `PastelSalt/moekoworks_official` on github.com, then (2) give this machine access, with either `sudo pacman -S github-cli` + `gh auth login` (you log in in the browser), or an SSH key added to GitHub. | `gh`: easiest, and it lets me open PRs later. · Medium-high | 0.69 |
+| **S3** | **OK to create the cloud resources** through the connectors: Neon project `moekoworks-official` (Singapore); Cloudinary folder `moekoworks-official/` + 2 signed upload presets; Vercel project `moekoworks` (Hobby) with env vars and the Git connection. Your credentials go only into env. | Yes, all three in P0. · High | 0.35 |
 | **S4** | **Database for the local Kotoha copy** (admin screenshots): (a) a temporary **Neon branch** of the Kotoha database (real content and stats, production untouched, deleted after), or (b) an empty database with the repo's seed. | (a) · Medium-high | 0.60 |
 
 **Your reviews later (not blocking):**
@@ -2168,7 +2168,7 @@ Same as before:
 |---|---|---|
 | v0.1 | Pages, nav, content | Wireframes (content intent): About · Contact · History, latest + previous projects, a contact form, certifications |
 | v0.1 → v0.3 | Positioning | Portfolio under Moeko Works by Kyle Zoleta; contact = questions about you or your projects |
-| v0.1 | Repo / Vercel / domain | `PastelSalt/moesoft_official` (private) · `moekoworks.vercel.app` · no custom domain |
+| v0.1 | Repo / Vercel / domain | `PastelSalt/moekoworks_official` (private) · `moekoworks.vercel.app` · no custom domain |
 | v0.1 | Source code | Never public, never referenced |
 | v0.1 | Content | Only what's necessary; web first + mobile + some desktop; strongest in backend, systems analysis, integration, operations |
 | v0.1 | Languages · mascot · admins · notifications | English only · none · only you · check the inbox yourself (e-mail later) |
@@ -2374,7 +2374,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 
 ## Appendix F — References
 - Your reference project: https://kotoha-fansite.vercel.app/ (the source stays private and is never linked from Moeko Works)
-- Old Moeko Works site (you'll remove it after launch): https://moesoft-web.vercel.app/
+- Old site (you'll remove it after launch): https://moesoft-web.vercel.app/
 - Design inspiration: https://mikuexpo.com/ (History: https://mikuexpo.com/history.html · tour microsite: https://mikuexpo.com/europe2026/) · https://archive.genco.co.jp/happysugarlife/
 - Next.js docs: https://nextjs.org/docs (App Router, Proxy, Caching / Cache Components, Authentication, Draft Mode)
 - MUI + Next.js integration: https://mui.com/material-ui/integrations/nextjs/

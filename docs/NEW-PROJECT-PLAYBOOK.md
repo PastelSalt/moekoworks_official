@@ -70,13 +70,13 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
 - **MUI 9.4** (Emotion inside `@layer mui`) for admin + form primitives; the public look is plain global CSS
   in cascade layers (`reset, tokens, base, mui, components, sections, motion, utilities`).
 - **Drizzle ORM 0.45** on **Neon** (`drizzle-orm/neon-http`): no interactive transactions → `db.batch([...])`.
-- **Cloudinary** (cloud `dijqsw0k8`, dynamic folders, root `moesoft-official`). Delivery helpers in
+- **Cloudinary** (cloud `dijqsw0k8`, dynamic folders, root `moekoworks-official`). Delivery helpers in
   `src/lib/cloudinary.ts`; never next/image (rule `@next/next/no-img-element` is off on purpose).
 - Motion: Lenis (desktop + full motion), CSS scroll-driven reveals, server-split letter pops, cursor sparkles,
   canvas-confetti; calm mode via `html[data-motion]`. Splash via `html[data-splash = show|done|skip]`.
 - Tooling: Node 24+ (26 on the current machine), `tsx` for scripts (scripts are **`.mts`** with explicit `.ts`
   imports), Playwright-core driving **`/usr/bin/google-chrome-stable`** (no browser download), `gh` logged in
-  as PastelSalt. Since the move to `~/Desktop/Moesoft/moesoft_official` (2026-10-11) the machine has no system
+  as PastelSalt. Since the 2026-10-11 move (now `Documents/MoekoWorks/moekoworks_official` on Windows) the machine has no system
   ffmpeg / ImageMagick: `ffmpeg-static` + `ffprobe-static` installed with npm in the scratchpad
   (`<scratch>/tools`, binary at `node_modules/ffmpeg-static/ffmpeg`, no `drawtext` filter) work, and stills /
   contact sheets use the repo's `sharp` (`createRequire(<repo>/package.json)("sharp")`).
@@ -86,13 +86,13 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
 | What | Value |
 |---|---|
 | GitHub repo | `PastelSalt/moekoworks_official` (private; renamed from `moesoft_official` 2026-10-20). Work on `dev`; `main` = production |
-| Vercel project | `moesoft` · `prj_iiroJzD4wL9Iw2ImeYHrxBZX05k3` · team `team_iTXgjBMqb9YpVCwrSPc0UKWO` (scope `pastelsalts-projects`) · Hobby · region `sin1` |
+| Vercel project | `moekoworks` (renamed 2026-10-20) · `prj_iiroJzD4wL9Iw2ImeYHrxBZX05k3` · team `team_iTXgjBMqb9YpVCwrSPc0UKWO` (scope `pastelsalts-projects`) · Hobby · region `sin1` |
 | Production URL | https://moekoworks.vercel.app |
-| Preview of `dev` | `moesoft-git-dev-pastelsalts-projects.vercel.app` (Vercel SSO: Kyle's login) |
+| Preview of `dev` | `moekoworks-git-dev-pastelsalts-projects.vercel.app` (Vercel SSO: Kyle's login) |
 | Old site | Vercel project `moesoft-web` — Kyle removes it himself; never touch it |
-| Neon (Moeko Works) | project `shy-rice-98401386`, Singapore, PG 17, database `moesoft` |
+| Neon (Moeko Works) | project `shy-rice-98401386`, Singapore, PG 17, database `moekoworks` (role `moesoft_owner`: Neon cannot rename/re-own it, kept on purpose) |
 | Neon (Kotoha) | project `odd-base-44136456`, default branch `main` (`br-tiny-credit-b3dga6s5`), database `kotoha`, role `kotoha_owner` |
-| Cloudinary | cloud `dijqsw0k8`; folders `moesoft-official/{projects/<slug>,certifications,site}`; presets `moekoworks_images_signed`, `moekoworks_videos_signed` (code defaults since the 2026-10-20 rebrand — until Kyle creates them, the old presets/folder are what the account has; see PROGRESS.md incident log) (signed, `disallow_public_id`, `unique_filename`, `overwrite: false`) |
+| Cloudinary | cloud `dijqsw0k8`; folders `moekoworks-official/{projects/<slug>,certifications,site}`; presets `moekoworks_images_signed`, `moekoworks_videos_signed` (code defaults since the 2026-10-20 rebrand — until Kyle creates them, the old presets/folder are what the account has; see PROGRESS.md incident log) (signed, `disallow_public_id`, `unique_filename`, `overwrite: false`) |
 | Video preset eager list | `c_limit,q_auto,vc_h264,w_1280/mp4` · `c_limit,q_auto,vc_vp9,w_1280/webm` · `c_limit,du_8,q_auto,vc_h264,w_854/mp4` · `c_limit,q_auto,so_auto,w_1280/jpg` |
 | Kotoha | live https://kotoha-fansite.vercel.app/ · repo `PastelSalt/kotoha-fansite` (may be private; clone with `gh`) |
 | Hanon | live https://hanon-fansite.vercel.app/ · repo `PastelSalt/hanon-fansite` · Neon `broad-flower-24329862` (branch `main` = `br-falling-water-az0enons`, db `hanon`) · tracking `/api/track` (same code base as Kotoha) |
@@ -290,7 +290,7 @@ Never touch the production branch; never show real usernames.
    (Kotoha: `admin_users.username`, `activity_log.admin_username`, `archived_content.archived_by_username`,
    `login_attempts.username_attempted`), and its password hashing (Kotoha: `@node-rs/argon2`,
    `{ memoryCost: 19456, timeCost: 2, parallelism: 1 }` — same as Moeko Works).
-2. **Create the branch** (Neon MCP `create_branch`, name e.g. `moesoft-screenshots-tmp`). Don't pass
+2. **Create the branch** (Neon MCP `create_branch`, name e.g. `moekoworks-screenshots-tmp`). Don't pass
    `compute.suspend_timeout_seconds` — the plan rejects it (HTTP 412).
 3. **Throwaway login**: generate a random password + hash locally, store both in `<scratch>/…json`
    (mode 600, deleted at the end); never print the password:
@@ -325,8 +325,8 @@ the Cloudinary MCP **`sign-upload`** tool, then POST with curl.
 
 1. Sign one entry per file (all at once):
    ```json
-   { "public_id": "moesoft-official/projects/<slug>/<name>", "asset_folder": "moesoft-official/projects/<slug>",
-     "tags": "moesoft,<slug>", "overwrite": true, "invalidate": true,
+   { "public_id": "moekoworks-official/projects/<slug>/<name>", "asset_folder": "moekoworks-official/projects/<slug>",
+     "tags": "moekoworks,<slug>", "overwrite": true, "invalidate": true,
      "colors": true }                                  // images
    { …same…, "eager": "c_limit,q_auto,vc_h264,w_1280/mp4|c_limit,q_auto,vc_vp9,w_1280/webm|c_limit,du_8,q_auto,vc_h264,w_854/mp4|c_limit,q_auto,so_auto,w_1280/jpg",
      "eager_async": true }                             // the preview video
@@ -423,7 +423,7 @@ Deleting a media item deletes the row **and** the Cloudinary file.
 ```js
 // node shot.mjs <path> <name> [w=1440] [h=900] [--scroll=<css selector|px>] [--mobile] [--full] [--live]
 import { createRequire } from "node:module";
-const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
+const { chromium } = createRequire("C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/package.json")("playwright-core");
 const [, , path = "/", name = "shot", w = "1440", h = "900", ...flags] = process.argv;
 const has = (f) => flags.includes(f);
 const base = has("--live") ? "https://moekoworks.vercel.app" : "http://localhost:3000";
@@ -454,7 +454,7 @@ await b.close();
 ```js
 // node fps.mjs <w> <h> gpu|cpu  → prints frames per second of a 9 s screencast of the target site
 import { createRequire } from "node:module";
-const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
+const { chromium } = createRequire("C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/package.json")("playwright-core");
 const [, , w, h, mode] = process.argv;
 const args = mode === "gpu" ? ["--ignore-gpu-blocklist", "--use-gl=angle", "--use-angle=gl", "--enable-gpu-rasterization"] : [];
 const b = await chromium.launch({ executablePath: "/usr/bin/google-chrome-stable", headless: true, args });
@@ -479,7 +479,7 @@ Write `<scratch>/endcard.html`, screenshot at 1280×720 into `scripts/capture/ou
 html,body{margin:0;width:1280px;height:720px;overflow:hidden;font-family:Fredoka,sans-serif}
 .card{position:relative;width:1280px;height:720px;display:grid;place-items:center;
   background:linear-gradient(150deg,<accent tint>,#fffdfe 48%,<accent-2 tint>)}
-.card::before{content:"";position:absolute;inset:0;background:url(/home/moeko/Desktop/Moesoft/moesoft_official/public/brand/pattern.svg) 0 0/720px;opacity:.9}
+.card::before{content:"";position:absolute;inset:0;background:url(C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/public/brand/pattern.svg) 0 0/720px;opacity:.9}
 .inner{position:relative;display:grid;justify-items:center;gap:14px;padding:44px 64px 40px;border-radius:32px;
   background:rgba(255,255,255,.86);border:2px solid #1e1a24;box-shadow:0 22px 50px -26px rgba(143,31,85,.45)}
 .label{font-size:15px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#5d5869}
@@ -489,7 +489,7 @@ h1{margin:0;font-size:64px;line-height:1;color:#2e2a36}
 .by img{width:190px}
 </style></head><body><div class="card"><div class="inner">
 <div class="label">Project · No.0N ✿</div><h1><Project title></h1><div class="url"><host></div>
-<div class="by">by <img src="/home/moeko/Desktop/Moesoft/moesoft_official/public/brand/moekoworks-logo.svg" alt=""></div>
+<div class="by">by <img src="C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/public/brand/moekoworks-logo.svg" alt=""></div>
 </div></div></body></html>
 ```
 
@@ -497,9 +497,9 @@ h1{margin:0;font-size:64px;line-height:1;color:#2e2a36}
 ```js
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
-const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
+const { chromium } = createRequire("C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/package.json")("playwright-core");
 const login = JSON.parse(readFileSync("<scratch>/test-login.json", "utf8"));
-const OUT = "/home/moeko/Desktop/Moesoft/moesoft_official/scripts/capture/out/<slug>/admin/";
+const OUT = "C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/scripts/capture/out/<slug>/admin/";
 const b = await chromium.launch({ executablePath: "/usr/bin/google-chrome-stable", headless: true, args: ["--ignore-gpu-blocklist", "--use-gl=angle", "--use-angle=gl"] });
 const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 }, locale: "en-US", reducedMotion: "reduce" });
 const page = await ctx.newPage();
@@ -524,7 +524,7 @@ await b.close();
 # (order of name=file pairs must match the order of entries you signed)
 import json, subprocess, sys
 signed, slug, pairs = json.load(open(sys.argv[1])), sys.argv[2], [a.split("=", 1) for a in sys.argv[3:]]
-OUT = f"/home/moeko/Desktop/Moesoft/moesoft_official/scripts/capture/out/{slug}"
+OUT = f"C:/Users/Myaako/Documents/MoekoWorks/moekoworks_official/scripts/capture/out/{slug}"
 try: results = json.load(open(f"{OUT}/uploads.json"))
 except FileNotFoundError: results = {}
 for entry, (name, path) in zip(signed, pairs):
@@ -710,7 +710,7 @@ point first), the cron rollup and the dashboard card. Admins (cookie), bots and 
 - Media (19): preview (29.1 s, 1280×720, 7 MB) · hover (8 s, 854×480, 0.66 MB) · 10 public shots (8 desktop
   browser-framed + 2 phone) · admin statistics + activity in the gallery · 5 admin shots on operation cards.
 - Files: `scripts/capture/kotoha.mts`, `scripts/capture/encode.sh`, `scripts/seed-kotoha.mts`;
-  Cloudinary `moesoft-official/projects/kotoha-fansite/{preview,hover,home,about,news,discography,gallery,
+  Cloudinary `moekoworks-official/projects/kotoha-fansite/{preview,hover,home,about,news,discography,gallery,
   lightbox,japanese,loader,phone-home,phone-gallery,admin-*}`.
 - Timeline of the real run: capture shots (~1 min) → video (32 s capture) → encode (~1 min) → sign + upload
   12 files (~30 s) → seed (dry-run, run) → verify pages → commit/push → preview → checkpoint → merge →

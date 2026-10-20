@@ -11,7 +11,7 @@
 ## Status
 | Phase | Status | Notes |
 |---|---|---|
-| P0 Start-up | ✅ done 2026-10-04 | Node 24.21, `gh` login, private repo `PastelSalt/moesoft_official`, Neon `moesoft-official` (`shy-rice-98401386`, Singapore, PG 17), Cloudinary folders + signed presets, Vercel project `moesoft` |
+| P0 Start-up | ✅ done 2026-10-04 | Node 24.21, `gh` login, private repo `PastelSalt/moekoworks_official` (renamed 2026-10-20), Neon `moekoworks-official` (`shy-rice-98401386`, Singapore, PG 17), Cloudinary folders + signed presets, Vercel project `moesoft` |
 | P1 Foundations | ✅ done | Next 16.3.8, React 19.2.8, MUI 9.4 (`@layer mui`), tokens/base CSS, Fredoka 400/700 + Lilita One, security headers (CSP report-only), brand SVGs |
 | P2 Shell & design system | ✅ done (`dev`) | Sidebar / mobile bar + MENU sheet / footer / PAGE TOP; splash (real progress, FLIP); pattern stage from the logo glyphs, watercolor washes, giant words, vertical text, badge, stickers, tape, marquee; motion (Lenis, lean, sparkles, letter pops, CSS scroll-driven reveals, calm mode) |
 | P3 Data & auth | ✅ done | Schema + `0000_init`; owner seeded (forced change pending — Kyle's first login); login / change password / sessions / lockout (9/9 e2e) |
@@ -68,31 +68,34 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
   0 old ids in page HTML, Hanon project page images load.
 - Tag `moekoworks` added to all 47 images; `moekoworks-portfolio` added to that project's 13 images + 2 videos.
 
-**Cleanup — still to do (resume here):**
-1. Cloudinary tags: add `moekoworks` to the 6 videos (`…/{moekoworks-portfolio,hanon-fansite,kotoha-fansite}/{hover,preview}`),
-   then remove the old tags `moesoft` (all 53) and `moesoft-portfolio` (15). Internal only.
-2. Re-check Home on the live site (every Cloudinary image/video loads); the classifier outage stopped this check.
-3. Docs: rewrite the remaining old-name mentions in `PRELIMENARYPLAN.md`, `docs/NEW-PROJECT-PLAYBOOK.md` and this file to
-   the current names (keep one history line about the rename). Do it after step 4 so the Neon names are final.
-4. Neon: rename database `moesoft` and role `moesoft_owner`, and rotate the leaked password together. The connection
-   string changes, so production has no DB until Kyle pastes the new `DATABASE_URL` / `DATABASE_URL_UNPOOLED` into Vercel
-   and redeploys (~2 min). Give Kyle the exact steps first. Public pages keep serving from cache meanwhile.
-5. Git: delete the merged branch `claude/kind-mccarthy-89dx0w` (local + origin).
-6. Neon backup branches `before-rebrand-2026-10-20` and `before-media-move-2026-10-20`: keep ~1 week, then ask before deleting.
+**Cleanup pass, part 2 (2026-10-20) — done:**
+- Cloudinary: `moekoworks` tag on all 53 assets (+ the 2 certificate images), old `moesoft` / `moesoft-portfolio` tags removed;
+  0 assets, tags or folders left with the old name. Old preset `moesoft_images_signed` deleted.
+- Live check: 358 media URLs across 6 pages, all 200.
+- Neon: database renamed `moesoft` → `moekoworks`; `moesoft_owner` password reset by Kyle (the leaked one is dead).
+  The role name stays: Neon roles can't grant/re-own each other (`permission denied to grant role`), so a rename would
+  need a full data copy — owner chose to keep it (it only appears inside the private connection string).
+- Vercel env: `DATABASE_URL` (new db + password), `CLOUDINARY_ROOT_FOLDER` = `moekoworks-official`,
+  `CLOUDINARY_PRESET_{IMAGES,VIDEOS}` = `moekoworks_{images,videos}_signed` (they had overridden the code defaults
+  with the old names since 2026-10-04), redeployed. Verified: production writes analytics events again.
+- Docs: old infra names rewritten in `PRELIMENARYPLAN.md`, the playbook and here (only `moesoft-web`, `moesoft_owner`
+  and history lines keep the old name). Merged branch `claude/kind-mccarthy-89dx0w` deleted (local + origin).
 
 **Still on Kyle:**
-1. Vercel: delete the old project `moesoft-web` (still online with the old brand). Vercel connector gets 403 for the team,
-   so: project → Settings → General → Delete Project.
-2. Vercel env: if `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` were set to the old names, delete them.
-3. Canva design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
-4. Re-run the Facebook/X/LinkedIn OG debuggers; resubmit the sitemap (new domain) in Search Console.
-5. Sign in to the admin again (session cookie renamed).
+1. Cloudinary: delete the old preset `moesoft_videos_signed` (unused now; the auto-mode checker blocked me).
+   Settings → Upload → Upload presets.
+2. Vercel: delete the old project `moesoft-web` (still online with the old brand): project → Settings → General → Delete.
+3. Delete the downloaded Neon `.env` / `env.txt` file from Downloads (it holds the DB password).
+4. Canva design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
+5. Re-run the Facebook/X/LinkedIn OG debuggers; resubmit the sitemap (new domain) in Search Console.
+6. Sign in to the admin again (session cookie renamed).
+7. In ~1 week: OK to delete the Neon backup branches `before-rebrand-2026-10-20` and `before-media-move-2026-10-20`.
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
 - Kept the scaffold's React 19.2.8 / TypeScript 5 / ESLint 9 (more conservative than plan's "latest").
 - Cover/preview/hover/OG are `media_assets.role` values instead of columns on `projects` (no circular FKs). Cover falls back to the first gallery image.
-- Single DB role (`moesoft_owner`) for now instead of separate app/migrator roles.
+- Single DB role (`moesoft_owner`, name kept: Neon cannot rename/re-own it) instead of separate app/migrator roles.
 - Logo tagline was rasterised in the Canva PDF (WebP in the SVGs); since the 2026-10-20 rebrand it is vector Fredoka paths.
 - **Global CSS files in cascade layers** (`src/styles/*.css`, kotoha's approach) instead of CSS Modules; letter pops are server-split spans + CSS (no SplitText), reveals are CSS scroll-driven animations (kotoha). GSAP stays installed for later.
 - `@next/next/no-img-element` is off: images are Cloudinary (`f_auto,q_auto`, srcset) or local SVG.
