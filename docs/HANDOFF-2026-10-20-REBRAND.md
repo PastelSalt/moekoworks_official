@@ -36,7 +36,7 @@ incident in `docs/PROGRESS.md`.
 | Defaults | Site URL `https://moekoworks.vercel.app`; Cloudinary root `moekoworks-official`; presets `moekoworks_{images,videos}_signed`; package name `moekoworks-official` (also in `package-lock.json`); CSV `moekoworks-statistics-*`; admin UA; password blocklist. |
 | Scripts | `seed-moekoworks.mts` (`npm run seed:moekoworks`, slug `moekoworks-portfolio`), `capture/moekoworks.mts`, `capture/encode-moekoworks.sh`, perf scripts use the `mw_*` keys. |
 | DB migration | **`scripts/rebrand-moekoworks.mts`** (new, never run). It scans every text/jsonb/array column of the content tables (skips `public_id`, `slug`, enums) and rewrites the old name. It also renames project slug `moesoft-portfolio` → `moekoworks-portfolio` and keeps the old slug in `project_slug_history` (301). Dry run by default; `--apply` writes it all in one transaction. It prints the rows it can't rewrite automatically. |
-| Docs | `CLAUDE.md` (title + rule 10), `README.md`, `PRELIMENARYPLAN.md` (rename note at the top), playbook, performance plan, progress. Real infra names that still exist (repo `moesoft_official`, Vercel project `moesoft`, Neon project/DB/role, local folder `~/Desktop/Moesoft/`, old site `moesoft-web`) are **kept literal on purpose** until Kyle renames them. |
+| Docs | `CLAUDE.md` (title + rule 10), `README.md`, `PRELIMENARYPLAN.md` (rename note at the top), playbook, performance plan, progress. Real infra names that still exist (Vercel project `moesoft`, Neon project/DB/role, local folder `~/Desktop/Moesoft/`, old site `moesoft-web`) are **kept literal on purpose** until Kyle renames them. |
 | Checks | `npm run typecheck` ✅ · `npm run lint` ✅ · `next build` compiles + TypeScript ✅. Page-data collection stopped because the cloud had no `DATABASE_URL`; the baseline build stopped at the same step, so **do a full `npm run build` locally**. A search of `src public scripts` finds 0 old-name hits (only `rebrand-moekoworks.mts`, which splits the word on purpose). |
 
 ## 4. Not verified — do these first locally
@@ -60,7 +60,7 @@ The Vercel API returned 403 for scope `pastelsalts-projects`. Neon, Cloudinary a
    in Vercel to the old values for now. Otherwise admin uploads break. Existing media URLs still contain
    `moesoft-official/…`. Moving them (rename public_ids + update `media_assets.public_id`) is a separate job that needs approval first.
 5. **E-mail** `moekosoftware@outlook.com` still reads "Moeko Software". Waiting for Kyle's new address (`src/lib/site.ts`, 2 places).
-6. Optional: rename the GitHub repo, the Neon project/DB/role, the local folder, and remove the old `moesoft-web` site.
+6. Optional: rename the Neon project/DB/role, the local folder, and remove the old `moesoft-web` site.
 7. After the deploy: OG debuggers (Facebook/X/LinkedIn), resubmit the sitemap in Search Console.
 
 ## 6. How the logo was rebuilt (to redo or tweak it)

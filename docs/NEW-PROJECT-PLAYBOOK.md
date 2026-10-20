@@ -85,7 +85,7 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
 ### 2.2 Accounts & IDs
 | What | Value |
 |---|---|
-| GitHub repo | `PastelSalt/moesoft_official` (private). Work on `dev`; `main` = production |
+| GitHub repo | `PastelSalt/moekoworks_official` (private; renamed from `moesoft_official` 2026-10-20). Work on `dev`; `main` = production |
 | Vercel project | `moesoft` · `prj_iiroJzD4wL9Iw2ImeYHrxBZX05k3` · team `team_iTXgjBMqb9YpVCwrSPc0UKWO` (scope `pastelsalts-projects`) · Hobby · region `sin1` |
 | Production URL | https://moekoworks.vercel.app |
 | Preview of `dev` | `moesoft-git-dev-pastelsalts-projects.vercel.app` (Vercel SSO: Kyle's login) |
