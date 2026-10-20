@@ -349,7 +349,7 @@ People curious about you and your work:
 Friendly, clear, a little playful. **Descriptive, not salesy**: it shows and explains, it doesn't pitch. I write the copy (Appendix D) and you review it at the checkpoint ✋.
 
 ### 4.3 Contact & socials
-- **GitHub: PastelSalt** (profile only, never project repositories) · **E-mail: moekosoftware@outlook.com** · **Facebook: Kyle Zoleta**.
+- **GitHub: PastelSalt** (profile only, never project repositories) · **E-mail: zoletakyle.1111@gmail.com** (switched 2026-10-20; was the old-brand Outlook address) · **Facebook: Kyle Zoleta**.
 - **Contact purpose:** questions about you or your projects, nothing else.
 
 ### 4.4 Personal-details policy ("only what's necessary")

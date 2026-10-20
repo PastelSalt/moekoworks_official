@@ -64,7 +64,7 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
    `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` in Vercel to the old names — otherwise admin uploads fail.
    53 existing media public_ids still carry the old folder name (only visible in image URLs); moving them is a
    separate, approved-first job.
-3. **E-mail** `moekosoftware@outlook.com` still reads as "Moeko Software": waiting for a new address (`src/lib/site.ts`).
+3. ~~E-mail~~ done 2026-10-20: the site now uses the personal Gmail address (`src/lib/site.ts`).
 4. **Neon DB password** was pasted in a chat: rotate it (Vercel + `.env.local`). Optional: rename the Neon
    project/DB/role, remove the old Vercel project `moesoft-web`.
 5. Re-run the Facebook/X/LinkedIn OG debuggers and resubmit the sitemap (new domain) in Search Console.
