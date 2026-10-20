@@ -1,4 +1,4 @@
-# NEW-PROJECT-PLAYBOOK.md — adding a project to Moesoft (guide for future Claude sessions)
+# NEW-PROJECT-PLAYBOOK.md — adding a project to Moeko Works (guide for future Claude sessions)
 
 > Written 2026-10-04 right after the Kotoha Fan Site was added and the site launched. It records the exact
 > pipeline that worked end to end, with the scripts, IDs, settings and the mistakes worth not repeating.
@@ -50,11 +50,11 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
   commit. Neon connection strings from `get_connection_string` contain the role password (shared by every
   branch of that project!) — keep them only in a scratch `.env.local` and delete it afterwards.
 - **Don't pollute statistics:** block the target site's tracking endpoint during captures
-  (Kotoha: `**/api/track**`), and set `localStorage.ms_nt = "1"` when screenshotting Moesoft itself.
+  (Kotoha: `**/api/track**`), and set `localStorage.mw_nt = "1"` when screenshotting Moeko Works itself.
 - When asking Kyle something: give a recommendation and a confidence level. Answer plainly if he's frustrated.
 - English only. Copy tone: friendly portfolio voice (plan Appendix D), "Kyle" in first person on About only.
 - Commit attribution: use the `Co-Authored-By` trailer the session's system reminder specifies. The repo-local
-  git author is already configured (`Moesoft: Moeko Software and Technologies`).
+  git author is already configured (`Moeko Works: Moeko Works`).
 
 ---
 
@@ -87,12 +87,12 @@ These come from `CLAUDE.md` / the owner; the ones that bite during a project imp
 |---|---|
 | GitHub repo | `PastelSalt/moesoft_official` (private). Work on `dev`; `main` = production |
 | Vercel project | `moesoft` · `prj_iiroJzD4wL9Iw2ImeYHrxBZX05k3` · team `team_iTXgjBMqb9YpVCwrSPc0UKWO` (scope `pastelsalts-projects`) · Hobby · region `sin1` |
-| Production URL | https://moesoft.vercel.app |
+| Production URL | https://moekoworks.vercel.app |
 | Preview of `dev` | `moesoft-git-dev-pastelsalts-projects.vercel.app` (Vercel SSO: Kyle's login) |
 | Old site | Vercel project `moesoft-web` — Kyle removes it himself; never touch it |
-| Neon (Moesoft) | project `shy-rice-98401386`, Singapore, PG 17, database `moesoft` |
+| Neon (Moeko Works) | project `shy-rice-98401386`, Singapore, PG 17, database `moesoft` |
 | Neon (Kotoha) | project `odd-base-44136456`, default branch `main` (`br-tiny-credit-b3dga6s5`), database `kotoha`, role `kotoha_owner` |
-| Cloudinary | cloud `dijqsw0k8`; folders `moesoft-official/{projects/<slug>,certifications,site}`; presets `moesoft_images_signed`, `moesoft_videos_signed` (signed, `disallow_public_id`, `unique_filename`, `overwrite: false`) |
+| Cloudinary | cloud `dijqsw0k8`; folders `moesoft-official/{projects/<slug>,certifications,site}`; presets `moekoworks_images_signed`, `moekoworks_videos_signed` (code defaults since the 2026-10-20 rebrand — until Kyle creates them, the old presets/folder are what the account has; see PROGRESS.md incident log) (signed, `disallow_public_id`, `unique_filename`, `overwrite: false`) |
 | Video preset eager list | `c_limit,q_auto,vc_h264,w_1280/mp4` · `c_limit,q_auto,vc_vp9,w_1280/webm` · `c_limit,du_8,q_auto,vc_h264,w_854/mp4` · `c_limit,q_auto,so_auto,w_1280/jpg` |
 | Kotoha | live https://kotoha-fansite.vercel.app/ · repo `PastelSalt/kotoha-fansite` (may be private; clone with `gh`) |
 | Hanon | live https://hanon-fansite.vercel.app/ · repo `PastelSalt/hanon-fansite` · Neon `broad-flower-24329862` (branch `main` = `br-falling-water-az0enons`, db `hanon`) · tracking `/api/track` (same code base as Kotoha) |
@@ -137,7 +137,7 @@ Tables: `projects` (1 row) → `project_links`, `project_technologies` (→ `tec
 - Enums (DB check constraints):
   - category: `web, mobile, desktop, game, tool, research, concept, other`
   - lifecycle (the project's own state): `live, beta, in_development, completed, delivered, research, concept, archived`
-  - status (on Moesoft): `draft, published, archived`
+  - status (on Moeko Works): `draft, published, archived`
   - platforms (free text[], the UI offers): `web, android, ios, windows, macos, linux`
   - link kinds: `live, apk, exe, msi, dmg, appimage, ios, play_store, app_store, docs, demo_video, paper, other` (URLs must be `https://`)
   - media roles: `gallery, cover, preview, hover, operation, og, certificate, site` · frames: `auto, browser, phone, tablet, window, none`
@@ -289,7 +289,7 @@ Never touch the production branch; never show real usernames.
 1. **Inspect** the project's schema: admin users table, any table storing usernames as text
    (Kotoha: `admin_users.username`, `activity_log.admin_username`, `archived_content.archived_by_username`,
    `login_attempts.username_attempted`), and its password hashing (Kotoha: `@node-rs/argon2`,
-   `{ memoryCost: 19456, timeCost: 2, parallelism: 1 }` — same as Moesoft).
+   `{ memoryCost: 19456, timeCost: 2, parallelism: 1 }` — same as Moeko Works).
 2. **Create the branch** (Neon MCP `create_branch`, name e.g. `moesoft-screenshots-tmp`). Don't pass
    `compute.suspend_timeout_seconds` — the plan rejects it (HTTP 412).
 3. **Throwaway login**: generate a random password + hash locally, store both in `<scratch>/…json`
@@ -309,7 +309,7 @@ Never touch the production branch; never show real usernames.
    the project needs (Kotoha: `DATABASE_URL`, `ANALYTICS_SALT=<random>`, `ALLOWED_ORIGINS=localhost:3100`,
    `PORT=3100`). Uploads stay off (no Cloudinary secret).
 6. `npm ci --omit=dev` in the clone, then run its own dev server **in the background on 3100**
-   (Moesoft dev uses 3000): `node --env-file=.env.local scripts/dev-server.js`.
+   (Moeko Works dev uses 3000): `node --env-file=.env.local scripts/dev-server.js`.
 7. Capture with §11.4 (sign in, hash-route through the admin pages, 1920×1080, `reducedMotion: "reduce"`),
    and assert no real username appears in `document.body.innerText`.
 8. **Tear down immediately:** stop the server (TaskStop), `delete_branch` (needs Kyle's OK — get it in step 1),
@@ -389,7 +389,7 @@ Deleting a media item deletes the row **and** the Cloudinary file.
 
 ## 9. Step 7 — Verify locally
 
-1. Dev server: built-in browser `preview_start` with name `moesoft-dev` (`.claude/launch.json`, port 3000).
+1. Dev server: built-in browser `preview_start` with name `moekoworks-dev` (`.claude/launch.json`, port 3000).
    First compile of a route can take **~30 s** in dev — use 60–90 s timeouts in tests.
 2. Screenshots with §11.1 (skips the splash, doesn't count the visit). Check: Home (ticker, Latest card,
    Works grid), `/history` (row + LATEST sticker + floating preview), `/history/<slug>` hero and every section
@@ -408,7 +408,7 @@ Deleting a media item deletes the row **and** the Cloudinary file.
 3. **Checkpoint with Kyle** (screens, copy, media). Changes → iterate.
 4. With his OK: `git checkout main && git merge --ff-only dev && git push origin main && git checkout dev`
    (never force-push). Production builds in ~1 min.
-5. Wait for it (background until-loop: `curl -s https://moesoft.vercel.app/ | grep -q "<new title>"`), then
+5. Wait for it (background until-loop: `curl -s https://moekoworks.vercel.app/ | grep -q "<new title>"`), then
    run §11.8 and a live screenshot. Seed data is in the DB already, so the new build's ISR pages include it;
    otherwise pages refresh within 10 minutes.
 6. Update `docs/PROGRESS.md` (docs-only commits can stay on `dev` until the next approved merge).
@@ -426,15 +426,15 @@ import { createRequire } from "node:module";
 const { chromium } = createRequire("/home/moeko/Desktop/Moesoft/moesoft_official/package.json")("playwright-core");
 const [, , path = "/", name = "shot", w = "1440", h = "900", ...flags] = process.argv;
 const has = (f) => flags.includes(f);
-const base = has("--live") ? "https://moesoft.vercel.app" : "http://localhost:3000";
+const base = has("--live") ? "https://moekoworks.vercel.app" : "http://localhost:3000";
 const scroll = flags.find((f) => f.startsWith("--scroll="))?.slice(9);
 const b = await chromium.launch({ executablePath: "/usr/bin/google-chrome-stable", headless: true });
 const ctx = await b.newContext({
   viewport: { width: +w, height: +h }, isMobile: has("--mobile"), hasTouch: has("--mobile"), deviceScaleFactor: has("--mobile") ? 2 : 1,
   userAgent: has("--mobile") ? "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Mobile Safari/537.36" : undefined,
 });
-// skip the splash, and never count these visits in Moesoft's statistics
-await ctx.addInitScript(() => { try { sessionStorage.setItem("ms_splash", "1"); localStorage.setItem("ms_nt", "1"); } catch {} });
+// skip the splash, and never count these visits in Moeko Works' statistics
+await ctx.addInitScript(() => { try { sessionStorage.setItem("mw_splash", "1"); localStorage.setItem("mw_nt", "1"); } catch {} });
 const page = await ctx.newPage();
 await page.goto(base + path, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForTimeout(1500);
@@ -489,7 +489,7 @@ h1{margin:0;font-size:64px;line-height:1;color:#2e2a36}
 .by img{width:190px}
 </style></head><body><div class="card"><div class="inner">
 <div class="label">Project · No.0N ✿</div><h1><Project title></h1><div class="url"><host></div>
-<div class="by">by <img src="/home/moeko/Desktop/Moesoft/moesoft_official/public/brand/moesoft-logo.svg" alt=""></div>
+<div class="by">by <img src="/home/moeko/Desktop/Moesoft/moesoft_official/public/brand/moekoworks-logo.svg" alt=""></div>
 </div></div></body></html>
 ```
 
@@ -594,7 +594,7 @@ EOF
 
 ### 11.8 Production smoke check
 ```bash
-B=https://moesoft.vercel.app; UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36"
+B=https://moekoworks.vercel.app; UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Safari/537.36"
 for p in / /history /history/<slug> /about /contact /privacy /sitemap.xml /robots.txt /opengraph-image.jpg /nope; do
   printf "%-28s %s\n" "$p" "$(curl -s -o /dev/null -w '%{http_code} %{size_download}B' -A "$UA" "$B$p")"; done
 curl -s -o /dev/null -w "/admin → %{http_code} %{redirect_url}\n" "$B/admin"            # 307 → /admin/login
@@ -646,7 +646,7 @@ loader_timing, project_view, project_open, project_link_click, video_play, video
 certificate_open, outbound_click, contact_start, contact_submit, copy_email, motion_toggle, filter_use,
 not_found. Home sections: `data-track-section="<key>"`; page-level views: `data-track-view="project:<id>"`.
 A new event type needs: `EVENT_TYPES`, the `analytics_events_type_check` constraint (migration + restore
-point first), the cron rollup and the dashboard card. Admins (cookie), bots and `ms_nt=1` are never counted.
+point first), the cron rollup and the dashboard card. Admins (cookie), bots and `mw_nt=1` are never counted.
 
 ## 14. Gotchas & lessons learned
 - **React dev StrictMode runs effects twice**: never "arm" DOM nodes with a marker class in an effect that
@@ -682,10 +682,10 @@ point first), the cron rollup and the dashboard card. Admins (cookie), bots and 
 
 ## 15. Worked examples
 
-### Moesoft Portfolio (2026-10-14, project id 10): this site as a project
-- `scripts/capture/moesoft.mts` (captures production with `ms_nt`, emulated fine pointer so Lenis/hover previews
-  work; the splash shot uses a fresh session), `encode-moesoft.sh` (5 cuts + end card → 23 s, 3.9 MB),
-  `seed-moesoft.mts`. 13 stills (10 desktop + 3 phone), no admin shots and **no "For admins" operations** (owner).
+### Moeko Works Portfolio (2026-10-14, project id 10): this site as a project
+- `scripts/capture/moekoworks.mts` (captures production with `mw_nt`, emulated fine pointer so Lenis/hover previews
+  work; the splash shot uses a fresh session), `encode-moekoworks.sh` (5 cuts + end card → 23 s, 3.9 MB),
+  `seed-moekoworks.mts`. 13 stills (10 desktop + 3 phone), no admin shots and **no "For admins" operations** (owner).
 - Dated by the owner: `started_on` **and** `published_at` = 2026-01-20 (the seed pins `PUBLISHED_AT`), so it is
   the oldest project: No.01; Kotoha became No.02, Hanon No.03 (still Latest).
 - New tech: Simple Icons (logo added to `tech-icons.ts`), Playwright (monogram), FFmpeg.

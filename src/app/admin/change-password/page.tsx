@@ -11,7 +11,7 @@ export default async function ChangePasswordPage() {
   return (
     <main className="admin-auth">
       <div className="admin-auth__card">
-        <img className="admin-auth__logo" src="/brand/moesoft-logo.svg" alt="Moesoft" width={210} height={66} />
+        <img className="admin-auth__logo" src="/brand/moekoworks-logo.svg" alt="Moeko Works" width={210} height={46} />
         <p className="admin-auth__label">{forced ? "Please set your own password" : "Change password"}</p>
         {forced && (
           <p style={{ marginTop: 0, color: "var(--ink-soft)", textAlign: "center" }}>

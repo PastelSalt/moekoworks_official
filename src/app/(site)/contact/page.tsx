@@ -10,11 +10,11 @@ import "@/styles/pages.css";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Questions about Kyle Zoleta or the projects on Moesoft? Send a message.",
+  description: "Questions about Kyle Zoleta or the projects on Moeko Works? Send a message.",
   alternates: { canonical: "/contact" },
 };
 
-const ASK = ["How something in one of my projects works.", "A bug or typo you spotted.", "Anything else about me or Moesoft, or just a kind word ✿"];
+const ASK = ["How something in one of my projects works.", "A bug or typo you spotted.", "Anything else about me or Moeko Works, or just a kind word ✿"];
 
 export default function ContactPage() {
   const github = site.socials.find((s) => s.id === "github")!;

@@ -11,7 +11,7 @@ export default async function LoginPage() {
   return (
     <main className="admin-auth">
       <div className="admin-auth__card">
-        <img className="admin-auth__logo" src="/brand/moesoft-logo.svg" alt="Moesoft" width={210} height={66} />
+        <img className="admin-auth__logo" src="/brand/moekoworks-logo.svg" alt="Moeko Works" width={210} height={46} />
         <p className="admin-auth__label">Admin · sign in</p>
         <LoginForm />
       </div>

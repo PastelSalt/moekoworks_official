@@ -50,7 +50,7 @@ export function AdminShell({ children, unread = 0 }: { children: React.ReactNode
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%", bgcolor: "background.paper" }}>
       <Box sx={{ p: 2.5, pb: 1 }}>
         <Link href="/admin" aria-label="Dashboard">
-          <img src="/brand/moesoft-logo.svg" alt="Moesoft" width={180} height={56} />
+          <img src="/brand/moekoworks-logo.svg" alt="Moeko Works" width={180} height={39} />
         </Link>
         <p className="admin-label" style={{ marginTop: 6 }}>Admin</p>
       </Box>
@@ -106,7 +106,7 @@ export function AdminShell({ children, unread = 0 }: { children: React.ReactNode
             <Menu />
           </IconButton>
           <Typography sx={{ ml: 1, fontWeight: 700 }}>
-            Moesoft admin
+            Moeko Works admin
           </Typography>
         </Toolbar>
       </AppBar>

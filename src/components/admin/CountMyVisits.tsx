@@ -5,7 +5,7 @@ import Switch from "@mui/material/Switch";
 import { useSyncExternalStore } from "react";
 
 // "Don't count my visits" (plan §17.1): a flag in this browser only; the tracker then sends nothing.
-const KEY = "ms_nt";
+const KEY = "mw_nt";
 const listeners = new Set<() => void>();
 const read = () => {
   try {

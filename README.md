@@ -1,6 +1,6 @@
-# Moesoft — a portfolio by Kyle Zoleta
+# Moeko Works — a portfolio by Kyle Zoleta
 
-Moesoft (Moeko Software and Technologies) is Kyle Zoleta's portfolio: creative websites and the systems behind them.
+Moeko Works is Kyle Zoleta's portfolio: creative websites and the systems behind them.
 Plan: [`PRELIMENARYPLAN.md`](PRELIMENARYPLAN.md) · Progress: [`docs/PROGRESS.md`](docs/PROGRESS.md) · Conventions: [`CLAUDE.md`](CLAUDE.md)
 
 ## Stack

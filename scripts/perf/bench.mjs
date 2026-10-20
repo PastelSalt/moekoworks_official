@@ -1,6 +1,6 @@
 // Scroll benchmark on the real GPU (docs/PERFORMANCE_PLAN.md): wheel-scrolls a page down and back up and records
 // every requestAnimationFrame interval. A fresh browser per run; a fine pointer is emulated so Lenis runs like on a
-// real mouse/touchpad. Never counted in Moesoft's statistics (ms_nt, /api/track answered locally).
+// real mouse/touchpad. Never counted in Moeko Works' statistics (mw_nt, /api/track answered locally).
 //   node scripts/perf/bench.mjs <url> <exp[,exp…]> [w=1920] [h=1080] [cpu=1]
 // Experiments switch one effect group off ("base" = none); combine with "+", e.g. lean+flowerfall.
 // Compare back-to-back pairs (base,exp,base,exp…) and use medians: this laptop is noisy (heat, other tabs).
@@ -44,9 +44,9 @@ async function run(name) {
   await ctx.route(/\/api\/track/, (r) => r.fulfill({ status: 204 }));
   await ctx.addInitScript(({ js, motion }) => {
     try {
-      sessionStorage.setItem("ms_splash", "1");
-      localStorage.setItem("ms_nt", "1");
-      if (motion === "off") localStorage.setItem("ms_motion", "off");
+      sessionStorage.setItem("mw_splash", "1");
+      localStorage.setItem("mw_nt", "1");
+      if (motion === "off") localStorage.setItem("mw_motion", "off");
     } catch {}
     {
       const fine = !js.includes("lenis");

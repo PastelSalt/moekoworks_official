@@ -82,7 +82,7 @@ export async function POST(req: Request) {
   const ua = req.headers.get("user-agent") ?? "";
   const cookie = req.headers.get("cookie") ?? "";
   // Not counted: bots, signed-in admin browsers, visitors who opted out.
-  if (isBot(ua) || /(?:^|;\s*)(?:__Host-)?ms_session=/.test(cookie) || parsed.nt === 1) return new Response(null, { status: 204 });
+  if (isBot(ua) || /(?:^|;\s*)(?:__Host-)?mw_session=/.test(cookie) || parsed.nt === 1) return new Response(null, { status: 204 });
 
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "0.0.0.0";
   const host = req.headers.get("host") ?? "";

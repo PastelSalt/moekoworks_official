@@ -165,7 +165,7 @@ export type UploadResult = { public_id: string; version: number; format: string;
 export async function addMedia(projectId: number | null, upload: UploadResult, role: string) {
   const session = await requireAdmin();
   const kind = upload.resource_type === "video" ? "video" : "image";
-  const root = process.env.CLOUDINARY_ROOT_FOLDER ?? "moesoft-official";
+  const root = process.env.CLOUDINARY_ROOT_FOLDER ?? "moekoworks-official";
   if (!upload.public_id || !upload.public_id.startsWith(`${root}/`) && !/^[a-z0-9]{12,}$/i.test(upload.public_id)) return null;
   const allowed = projectId ? MEDIA_ROLES : (["certificate", "site"] as const);
   const safeRole = (allowed as readonly string[]).includes(role) ? role : projectId ? "gallery" : "certificate";

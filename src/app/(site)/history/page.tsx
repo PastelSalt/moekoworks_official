@@ -14,7 +14,7 @@ export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "Project History",
-  description: "Every project made under Moesoft, newest first.",
+  description: "Every project made under Moeko Works, newest first.",
   alternates: { canonical: "/history" },
 };
 
@@ -30,7 +30,7 @@ export default async function HistoryPage() {
     <>
       <PageHead
         label="History"
-        title="Moesoft History"
+        title="Moeko Works History"
         giant="HISTORY"
         micro={
           <>
@@ -42,7 +42,7 @@ export default async function HistoryPage() {
           </>
         }
       >
-        <p>Every project made under Moesoft, newest first. Hover a project for a quick preview, or open it to see what it does, how it works and what it&apos;s made with.</p>
+        <p>Every project made under Moeko Works, newest first. Hover a project for a quick preview, or open it to see what it does, how it works and what it&apos;s made with.</p>
       </PageHead>
 
       <section className="wrap section history" aria-label="Project archive">

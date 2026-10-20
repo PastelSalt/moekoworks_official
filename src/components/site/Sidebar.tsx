@@ -31,7 +31,7 @@ export function Sidebar() {
   return (
     <aside className="sidebar" aria-label="Site">
       <Link className="sidebar__logo" href="/" data-splash-target>
-        <img src="/brand/moesoft-logo.svg" alt="Moesoft home" width={190} height={60} />
+        <img src="/brand/moekoworks-logo.svg" alt="Moeko Works home" width={190} height={41} />
       </Link>
       <nav className="sidebar__nav" aria-label="Main">
         <NavLinks variant="sidebar" />
@@ -39,7 +39,7 @@ export function Sidebar() {
       <div className="sidebar__foot">
         <Socials />
         <MotionToggle />
-        <p className="sidebar__copy">© {site.since} Moesoft</p>
+        <p className="sidebar__copy">© {site.since} Moeko Works</p>
       </div>
     </aside>
   );

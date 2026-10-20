@@ -1,10 +1,10 @@
-// Moesoft Portfolio seed: this site as a project (copy of seed-hanon.mts, docs/NEW-PROJECT-PLAYBOOK.md §8). No
+// Moeko Works Portfolio seed: this site as a project (copy of seed-hanon.mts, docs/NEW-PROJECT-PLAYBOOK.md §8). No
 // "For admins" operations or admin screenshots (owner). Dated 2026-01-20 (start and publish date).
-// Media metadata comes from scripts/capture/out/moesoft/uploads.json (upload step).
+// Media metadata comes from scripts/capture/out/moekoworks/uploads.json (upload step).
 //
-//   npm run seed:moesoft -- --dry-run      list everything that would be written
-//   npm run seed:moesoft                   create the project (refuses if it already exists)
-//   npm run seed:moesoft -- --replace      replace its links / tech / operations / media
+//   npm run seed:moekoworks -- --dry-run      list everything that would be written
+//   npm run seed:moekoworks                   create the project (refuses if it already exists)
+//   npm run seed:moekoworks -- --replace      replace its links / tech / operations / media
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { eq, inArray, sql } from "drizzle-orm";
@@ -14,7 +14,7 @@ import { TECH } from "./seed-tech.mts";
 
 const dry = process.argv.includes("--dry-run");
 const replace = process.argv.includes("--replace");
-const SLUG = "moesoft-portfolio";
+const SLUG = "moekoworks-portfolio";
 const ACCENT = "#FFB4E3";
 const ACCENT_2 = "#A0CFFC";
 // Kyle's date for this site (owner, 2026-10-14): start and publish date; it is the oldest project (No.01)
@@ -23,10 +23,10 @@ const PUBLISHED_AT = new Date(`${DATED}T09:00:00+08:00`);
 
 const project = {
   slug: SLUG,
-  title: "Moesoft Portfolio",
+  title: "Moeko Works Portfolio",
   tagline: "This portfolio itself: a pastel “Bloom Expo” site with video previews, story-like project pages, cookieless statistics and smooth motion.",
   descriptionMd: [
-    "**Moesoft Portfolio** is the home of Moeko Software and Technologies: the site where Kyle Zoleta shows what he builds, from creative websites to the systems behind them. Every project gets its own page with a preview video, what you can do with it, how it works behind the scenes and what it is made with.",
+    "**Moeko Works Portfolio** is the home of Moeko Works: the site where Kyle Zoleta shows what he builds, from creative websites to the systems behind them. Every project gets its own page with a preview video, what you can do with it, how it works behind the scenes and what it is made with.",
     "Its look, **“Bloom Expo,”** pairs the structure of an expo site with a pastel palette of pinks and blues: sticker labels, giant outlined words, rotating badges and the logo's five-petal flower everywhere. Motion follows one tempo (120 BPM): a splash that assembles the logo, letter pops, scroll-driven reveals, outline flowers drifting behind the pages, and a Motion switch for a calm version.",
     "It runs on **Next.js 16** with React server components, MUI and plain CSS in cascade layers, Drizzle ORM on Neon Postgres and Cloudinary for media, hosted on Vercel in Singapore. Cookieless first-party statistics, a spam-protected contact form and a performance pass that keeps it smooth on modest laptops complete the picture.",
   ].join("\n\n"),
@@ -45,7 +45,7 @@ const project = {
   disclaimerMd: null,
 };
 
-const links = [{ kind: "live", label: null, url: "https://moesoft.vercel.app/", note: "moesoft.vercel.app", isPrimary: true }];
+const links = [{ kind: "live", label: null, url: "https://moekoworks.vercel.app/", note: "moekoworks.vercel.app", isPrimary: true }];
 
 // [tech slug, usage note]
 const stack: [string, string][] = [
@@ -92,9 +92,9 @@ const operations: [string, string, string, string][] = [
 
 // [upload key, role, frame, alt, caption]
 const media: [string, string, string, string, string | null][] = [
-  ["preview", "preview", "browser", "Preview of Moesoft Portfolio: the splash, Home, the Works grid, a History hover preview, a project page, About and Contact.", null],
-  ["hover", "hover", "browser", "Short preview of Moesoft Portfolio's home page arriving and scrolling to the latest project.", null],
-  ["home", "gallery", "browser", "Moesoft home page: the pastel stage with the Moesoft logo, the portfolio introduction and the latest project's preview video.", "Home: the key-visual stage and the latest project."],
+  ["preview", "preview", "browser", "Preview of Moeko Works Portfolio: the splash, Home, the Works grid, a History hover preview, a project page, About and Contact.", null],
+  ["hover", "hover", "browser", "Short preview of Moeko Works Portfolio's home page arriving and scrolling to the latest project.", null],
+  ["home", "gallery", "browser", "Moeko Works home page: the pastel stage with the Moeko Works logo, the portfolio introduction and the latest project's preview video.", "Home: the key-visual stage and the latest project."],
   ["works", "gallery", "browser", "The Works grid on the home page: the featured latest project, the next project and the profile strip above.", "Works: the newest projects with hover previews."],
   ["history", "gallery", "browser", "The History page listing every project, with a preview video floating next to the hovered row.", "History: every project, with a floating preview."],
   ["project", "gallery", "browser", "A project page hero: title, one-line description, status chips, a Visit button and the preview video in a browser frame.", "A project page: the hero."],
@@ -102,9 +102,9 @@ const media: [string, string, string, string, string | null][] = [
   ["project-tech", "gallery", "browser", "A project page's “Built with” section: a ribbon of technologies and grouped cards with usage notes.", "A project page: built with."],
   ["about", "gallery", "browser", "The About page with the profile card and its details.", "About: the profile."],
   ["contact", "gallery", "browser", "The Contact page: contact details and the message form.", "Contact: details and the message form."],
-  ["splash", "gallery", "browser", "The first-visit splash: the Moesoft logo assembling with a loading percentage.", "Splash: real loading progress."],
+  ["splash", "gallery", "browser", "The first-visit splash: the Moeko Works logo assembling with a loading percentage.", "Splash: real loading progress."],
   ["toolbox", "gallery", "browser", "The Toolbox ribbon and the Certifications strip on the home page.", "Toolbox and certifications."],
-  ["phone-home", "gallery", "phone", "Moesoft on a phone: the news ticker, the logo, the introduction and the latest project.", "On a phone: Home."],
+  ["phone-home", "gallery", "phone", "Moeko Works on a phone: the news ticker, the logo, the introduction and the latest project.", "On a phone: Home."],
   ["phone-project", "gallery", "phone", "A project page on a phone: the hero with its preview and Visit button.", "On a phone: a project page."],
   ["phone-menu", "gallery", "phone", "The full-screen phone menu with About, Contact and History, social links and the Motion switch.", "On a phone: the menu."],
 ];
@@ -113,7 +113,7 @@ const media: [string, string, string, string, string | null][] = [
 const opMedia: Record<string, string> = {};
 
 type Upload = { public_id: string; version: number; format: string; width: number; height: number; bytes: number; duration?: number; resource_type: string; dominant?: string | null };
-const uploads: Record<string, Upload> = JSON.parse(readFileSync(join(import.meta.dirname, "capture", "out", "moesoft", "uploads.json"), "utf8"));
+const uploads: Record<string, Upload> = JSON.parse(readFileSync(join(import.meta.dirname, "capture", "out", "moekoworks", "uploads.json"), "utf8"));
 const missing = media.filter(([k]) => !uploads[k]).map(([k]) => k);
 if (missing.length) throw new Error(`uploads.json is missing: ${missing.join(", ")}`);
 if (project.tagline.length > 160) throw new Error(`tagline is ${project.tagline.length} chars (max 160)`);

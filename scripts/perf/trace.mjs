@@ -15,8 +15,8 @@ try {
   await ctx.addInitScript(
     ({ noLean, noLenis }) => {
       try {
-        sessionStorage.setItem("ms_splash", "1");
-        localStorage.setItem("ms_nt", "1");
+        sessionStorage.setItem("mw_splash", "1");
+        localStorage.setItem("mw_nt", "1");
       } catch {}
       const mm = window.matchMedia.bind(window);
       window.matchMedia = (q) => (q === "(pointer: fine)" ? { matches: !noLenis, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} } : mm(q));

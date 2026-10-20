@@ -1,6 +1,6 @@
 // Rebuilds scripts/capture/out/<folder>/uploads.json from a project's media rows, so a seed can be re-run
 // with --replace after the git-ignored capture outputs are gone (new machine, wiped folder).
-// Keys are the last segment of each public_id (e.g. moesoft-official/projects/kotoha-fansite/home → "home").
+// Keys are the last segment of each public_id (e.g. moekoworks-official/projects/kotoha-fansite/home → "home").
 //
 //   npx tsx scripts/capture/uploads-from-db.mts <project slug> <out folder>   e.g. kotoha-fansite kotoha
 import { mkdirSync, writeFileSync } from "node:fs";

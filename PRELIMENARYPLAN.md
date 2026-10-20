@@ -1,6 +1,7 @@
-# Moesoft Official Website — Preliminary Plan
+# Moeko Works Official Website — Preliminary Plan
 
-> **Moesoft · Moeko Software and Technologies** — a portfolio by **Kyle Zoleta**
+> **Moeko Works** — a portfolio by **Kyle Zoleta**
+> ⚠️ **Renamed 2026-10-20:** the brand was renamed to **Moeko Works** (the old name belongs to an established company). Brand text in this plan was updated; infrastructure names quoted below (repo, Neon/Vercel projects, Cloudinary folder, DB roles) are the ones created at the time — see `docs/PROGRESS.md` → "Incident log".
 > File: `PRELIMENARYPLAN.md` · Version **0.3** · Updated **2026-10-04** (Asia/Manila)
 > Status: **Ready to start** once the 4 start-up items in [§26](#26-readiness--start-up-items) are done
 > Plan readiness: v0.1 61.1 → v0.2 80.0 → **v0.3 94.5 / 100** · **96.7 after the start-up items** · the last points come from your copy review at the design checkpoint ✋
@@ -54,7 +55,7 @@
 ### 0.1 Your latest answers, applied
 | Topic | Decision (v0.3) |
 |---|---|
-| Positioning | ✅ **A portfolio** under the name Moesoft, by Kyle Zoleta. **Contact = questions about you or your projects.** No services, prices or "hire me". This fits Vercel Hobby's personal-use rule. |
+| Positioning | ✅ **A portfolio** under the name Moeko Works, by Kyle Zoleta. **Contact = questions about you or your projects.** No services, prices or "hire me". This fits Vercel Hobby's personal-use rule. |
 | Old site | ✅ You'll remove `moesoft-web` once this site is finished. The new site is a new codebase and a new Vercel project; I won't touch the old one. |
 | Logo | ✅ Canva link set to view-only. The 6-layer PDF and the GIF are in `assets/`. Fonts: **Lilita One** (wordmark) and **Canva Sans Bold Italic** (tagline). |
 | Mobile + references | ✅ Mobile follows **mikuexpo.com**: a top bar with the logo and a "MENU" button that opens a full menu |
@@ -90,8 +91,8 @@
 ## 1. Executive summary
 
 ### 1.1 What we are building
-**Moesoft**, the portfolio of Kyle Zoleta. It's a creative-first, still-professional, pastel and rounded site that feels like a modern Japanese creative website: **visual-heavy, layered and dense with information**, the way Kotoha is. It:
-1. Opens with a **splash screen**: the Moesoft logo assembles and its flowers spin.
+**Moeko Works**, the portfolio of Kyle Zoleta. It's a creative-first, still-professional, pastel and rounded site that feels like a modern Japanese creative website: **visual-heavy, layered and dense with information**, the way Kotoha is. It:
+1. Opens with a **splash screen**: the Moeko Works logo assembles and its flowers spin.
 2. Shows the **latest project** big, then the rest of the work, with **hover video previews**.
 3. Gives every project its own **themed mini-site page**. It's built from a single admin form, like each Miku Expo tour getting its own site.
 4. Has **About** (with admin-managed **Certifications**), **Contact** (questions about you or your projects) and **History** (an archive list in the Miku Expo style).
@@ -115,12 +116,12 @@
 | Fonts | Fredoka 400/700 (+ Lilita One as a logo-echo display accent) |
 
 ### 1.3 Design direction — "Bloom Expo" (§6)
-| Source | What it gives Moesoft |
+| Source | What it gives Moeko Works |
 |---|---|
 | Miku Expo | The **structure**: fixed white sidebar, patterned stage, wide-tracked titles with long underlines, an archive-style History table, a featured card, per-tour microsites, the mobile MENU bar |
 | Happy Sugar Life | The **palette & ornaments**: pastel pink/blue on white and light gray, watercolor corners, sparkles, vertical text, the round PAGE TOP button, a NEWS ticker |
 | Kotoha | The **density & personality**: layered info columns, micro-labels, giant outlined words, paper cards and stickers, beat-timed motion |
-| Moesoft logo | The **flowers**: they appear everywhere, from the splash to the cursor sparkles |
+| Moeko Works logo | The **flowers**: they appear everywhere, from the splash to the cursor sparkles |
 
 ### 1.4 Readiness
 The plan scores **94.5 / 100**. It reaches **96.7** once four start-up items are done (§26):
@@ -136,7 +137,7 @@ The plan scores **94.5 / 100**. It reaches **96.7** once four start-up items are
 ### 2.1 Local environment (checked 2026-10-04)
 | Item | Status |
 |---|---|
-| Project folder | `assets/moesoft_logo.png` only, **not a git repository** yet |
+| Project folder | `assets/moekoworks_logo.png` only, **not a git repository** yet |
 | OS / shell | CachyOS Linux, KDE Plasma (Wayland + Xwayland `:0`), fish |
 | Node.js / npm / pnpm / bun | ❌ **not installed** |
 | git | ✅ 2.56.0 · GitHub CLI `gh` ❌ not installed |
@@ -146,7 +147,7 @@ The plan scores **94.5 / 100**. It reaches **96.7** once four start-up items are
 | Python | ✅ 3.14 (no pip) |
 | Vercel / Neon / Cloudinary CLIs | ❌ not installed, but the MCP connectors work (read-only checks done) |
 
-### 2.2 Logo analysis — `assets/moesoft_logo.png`
+### 2.2 Logo analysis — `assets/moekoworks_logo.png`
 - 2400×1200 px, sRGB, **transparent background**, large padding. Trimmed variants are needed: horizontal lockup, mark-only and favicon.
 - Composition: a **pink flower** (peach centre) and a **purple flower** (butter centre), plus the wordmark **"M❀esoft"**. The "o" is a **white flower**. The wordmark is lilac with a **thick black outline** and an **offset lilac shadow**. Below it sits the tagline "software and technologies" in a dark italic sans.
 
@@ -168,7 +169,7 @@ Implications:
 5. ✅ **SVG layers now exist**, converted from your 6-page PDF (§2.7).
 
 ### 2.3 kotoha-fansite (read from the live deployment, then verified against the repo)
-✅ **Verified against the repository on 2026-10-04.** It was made temporarily public for this review and is never linked from Moesoft. Source facts: Vercel project `kotoha-fansite`, Git deploys from `PastelSalt/kotoha-fansite@main`, Node 24.x, framework preset "Other". It is a **framework-free site** (HTML + modern CSS + ES modules) with serverless `/api/*` endpoints, Neon Postgres 17 (Singapore) and Cloudinary. First deployed **26 Sep 2026**; design v2 "Clover Scrapbook" merged **2 Oct 2026**.
+✅ **Verified against the repository on 2026-10-04.** It was made temporarily public for this review and is never linked from Moeko Works. Source facts: Vercel project `kotoha-fansite`, Git deploys from `PastelSalt/kotoha-fansite@main`, Node 24.x, framework preset "Other". It is a **framework-free site** (HTML + modern CSS + ES modules) with serverless `/api/*` endpoints, Neon Postgres 17 (Singapore) and Cloudinary. First deployed **26 Sep 2026**; design v2 "Clover Scrapbook" merged **2 Oct 2026**.
 
 | Area | What it does (and what we carry over) |
 |---|---|
@@ -217,7 +218,7 @@ The title is "Visitor statistics", counted in **Japan time with weeks starting M
    - `analytics_events`: type, visit_id, visitor_hash, section, duration_ms, content_type/id, target, device, browser, language, country, referrer_host, environment.
    - `analytics_daily`: (day, metric, dimension) → value.
 
-### 2.5 The old Moesoft site
+### 2.5 The old Moeko Works site
 - `moesoft-web.vercel.app` is still online (checked 2026-10-04) and still lists the old projects. What I meant earlier was only that: until it's removed, those projects stay visible.
 - **You'll remove it after this site launches.** Nothing from it is reused, and I won't touch it.
 
@@ -225,12 +226,12 @@ The title is "Visitor statistics", counted in **Japan time with weeks starting M
 Your wireframes only tell me **which pages and content** you want: Home with the latest + previous projects, About + Certifications, a Contact form, History, and the sidebar + footer. **Colours, formatting and composition are designed here**, from the references below.
 
 #### 2.6.1 Miku Expo — structure & navigation (desktop, mobile, History, tour microsite captured 2026-10-04)
-| Element | Miku Expo | Moesoft adaptation |
+| Element | Miku Expo | Moeko Works adaptation |
 |---|---|---|
 | Shell | **Fixed white left sidebar:** small logo, then ABOUT · GALLERY · SPECIAL · HISTORY in wide-tracked caps; socials pinned to the bottom | Same skeleton: logo, then **ABOUT · CONTACT · HISTORY**; socials + motion toggle at the bottom |
-| Stage | Dark stage covered in a repeating typographic logo pattern; big wordmark; right-aligned tagline | **Pastel stage** (blush → ice) with a tone-on-tone "MOESOFT ✿" letter-and-flower pattern |
+| Stage | Dark stage covered in a repeating typographic logo pattern; big wordmark; right-aligned tagline | **Pastel stage** (blush → ice) with a tone-on-tone "MOEKO WORKS ✿" letter-and-flower pattern |
 | Featured | Event card overlapping the artwork, with "for more information »" | **LATEST PROJECT** card overlapping the stage, with a live video preview and "for more information »" |
-| Page titles | "MIKU EXPO HISTORY" in wide-tracked caps with a long underline running in from the left edge; a small page label top-right | "MOESOFT HISTORY", "ABOUT MOESOFT", "CONTACT" in the same pattern |
+| Page titles | "MIKU EXPO HISTORY" in wide-tracked caps with a long underline running in from the left edge; a small page label top-right | "MOEKO WORKS HISTORY", "ABOUT MOEKO WORKS", "CONTACT" in the same pattern |
 | History | Archive table (Event title in accent colour linking to the tour site · Date · City · Venue), thin rules, grouped by tour | Archive list: **No. · Project · Date · Type · Built with · Status**, grouped by year. Each title links to its project page; **hovering shows the video preview**. |
 | Tour sites | Each tour has its **own themed microsite**: key visual, ribbon banner, ornate section titles, framed video, credits | Each **project page is its own themed mini-site** (§9). This is the boilerplate. |
 | Mobile (≤ 900 px) | **White top bar:** logo left, ☰ with a "MENU" label right; tables stack into cards | Same pattern, with a pastel full-screen menu |
@@ -268,7 +269,7 @@ Your wireframes only tell me **which pages and content** you want: Home with the
 - **Labels:** numbered sections ("01 ABOUT"), with many micro-labels.
 - **Overall:** dense, but ordered.
 
-**What modern Japanese creative sites share, and Moesoft will do:**
+**What modern Japanese creative sites share, and Moeko Works will do:**
 - **Micro-labels everywhere:** `No.01`, `2026.10.04`, `STATUS ● LIVE`, `SCROLL ✿`
 - dot-format dates, thin rules and dotted dividers
 - **big English display words used as graphics** (outlined, cropped, rotated)
@@ -281,18 +282,18 @@ Your wireframes only tell me **which pages and content** you want: Home with the
 - a strong key visual on every page
 
 ### 2.7 Logo files (received 2026-10-04)
-- **`assets/moesoft_logo.pdf`** is a Canva export with 6 vector pages: (1) full logo · (2) purple flower · (3) pink flower · (4) "M esoft" wordmark · (5) white "o" flower · (6) tagline.
+- **`assets/moekoworks_logo.pdf`** is a Canva export with 6 vector pages: (1) full logo · (2) purple flower · (3) pink flower · (4) "M esoft" wordmark · (5) white "o" flower · (6) tagline.
   - Every layer sits in the same position, so each converts cleanly to an **SVG layer** (`pdftocairo -svg`, tested OK) for animation.
   - Pages 1 and 6 embed one raster (the wordmark's soft shadow). I'll redraw it as a vector/CSS shadow.
 - **Fonts:**
   - wordmark: **Lilita One** (Google Fonts, OFL)
   - tagline: **Canva Sans Bold Italic** (Canva-only; it stays as outlined paths in the SVG and is never loaded as a web font)
-- **`assets/moesoft_logo.gif`** (1200×600, 150 frames, ≈ 5 s) plays: the pink flower pops in → "M" → the white flower → "esoft" builds → the purple flower rolls in → the tagline types itself → the flowers keep turning. This is the splash reference (§7.5).
+- **`assets/moekoworks_logo.gif`** (1200×600, 150 frames, ≈ 5 s) plays: the pink flower pops in → "M" → the white flower → "esoft" builds → the purple flower rolls in → the tagline types itself → the flowers keep turning. This is the splash reference (§7.5).
 
 ### 2.8 Accounts & quotas (read-only checks)
-| Service | What exists | Plan for Moesoft |
+| Service | What exists | Plan for Moeko Works |
 |---|---|---|
-| **Vercel** (`pastelsalt`, `pastelsalts-projects`) | `kotoha-fansite` (Git) and `moesoft-web` (old site, you'll remove it) | **New project `moesoft` → `moesoft.vercel.app`** on **Hobby**: a portfolio is personal use. Region `sin1`. |
+| **Vercel** (`pastelsalt`, `pastelsalts-projects`) | `kotoha-fansite` (Git) and `moesoft-web` (old site, you'll remove it) | **New project `moesoft` → `moekoworks.vercel.app`** on **Hobby**: a portfolio is personal use. Region `sin1`. |
 | **Neon** (Free) | `kotoha-fansite`: `aws-ap-southeast-1`, PG 17, 0.25 CU, 6 h history | New project **`moesoft-official`** (Singapore), **one production database** |
 | **Cloudinary** (Free, shared with Kotoha) | 25 credits/month, 0.96 % used. Limits: image 10 MB · video 100 MB · 25 MP | Root folder **`moesoft-official/`** + 2 signed presets |
 | **GitHub** (`PastelSalt`) | `kotoha-fansite` temporarily public for this review | **`PastelSalt/moesoft_official`, private** |
@@ -339,9 +340,9 @@ People curious about you and your work:
 ## 4. Brand & content
 
 ### 4.1 Identity
-- **Moesoft** is the name your portfolio lives under. The full name, **Moeko Software and Technologies**, goes in the footer, metadata and JSON-LD.
+- **Moeko Works** is the name your portfolio lives under. The full name, **Moeko Works**, goes in the footer, metadata and JSON-LD.
 - Header line: "**A portfolio by Kyle Zoleta**".
-- The stylised M❀esoft appears only inside the logo artwork. © line: "© 2026 Moeko Software and Technologies".
+- The stylised M❀esoft appears only inside the logo artwork. © line: "© 2026 Moeko Works".
 - **No photo, and no "Moeko Moemori"** anywhere on the site.
 
 ### 4.2 Voice
@@ -378,9 +379,9 @@ Friendly, clear, a little playful. **Descriptive, not salesy**: it shows and exp
 ```
 /                      Home: splash (first visit) · NEWS ticker · key-visual stage · LATEST PROJECT · profile strip ·
                        WORKS · TOOLBOX · CERTIFICATIONS · NEWS · contact banner · footer
-/about                 ABOUT MOESOFT: profile · what I make · toolbox · certifications
+/about                 ABOUT MOEKO WORKS: profile · what I make · toolbox · certifications
 /contact               CONTACT: intro + contact info + form
-/history               MOESOFT HISTORY: archive list of all projects, newest first, hover video previews
+/history               MOEKO WORKS HISTORY: archive list of all projects, newest first, hover video previews
 /history/[slug]        Project page: themed mini-site (the boilerplate)
 /privacy               Privacy notice (footer link)
 (404, error)
@@ -422,16 +423,16 @@ Friendly, clear, a little playful. **Descriptive, not salesy**: it shows and exp
 ## 6. Visual design system
 
 ### 6.1 Concept — "Bloom Expo" (v0.3)
-> *A pastel flower expo: Miku Expo's structure, Happy Sugar Life's palette and ornaments, and Kotoha's density, all grown from the Moesoft flowers.*
+> *A pastel flower expo: Miku Expo's structure, Happy Sugar Life's palette and ornaments, and Kotoha's density, all grown from the Moeko Works flowers.*
 
-| Signature element | From | In Moesoft |
+| Signature element | From | In Moeko Works |
 |---|---|---|
-| **Pattern stage** | Miku Expo | A tone-on-tone repeating "MOESOFT ✿" pattern (Lilita One outlines + tiny flowers) on a blush → ice gradient, at about 6 % contrast, drifting slowly |
+| **Pattern stage** | Miku Expo | A tone-on-tone repeating "MOEKO WORKS ✿" pattern (Lilita One outlines + tiny flowers) on a blush → ice gradient, at about 6 % contrast, drifting slowly |
 | **Watercolor corners** | HSL | A pink wash top-left and a blue wash bottom-right on every page (original artwork: CSS gradients + SVG noise) |
-| **Giant outlined words** | Kotoha / Miku Expo | "MOESOFT", "ABOUT", "HISTORY", "CONTACT" in huge outlined Lilita One, cropped at section edges, with gentle parallax |
+| **Giant outlined words** | Kotoha / Miku Expo | "MOEKO WORKS", "ABOUT", "HISTORY", "CONTACT" in huge outlined Lilita One, cropped at section edges, with gentle parallax |
 | **Tracked titles + long underline** | Miku Expo | Page and section titles in wide-tracked caps, an underline drawing in from the left edge, and a small page label top-right |
 | **Micro-labels & data chips** | Japanese creative web | `No.01` · `2026.10.04` · `WEB PLATFORM` · `STATUS ● LIVE` · `SCROLL ✿` on cards, rows and sections |
-| **Rotating text badge** | HSL / Kotoha | "MOESOFT ✿ PORTFOLIO ✿ SOFTWARE AND TECHNOLOGIES ✿" circling the white flower; it doubles as the link on the Latest project ("VISIT ✿ VISIT ✿") |
+| **Rotating text badge** | HSL / Kotoha | "MOEKO WORKS ✿ PORTFOLIO ✿ SOFTWARE AND TECHNOLOGIES ✿" circling the white flower; it doubles as the link on the Latest project ("VISIT ✿ VISIT ✿") |
 | **Vertical text** | HSL | English vertical lines along stage edges ("SOFTWARE AND TECHNOLOGIES — SINCE 2026"), alternating pink and blue |
 | **Paper & stickers** | Kotoha + logo | Paper cards with washi tape; die-cut flower stickers with a dark outline and a **lilac offset shadow** (the logo's look) |
 | **Ribbon banners** | Miku Expo tour sites | A ribbon carries each project's one-sentence description on its page |
@@ -506,7 +507,7 @@ Friendly, clear, a little playful. **Descriptive, not salesy**: it shows and exp
 |---|---|---|---|
 | `--fs-giant` | 120 → 280 px | Lilita One, outline | decorative words (aria-hidden) |
 | `--fs-display` | 40 → 92 px | 700 | key-visual headline, project titles |
-| `--fs-h1` | 32 → 56 px | 700, tracked caps | page titles ("MOESOFT HISTORY") |
+| `--fs-h1` | 32 → 56 px | 700, tracked caps | page titles ("MOEKO WORKS HISTORY") |
 | `--fs-h2` | 26 → 44 px | 700 | section titles (letter-pop) |
 | `--fs-h3` | 20 → 28 px | 700 | card titles |
 | `--fs-lead` | 16 → 20 px | 400 | intros |
@@ -610,7 +611,7 @@ These are the 7 rules in §6.1, plus:
 | Moment | Where | Behaviour | Calm-mode fallback |
 |---|---|---|---|
 | **Splash loader** | First visit per session | Sequence from your GIF (§7.5) | Static logo, fade |
-| Stage arrival | Home | Sidebar slides in; the logo layers settle; the giant "MOESOFT" rises; the badge starts turning; the Latest card drops in with its tape "sticking" | Static |
+| Stage arrival | Home | Sidebar slides in; the logo layers settle; the giant "MOEKO WORKS" rises; the badge starts turning; the Latest card drops in with its tape "sticking" | Static |
 | Section titles | All pages | Letters pop (SplitText); the long underline draws in from the left | Static |
 | Pattern stage | Home, page heads | The letter pattern drifts very slowly; watercolor corners breathe | Static |
 | Giant words | Section edges | Gentle parallax and lean with scroll speed | Static |
@@ -622,7 +623,7 @@ These are the 7 rules in §6.1, plus:
 | Flower confetti | Contact success, admin publish, clicking the logo flowers | Burst | Off |
 | PAGE TOP flower | Global | Progress ring; spins on hover | Instant jump |
 
-### 7.5 Splash loader (from `moesoft_logo.gif`)
+### 7.5 Splash loader (from `moekoworks_logo.gif`)
 - **Built from the six PDF layers as inline SVG.** CSS animations start on the very first paint, before any JavaScript (like Kotoha's clovers).
 - **Assembly** (≈ 1.6 s, in beats):
   1. beat 0: the pink flower pops in (scale 0 → 1, rotate −120° → 0)
@@ -657,19 +658,19 @@ These are the 7 rules in §6.1, plus:
 |---|---|---|---|
 | 0 | Splash | §7.5 | — |
 | 1 | **NEWS ticker** (HSL) | "NEWS" pill + rotating updates, e.g. "2026.10.04 — New project: Kotoha Fan Site" | auto: projects + certifications |
-| 2 | **Key-visual stage** (≈ 100 vh) | Pattern stage + watercolor corners. Animated logo (flowers slowly turning) and the line "A portfolio by Kyle Zoleta". Micro-labels `EST. 2026` · `PORTFOLIO` · `PROJECTS 01`. Rotating badge, vertical text on the right edge, a giant outlined "MOESOFT" cropped at the bottom, and a `SCROLL ✿` doodle. | config + counts |
+| 2 | **Key-visual stage** (≈ 100 vh) | Pattern stage + watercolor corners. Animated logo (flowers slowly turning) and the line "A portfolio by Kyle Zoleta". Micro-labels `EST. 2026` · `PORTFOLIO` · `PROJECTS 01`. Rotating badge, vertical text on the right edge, a giant outlined "MOEKO WORKS" cropped at the bottom, and a `SCROLL ✿` doodle. | config + counts |
 | 3 | **LATEST PROJECT** (Miku Expo featured card, overlapping the stage) | Large card: muted **video preview** autoplays while in view (poster in calm mode), the title overlapping the media, the one-sentence description, chips (type · year · `● LIVE`), "for more information »" | newest published |
-| 4 | **Profile strip** (4 dense paper cards) | `WHO`: Kyle Zoleta · Moesoft. `MAKES`: creative websites · backends · mobile. `FOCUS`: systems analysis · integration · operations. `NUMBERS`: projects · certifications · since 2026. | config + counts |
+| 4 | **Profile strip** (4 dense paper cards) | `WHO`: Kyle Zoleta · Moeko Works. `MAKES`: creative websites · backends · mobile. `FOCUS`: systems analysis · integration · operations. `NUMBERS`: projects · certifications · since 2026. | config + counts |
 | 5 | **No.02 — WORKS** | Grid of project cards (cover, **hover video**, `No.` badge, title, one-liner, tech icons, date) + "VIEW ALL HISTORY »". While there's only Kotoha, a "More projects on the way ✿" sticker card fills the grid. | DB |
 | 6 | **No.03 — TOOLBOX** | Marquee of tech logos used in your published projects (count on hover) | DB |
 | 7 | **No.04 — CERTIFICATIONS** | Horizontal strip of certificate thumbnails, titles and dates → About. Hidden while empty. | DB |
 | 8 | **No.05 — NEWS** | The last 5 updates (date · type chip · text) | auto |
 | 9 | Contact banner | "Questions about me or my projects? ✿ → Contact" with a sticker | — |
-| 10 | Footer | A big outlined MOESOFT, links, socials, © line, Privacy, the PAGE TOP flower | config |
+| 10 | Footer | A big outlined MOEKO WORKS, links, socials, © line, Privacy, the PAGE TOP flower | config |
 
 **Mobile:** the same order, stacked. A shorter stage, one-column cards, and swipeable strips.
 
-### 8.2 History — "MOESOFT HISTORY" (Miku Expo archive)
+### 8.2 History — "MOEKO WORKS HISTORY" (Miku Expo archive)
 - **Head:** page title + intro paragraph. Filter chips (All · Web · Mobile · Desktop) appear only once there are ≥ 4 projects.
 - **Archive list:** **No. · Project · Date · Type · Built with · Status**, grouped under big year labels ("2026") with thin rules.
   - Each project title is an accent-colour link to its page.
@@ -677,7 +678,7 @@ These are the 7 rules in §6.1, plus:
 - **Hover:** on desktop, a **floating video preview** (muted, ~480p) follows the cursor over a row; it also shows on keyboard focus. On mobile, each row becomes a card with the preview thumbnail inline.
 - **Order:** newest first. "Show more" after 20.
 
-### 8.3 About — "ABOUT MOESOFT"
+### 8.3 About — "ABOUT MOEKO WORKS"
 | Block | Content |
 |---|---|
 | `No.01 — PROFILE` | Intro paragraph + a facts table: Name · What I do · Focus · Based in (Philippines, GMT+8) · Since 2026 |
@@ -704,15 +705,15 @@ These are the 7 rules in §6.1, plus:
 ### 8.7 SEO & sharing
 | Page | `<title>` | Description (draft) |
 |---|---|---|
-| Home | Moesoft — a portfolio by Kyle Zoleta | Creative websites and the systems behind them: projects, notes and certifications by Kyle Zoleta. |
-| About | About · Moesoft | Who Kyle Zoleta is, what Moesoft makes, the toolbox and certifications. |
-| Contact | Contact · Moesoft | Questions about Kyle Zoleta or the projects on Moesoft? Send a message. |
-| History | Project History · Moesoft | Every project made under Moesoft, newest first. |
-| Project | {Title} · Moesoft | the project's one-sentence description; generated OG image |
+| Home | Moeko Works — a portfolio by Kyle Zoleta | Creative websites and the systems behind them: projects, notes and certifications by Kyle Zoleta. |
+| About | About · Moeko Works | Who Kyle Zoleta is, what Moeko Works makes, the toolbox and certifications. |
+| Contact | Contact · Moeko Works | Questions about Kyle Zoleta or the projects on Moeko Works? Send a message. |
+| History | Project History · Moeko Works | Every project made under Moeko Works, newest first. |
+| Project | {Title} · Moeko Works | the project's one-sentence description; generated OG image |
 
 **JSON-LD:**
 - `Person` (Kyle Zoleta, `sameAs`: GitHub, Facebook)
-- `WebSite` (Moesoft)
+- `WebSite` (Moeko Works)
 - one `CreativeWork` or `SoftwareApplication` per project
 
 ---
@@ -720,7 +721,7 @@ These are the 7 rules in §6.1, plus:
 ## 9. Project page template ("the boilerplate")
 
 ### 9.1 Goal & quality bar
-Every project gets **its own themed mini-site**, like each Miku Expo tour site, generated from one admin record. The Moesoft sidebar stays; everything else takes on the project's accent colours and key visual.
+Every project gets **its own themed mini-site**, like each Miku Expo tour site, generated from one admin record. The Moeko Works sidebar stays; everything else takes on the project's accent colours and key visual.
 
 The page must look finished with 1 image or 20, portrait or wide screenshots, a 2-line or a 2,000-word description, and with or without a video. Sections with no data disappear cleanly.
 
@@ -760,7 +761,7 @@ strong    = accent darkened in OKLCH until contrast(strong, #fff) ≥ 4.5  // li
 on-accent = contrast(ink, accent) ≥ 4.5 ? ink : white
 ```
 - `strong` and `on-accent` are computed **on save**; tints use CSS `color-mix()`. Over-saturated accents get their chroma clamped so tints stay pastel.
-- With no accent set, the page uses Moesoft pink.
+- With no accent set, the page uses Moeko Works pink.
 - The admin suggests accents from Cloudinary's colour analysis of the cover.
 
 ### 9.5 CTA matrix (no source-code links, ever)
@@ -873,13 +874,13 @@ sequenceDiagram
 ### 10.3 Password policy (✅ your kotoha rules)
 - 12–128 characters; passphrases are encouraged ("a few words together works great").
 - Must not contain the username, must differ from the current password, and must match the confirmation.
-- Not only site words: `moesoft, moeko, moemori, kyle, zoleta, flower, password, admin`.
+- Not only site words: `moekoworks, moeko, works, moemori, kyle, zoleta, flower, password, admin`.
 - **Not found in known breaches**: Have I Been Pwned k-anonymity range API (only the first 5 SHA-1 hex characters leave the server, `Add-Padding: true`). If the service can't be reached, the check is skipped (fail-open) with a warning.
 - A live checklist UI shows ✓/✗ for each rule as you type.
 - Hashing is **argon2id** via `@node-rs/argon2`, at or above OWASP's minimum parameters (19 MiB memory, t = 2, p = 1), tuned to ~250 ms on Vercel.
 
 ### 10.4 Sessions (✅ kept simple)
-- Token: 32 random bytes (base64url), held in the cookie **`__Host-moesoft_session`** (`HttpOnly; Secure; SameSite=Strict; Path=/`). The DB stores only its **SHA-256 hash**.
+- Token: 32 random bytes (base64url), held in the cookie **`__Host-mw_session`** (`HttpOnly; Secure; SameSite=Strict; Path=/`). The DB stores only its **SHA-256 hash**.
 - **Absolute lifetime 7 days, idle timeout 24 h.** `last_seen_at` is updated at most every 5 minutes.
 - The **Account** page lists active sessions (device · browser · last seen) and has **Sign out other devices**. Logout revokes the session server-side.
 - CSRF: Server Actions check the Origin header, the cookie is SameSite=Strict, and route handlers check the `Origin` header on POST.
@@ -1028,7 +1029,7 @@ A single **zod** schema per entity, shared by the client form (react-hook-form +
 
 Kotoha's "news link clicks" and "top artworks" become project equivalents below.
 
-### 12.2 Moesoft additions
+### 12.2 Moeko Works additions
 | Card | Metric |
 |---|---|
 | **Pages** | Views and average time per path |
@@ -1199,7 +1200,7 @@ flowchart LR
 ```
 moesoft_official/
 ├─ PRELIMENARYPLAN.md
-├─ assets/                    source brand files (moesoft_logo.png, references/, logo.svg when available)
+├─ assets/                    source brand files (moekoworks_logo.png, references/, logo.svg when available)
 ├─ docs/                      RUNBOOK.md · ADMIN_GUIDE.md · DECISIONS.md
 ├─ CLAUDE.md                  conventions for future AI sessions (like kotoha's MIGRATION.md)
 ├─ public/                    favicons, sprite.svg, og fallbacks
@@ -1486,7 +1487,7 @@ create table contact_messages (
 );
 create index on contact_messages (status, created_at desc);
 
--- ── Analytics (kotoha-compatible + Moesoft fields) ───────────────
+-- ── Analytics (kotoha-compatible + Moeko Works fields) ───────────────
 create table analytics_events (
   id            bigint generated always as identity primary key,
   occurred_at   timestamptz not null default now(),
@@ -1547,8 +1548,8 @@ Tags: `moesoft`, `project:<slug>`, `role:<role>`. These drive cleanup and search
 ### 16.2 Signed upload presets (created in P0)
 | Preset | Resource | Settings |
 |---|---|---|
-| `moesoft_images_signed` | image | signed; unique filename; no client public_id; allowed `jpg,jpeg,png,webp,avif,gif,heic,heif`; tags `moesoft`; `colors: true` (accent suggestions) |
-| `moesoft_videos_signed` | video | signed; allowed `mp4,webm,mov,m4v`; **eager, async:** MP4 H.264 width ≤ 1280 · WebM VP9 width ≤ 1280 · poster JPG (`so_auto`); tags `moesoft` |
+| `moekoworks_images_signed` | image | signed; unique filename; no client public_id; allowed `jpg,jpeg,png,webp,avif,gif,heic,heif`; tags `moesoft`; `colors: true` (accent suggestions) |
+| `moekoworks_videos_signed` | video | signed; allowed `mp4,webm,mov,m4v`; **eager, async:** MP4 H.264 width ≤ 1280 · WebM VP9 width ≤ 1280 · poster JPG (`so_auto`); tags `moesoft` |
 
 ### 16.3 Limits (from your account) & client handling
 - **Images:** ≤ 10 MB, ≤ 25 MP. Larger files are auto-shrunk to WebP in the browser (canvas) before upload. HEIC is accepted.
@@ -1609,7 +1610,7 @@ Scheduled at 16:30 UTC (= 00:30 Asia/Manila). Each run:
 
 | Variable | Where | Notes |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | all | `https://moesoft.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | all | `https://moekoworks.vercel.app` |
 | `SITE_TIMEZONE` | server | `Asia/Manila` |
 | `DATABASE_URL` | server | Neon **pooled**, `moesoft_app` role |
 | `DATABASE_URL_UNPOOLED` | CLI | Neon direct, migrations/seed |
@@ -1617,7 +1618,7 @@ Scheduled at 16:30 UTC (= 00:30 Asia/Manila). Each run:
 | `CLOUDINARY_API_KEY` | server | |
 | `CLOUDINARY_API_SECRET` 🔒 | server | never sent to the client |
 | `CLOUDINARY_ROOT_FOLDER` | server | `moesoft-official` |
-| `CLOUDINARY_PRESET_IMAGES` / `CLOUDINARY_PRESET_VIDEOS` | server | `moesoft_images_signed` / `moesoft_videos_signed` |
+| `CLOUDINARY_PRESET_IMAGES` / `CLOUDINARY_PRESET_VIDEOS` | server | `moekoworks_images_signed` / `moekoworks_videos_signed` |
 | `ADMIN_SEED_USERNAME` 🔒 | CLI (`.env.local` only) | your handle, **not committed** |
 | `ADMIN_SEED_PASSWORD` 🔒 | CLI (`.env.local` only) | **your default password; not committed**; remove after first login |
 | `HASH_PEPPER` 🔒 | server | 32+ random bytes (IP hashing for rate limits) |
@@ -1645,13 +1646,13 @@ Scheduled at 16:30 UTC (= 00:30 Asia/Manila). Each run:
 2. **GitHub** (**S2**): you create the empty private repo `PastelSalt/moesoft_official` and give this machine push access (`gh auth login` or an SSH key); then `git init` with a repo-local author (your name + GitHub noreply e-mail).
 3. **Neon** (**S3**): create project `moesoft-official` in `aws-ap-southeast-1` (PG 17) with one production database; roles `moesoft_app` (DML) and `moesoft_migrator` (DDL); a restore point before every schema change.
 4. **Cloudinary** (**S3**): create the two signed presets and the `moesoft-official/` folders.
-5. **Vercel:** new project **`moesoft`** → `moesoft.vercel.app` (if the name is taken, Vercel adds a suffix and we pick another), on the **Hobby** plan (a portfolio is personal use) (**S3**).
+5. **Vercel:** new project **`moesoft`** → `moekoworks.vercel.app` (if the name is taken, Vercel adds a suffix and we pick another), on the **Hobby** plan (a portfolio is personal use) (**S3**).
    - framework Next.js, Node 24.x, **functions region `sin1`**
    - env vars per environment
    - Git integration
    - cron in `vercel.json`
    - Standard deployment protection (previews protected)
-6. **Domain:** none for now; the site is `https://moesoft.vercel.app`.
+6. **Domain:** none for now; the site is `https://moekoworks.vercel.app`.
 
 ### 19.3 Release flow
 Feature branch → PR → Vercel Preview → checks pass (lint, typecheck, unit, build) → manual QA → merge to `main` → production.
@@ -1784,8 +1785,8 @@ Every feature in §22 lists its acceptance criteria.
 | 11–14 s | → News → Discography | Two glides |
 | 14–19 s | Gallery | The lightbox grows from a tile, then closes |
 | 19–22 s | Language | EN → JA |
-| 22–24 s | Footer | Moesoft credit |
-| 24–26 s | End card | Moesoft logo + `kotoha-fansite.vercel.app` |
+| 22–24 s | Footer | Moeko Works credit |
+| 24–26 s | End card | Moeko Works logo + `kotoha-fansite.vercel.app` |
 
 The project page also uses a **~480p, 6–8 s loop** cut from the same footage as the hover preview.
 
@@ -1938,7 +1939,7 @@ Same as before:
 
 | ID | Item | Status | Resolved by |
 |---|---|---|---|
-| 1.1 | Purpose: personal portfolio under the name Moesoft | ✅ known | — |
+| 1.1 | Purpose: personal portfolio under the name Moeko Works | ✅ known | — |
 | 1.2 | Audience: people curious about you and your projects | ✅ known | — |
 | 1.3 | Positioning: portfolio, not freelance (contact = questions) | ✅ known | — |
 | 1.4 | Calls-to-action (view projects, ask a question) | ✅ known | — |
@@ -2166,8 +2167,8 @@ Same as before:
 | Round | Topic | Your answer |
 |---|---|---|
 | v0.1 | Pages, nav, content | Wireframes (content intent): About · Contact · History, latest + previous projects, a contact form, certifications |
-| v0.1 → v0.3 | Positioning | Portfolio under Moesoft by Kyle Zoleta; contact = questions about you or your projects |
-| v0.1 | Repo / Vercel / domain | `PastelSalt/moesoft_official` (private) · `moesoft.vercel.app` · no custom domain |
+| v0.1 → v0.3 | Positioning | Portfolio under Moeko Works by Kyle Zoleta; contact = questions about you or your projects |
+| v0.1 | Repo / Vercel / domain | `PastelSalt/moesoft_official` (private) · `moekoworks.vercel.app` · no custom domain |
 | v0.1 | Source code | Never public, never referenced |
 | v0.1 | Content | Only what's necessary; web first + mobile + some desktop; strongest in backend, systems analysis, integration, operations |
 | v0.1 | Languages · mascot · admins · notifications | English only · none · only you · check the inbox yourself (e-mail later) |
@@ -2184,7 +2185,7 @@ Same as before:
 
 ## Appendix A — Design tokens (draft CSS)
 ```css
-/* Moesoft design system v0 · tokens — load first; fixes the cascade-layer order */
+/* Moeko Works design system v0 · tokens — load first; fixes the cascade-layer order */
 @layer reset, tokens, base, mui, components, sections, motion, utilities;
 
 @property --iris { syntax: '<length>'; inherits: false; initial-value: 0px; }
@@ -2310,10 +2311,10 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 ### Home
 - **Stage:** "A portfolio by Kyle Zoleta" · micro-labels `EST. 2026` · `PORTFOLIO` · `PROJECTS 01`
 - **Intro line:** "Creative websites, and the systems behind them."
-- **Rotating badge:** "MOESOFT ✿ PORTFOLIO ✿ SOFTWARE AND TECHNOLOGIES ✿"
+- **Rotating badge:** "MOEKO WORKS ✿ PORTFOLIO ✿ SOFTWARE AND TECHNOLOGIES ✿"
 - **Latest card:** `LATEST PROJECT` · {title} · {one-sentence description} · "for more information »"
 - **Profile strip:**
-  - `WHO`: "Kyle Zoleta · Moesoft"
+  - `WHO`: "Kyle Zoleta · Moeko Works"
   - `MAKES`: "Creative websites · Backends · Mobile apps"
   - `FOCUS`: "Systems analysis · Integration · Operations"
   - `NUMBERS`: "Projects 01 · Certifications 00 · Since 2026"
@@ -2322,7 +2323,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 
 ### About
 **No.01 — PROFILE**
-> Hi, I'm Kyle Zoleta, and Moesoft (Moeko Software and Technologies) is the name I make things under. I build websites from the first sketch to launch day, and I'm happiest when a project has personality: a character, a fandom, a world worth showing off. Behind the playful side there's a dependable one. Most of my strength is in the backend, in systems analysis, integration and operations, so everything keeps working long after launch.
+> Hi, I'm Kyle Zoleta, and Moeko Works is the name I make things under. I build websites from the first sketch to launch day, and I'm happiest when a project has personality: a character, a fandom, a world worth showing off. Behind the playful side there's a dependable one. Most of my strength is in the backend, in systems analysis, integration and operations, so everything keeps working long after launch.
 
 **No.02 — WHAT I MAKE**
 - **Creative websites.** Fan sites, VTuber, character and anime-themed sites, galleries and event pages that move smoothly and get the little details right.
@@ -2338,7 +2339,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 **What can I ask?**
 - "How something in one of my projects works."
 - "A bug or typo you spotted."
-- "Anything else about me or Moesoft, or just a kind word ✿"
+- "Anything else about me or Moeko Works, or just a kind word ✿"
 
 **Form:**
 - Labels: Name · E-mail · Subject · Message · **Send message**
@@ -2347,7 +2348,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 - Error: "Your message couldn't be sent. Please try again, or e-mail me directly."
 
 ### History
-**Intro:** "Every project made under Moesoft, newest first. Hover a project for a quick preview, or open it to see what it does, how it works and what it's made with."
+**Intro:** "Every project made under Moeko Works, newest first. Hover a project for a quick preview, or open it to see what it does, how it works and what it's made with."
 
 ### Project page labels
 `INFO` · `No.01 — OVERVIEW` · `No.02 — WHAT YOU CAN DO` · `No.03 — FOR ADMINS` · `No.04 — BEHIND THE SCENES` · `No.05 — BUILT WITH` · `No.06 — GALLERY` · `ACCESS` · `CREDITS & DISCLAIMER` · tickets "Visit website" / "Download APK" / "Download for Windows"
@@ -2355,7 +2356,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 ### System copy
 - **Splash:** "LOADING ✿ {n} %"
 - **404:** "This page wandered off the flower bed ✿" · [Home] [History]
-- **Footer:** "© 2026 Moeko Software and Technologies · Privacy"
+- **Footer:** "© 2026 Moeko Works · Privacy"
 
 ## Appendix E — Glossary
 | Term | Meaning |
@@ -2363,7 +2364,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 | History | The public archive list of projects (sidebar item); also the admin module "Project History" |
 | Project page | A project's themed mini-site, generated from the template (the "boilerplate") |
 | Operations | What a project does: *What you can do* (visitors), *For admins*, *Behind the scenes* (system) |
-| Pattern stage | The pastel "MOESOFT ✿" letter-pattern background (Miku Expo-style) |
+| Pattern stage | The pastel "MOEKO WORKS ✿" letter-pattern background (Miku Expo-style) |
 | Micro-label | Small tracked label such as `No.02 — WORKS` or `2026.10.04` |
 | Splash loader | First-visit loading screen built from the logo layers (your GIF) |
 | Calm mode | Reduced-motion mode (device setting or the site's Motion toggle) |
@@ -2372,8 +2373,8 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 | Restricted session | A session that can only change its password (first login) |
 
 ## Appendix F — References
-- Your reference project: https://kotoha-fansite.vercel.app/ (the source stays private and is never linked from Moesoft)
-- Old Moesoft site (you'll remove it after launch): https://moesoft-web.vercel.app/
+- Your reference project: https://kotoha-fansite.vercel.app/ (the source stays private and is never linked from Moeko Works)
+- Old Moeko Works site (you'll remove it after launch): https://moesoft-web.vercel.app/
 - Design inspiration: https://mikuexpo.com/ (History: https://mikuexpo.com/history.html · tour microsite: https://mikuexpo.com/europe2026/) · https://archive.genco.co.jp/happysugarlife/
 - Next.js docs: https://nextjs.org/docs (App Router, Proxy, Caching / Cache Components, Authentication, Draft Mode)
 - MUI + Next.js integration: https://mui.com/material-ui/integrations/nextjs/

@@ -12,7 +12,7 @@ const IDLE_MS = 24 * 60 * 60 * 1000;
 const TOUCH_EVERY_MS = 5 * 60 * 1000;
 
 // __Host- requires Secure; plain name on http://localhost during development.
-export const SESSION_COOKIE = process.env.NODE_ENV === "production" ? "__Host-ms_session" : "ms_session";
+export const SESSION_COOKIE = process.env.NODE_ENV === "production" ? "__Host-mw_session" : "mw_session";
 
 const sha256 = (value: string) => createHash("sha256").update(value).digest("hex");
 

@@ -48,7 +48,7 @@ function context(): Context {
   const u = source ? { s: source.slice(0, 60), m: q.get("utm_medium")?.slice(0, 60) || undefined, c: q.get("utm_campaign")?.slice(0, 80) || undefined } : undefined;
   let nt: 0 | 1 = 0;
   try {
-    nt = localStorage.getItem("ms_nt") === "1" ? 1 : 0; // "Don't count my visits" (admin Account page)
+    nt = localStorage.getItem("mw_nt") === "1" ? 1 : 0; // "Don't count my visits" (admin Account page)
   } catch {
     nt = 0;
   }

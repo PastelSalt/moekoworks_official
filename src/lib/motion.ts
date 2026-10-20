@@ -3,7 +3,7 @@
 import type Lenis from "lenis";
 
 export type MotionMode = "full" | "calm";
-const KEY = "ms_motion";
+const KEY = "mw_motion";
 const listeners = new Set<(mode: MotionMode) => void>();
 
 const reduceQuery = () => window.matchMedia("(prefers-reduced-motion: reduce)");

@@ -1,12 +1,11 @@
 // Public site configuration (plan §4). Only what's necessary: no handle, no photo, no city.
 export const site = {
-  name: "Moesoft",
-  legalName: "Moeko Software and Technologies",
+  name: "Moeko Works",
   owner: "Kyle Zoleta",
   tagline: "A portfolio by Kyle Zoleta",
   intro: "Creative websites, and the systems behind them.",
   since: 2026,
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://moesoft.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://moekoworks.vercel.app",
   email: "moekosoftware@outlook.com",
   replyNote: "I usually reply within a day or two (Philippine time, GMT+8).",
   socials: [

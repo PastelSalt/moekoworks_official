@@ -15,7 +15,7 @@
 |---|---|
 | Laptop | AMD Ryzen 3 3250U (2 cores / 4 threads), **Radeon Vega 3** integrated GPU, 13 GB RAM, Ubuntu 26.04: the same machine class as the Kotoha/Hanon performance passes |
 | Harness | `scripts/perf/bench.mjs` (frame times while wheel-scrolling the whole page down and up, a fresh headless Chrome per run, real GPU through ANGLE/OpenGL, fine pointer emulated so **Lenis runs as on a real mouse/touchpad**) and `scripts/perf/trace.mjs` (main-thread work by category, layer count) |
-| Page | Home at 1920×1080, production (`moesoft.vercel.app`, commit `f121c93`) |
+| Page | Home at 1920×1080, production (`moekoworks.vercel.app`, commit `f121c93`) |
 
 **Results (2026-10-14).** The laptop was hot (73–78 °C) and Kyle's own Chrome was busy at the same time (one tab's
 renderer at >100 % of a core, its GPU process at 100 %), so absolute numbers swing a lot between identical runs.
@@ -65,7 +65,7 @@ Each phase: implement → `npm run typecheck && npm run lint && npm run build` �
 before/after screenshots (§4.3) → commit on `dev`. Merge to `main` only with Kyle's OK.
 
 ### P0 — Quiet baseline (½ h)
-1. Kyle closes the other browser tabs (especially moesoft.vercel.app) and plugs the laptop in.
+1. Kyle closes the other browser tabs (especially moekoworks.vercel.app) and plugs the laptop in.
 2. `npm run build && npx next start -p 3200`, then for Home, `/history`, `/history/hanon-fansite`, `/about`:
    `node scripts/perf/bench.mjs http://localhost:3200/<page> base,calm,base,calm,base 1920 1080` and the same at
    `1366 768 4` (4× CPU slowdown); `node scripts/perf/trace.mjs http://localhost:3200/` for the main-thread split
@@ -119,7 +119,7 @@ before/after screenshots (§4.3) → commit on `dev`. Merge to `main` only with 
 4. Prefer `trace.mjs` numbers (style/layout/paint milliseconds, layer count) for decisions: they hold up even when
    the machine is busy; fps is the final check.
 5. Never measure while the laptop is above ~75 °C (`cat /sys/class/thermal/thermal_zone0/temp`, m°C).
-6. Statistics stay clean: the scripts set `ms_nt=1` and answer `/api/track` locally.
+6. Statistics stay clean: the scripts set `mw_nt=1` and answer `/api/track` locally.
 
 ## 5. Decisions for Kyle
 

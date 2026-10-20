@@ -1,8 +1,8 @@
 @AGENTS.md
 
-# Moesoft — working notes for Claude sessions
+# Moeko Works — working notes for Claude sessions
 
-Portfolio of Kyle Zoleta under the name **Moesoft (Moeko Software and Technologies)**. The plan and every decision live in
+Portfolio of Kyle Zoleta under the name **Moeko Works**. The plan and every decision live in
 `PRELIMENARYPLAN.md` (v0.3). Progress and the resume protocol live in `docs/PROGRESS.md`. Read both before changing anything.
 **Adding a new project/website to the portfolio?** Follow `docs/NEW-PROJECT-PLAYBOOK.md` step by step (intake, capture,
 admin shots, Cloudinary upload, seed, verify, ship) — it has the exact scripts, IDs and gotchas.
@@ -25,6 +25,8 @@ Next 16 renamed middleware to `src/proxy.ts`. Read `node_modules/next/dist/docs/
    (branch/snapshot) before every schema change.
 6. Never link any project's source code from the site. No codenames, no photo of the owner, never the owner's internet handle.
 7. English only. No sound. Seed only real, verified data.
+10. **The brand is Moeko Works** (renamed 2026-10-20: the old name belongs to an established company). Never reintroduce
+    the old name, its abbreviation, or the old "software and technologies" tagline anywhere public. Storage keys use `mw_`.
 8. Ask the owner before: downloading files, installing system software, deleting/overwriting things you didn't create,
    changing account/project settings, production writes beyond the approved plan.
 9. When asking questions, give a recommendation and a confidence level.

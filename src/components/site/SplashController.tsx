@@ -47,7 +47,7 @@ export function SplashController() {
     const finish = () => {
       html.dataset.splash = "done";
       try {
-        sessionStorage.setItem("ms_splash", "1");
+        sessionStorage.setItem("mw_splash", "1");
       } catch {
         /* private mode: the splash may show again next time */
       }

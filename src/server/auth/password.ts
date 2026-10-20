@@ -19,14 +19,14 @@ export async function verifyPassword(passwordHash: string, password: string) {
 // Verifying against a real hash when the user doesn't exist keeps timing the same either way.
 let dummyHash: Promise<string> | null = null;
 export async function burnVerify(password: string) {
-  dummyHash ??= hashPassword("moesoft-dummy-password-for-timing");
+  dummyHash ??= hashPassword("moekoworks-dummy-password-for-timing");
   await verifyPassword(await dummyHash, password);
 }
 
 // Kotoha's rules (plan §10.3). Client mirrors the first four; "guessable" and "leaked" are server-only.
 export type PasswordRule = "min_length" | "max_length" | "contains_username" | "same_as_current" | "guessable" | "leaked";
 
-const SITE_WORDS = ["moesoft", "moeko", "moemori", "kyle", "zoleta", "flower", "password", "admin", "software", "technologies"];
+const SITE_WORDS = ["moekoworks", "moeko", "works", "moemori", "kyle", "zoleta", "flower", "password", "admin", "software", "technologies"];
 
 export async function checkPasswordRules(username: string, current: string, next: string): Promise<PasswordRule[]> {
   const failed: PasswordRule[] = [];
@@ -51,7 +51,7 @@ async function isLeaked(password: string) {
   const suffix = digest.slice(5);
   try {
     const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
-      headers: { "Add-Padding": "true", "User-Agent": "moesoft-admin" },
+      headers: { "Add-Padding": "true", "User-Agent": "moekoworks-admin" },
       signal: AbortSignal.timeout(4000),
       cache: "no-store",
     });

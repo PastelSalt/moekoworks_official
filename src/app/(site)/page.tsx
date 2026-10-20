@@ -17,7 +17,7 @@ import "@/styles/home.css";
 export const revalidate = 600;
 
 export const metadata: Metadata = {
-  title: { absolute: "Moesoft — a portfolio by Kyle Zoleta" },
+  title: { absolute: "Moeko Works — a portfolio by Kyle Zoleta" },
   description: "Creative websites and the systems behind them: projects, notes and certifications by Kyle Zoleta.",
   alternates: { canonical: "/" },
 };
@@ -33,13 +33,13 @@ export default async function Home() {
   const lastUpdate = updates[0]?.date;
 
   const jsonLd = [
-    { "@context": "https://schema.org", "@type": "WebSite", name: site.name, alternateName: site.legalName, url: site.url, description: site.intro },
+    { "@context": "https://schema.org", "@type": "WebSite", name: site.name, url: site.url, description: site.intro },
     {
       "@context": "https://schema.org",
       "@type": "Person",
       name: site.owner,
       url: site.url,
-      description: "Makes creative websites and the systems behind them, as Moesoft.",
+      description: "Makes creative websites and the systems behind them, as Moeko Works.",
       sameAs: site.socials.filter((s) => s.id !== "email").map((s) => s.href),
     },
   ];
@@ -52,7 +52,7 @@ export default async function Home() {
       {/* ── Key-visual stage ── */}
       <PatternStage as="section" className="hero" aria-labelledby="hero-title" data-track-section="hero">
         <div className="hero__frame" aria-hidden="true">
-          <span className="hero__corner hero__corner--tl">No.00 — Moesoft</span>
+          <span className="hero__corner hero__corner--tl">No.00 — Moeko Works</span>
           <span className="hero__corner hero__corner--tr">{lastUpdate ? `Updated ${dotDate(lastUpdate)}` : `Est. ${site.since}`}</span>
           <span className="hero__corner hero__corner--bl">Scroll ✿</span>
           <span className="hero__corner hero__corner--br">PH · GMT+8</span>
@@ -69,9 +69,9 @@ export default async function Home() {
             </span>
           </p>
           <h1 id="hero-title" className="hero__title">
-            <span className="visually-hidden">Moesoft, a portfolio by Kyle Zoleta</span>
-            <img className="hero__logo hero__logo--anim" src="/brand/moesoft-splash.svg" alt="" width={720} height={226} fetchPriority="high" />
-            <img className="hero__logo hero__logo--static" src="/brand/moesoft-logo.svg" alt="" width={720} height={226} loading="lazy" />
+            <span className="visually-hidden">Moeko Works, a portfolio by Kyle Zoleta</span>
+            <img className="hero__logo hero__logo--anim" src="/brand/moekoworks-splash.svg" alt="" width={720} height={157} fetchPriority="high" />
+            <img className="hero__logo hero__logo--static" src="/brand/moekoworks-logo.svg" alt="" width={720} height={157} loading="lazy" />
           </h1>
           <div className="hero__copy">
             <p className="hero__by arrive" style={a(0.9)}>
@@ -91,14 +91,14 @@ export default async function Home() {
           </div>
         </div>
 
-        <RotatingBadge id="hero-badge" text="MOESOFT ✿ PORTFOLIO ✿ SOFTWARE AND TECHNOLOGIES ✿ " className="hero__badge arrive--stick" size={150} />
-        <VerticalText lines={["Software and", "Technologies", "Since 2026"]} className="hero__vtext arrive arrive--fade" />
+        <RotatingBadge id="hero-badge" text="MOEKO WORKS ✿ PORTFOLIO ✿ CREATIVE WEBSITES ✿ " className="hero__badge arrive--stick" size={150} />
+        <VerticalText lines={["Moeko", "Works", "Since 2026"]} className="hero__vtext arrive arrive--fade" />
         <img className="hero__sticker hero__sticker--pink float" src="/brand/flower-pink.svg" alt="" width={88} height={88} aria-hidden="true" style={{ "--d": -1 } as CSSProperties} />
         <img className="hero__sticker hero__sticker--purple float" src="/brand/flower-purple.svg" alt="" width={64} height={64} aria-hidden="true" style={{ "--d": -2.4 } as CSSProperties} />
         <Spark className="hero__spark hero__spark--a twinkle" size={22} color="var(--butter-300)" />
         <Spark className="hero__spark hero__spark--b twinkle" size={16} color="var(--pink-400)" style={{ "--d": -1.2 } as CSSProperties} />
         <Spark className="hero__spark hero__spark--c twinkle" size={18} color="var(--blue-400)" style={{ "--d": -0.6 } as CSSProperties} />
-        <GiantWord className="hero__giant arrive--giant">MOESOFT</GiantWord>
+        <GiantWord className="hero__giant arrive--giant">MOEKO WORKS</GiantWord>
       </PatternStage>
 
       {/* ── Latest project (overlaps the stage) ── */}
@@ -112,7 +112,7 @@ export default async function Home() {
               <UserRound size={14} aria-hidden="true" /> Who
             </p>
             <p className="profile__value">{site.owner}</p>
-            <p className="profile__sub">Making things as Moesoft</p>
+            <p className="profile__sub">Making things as Moeko Works</p>
           </li>
           <li className="profile__card paper paper--pad reveal">
             <p className="micro">

@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (pathname === "/admin/login") return NextResponse.next();
-  const hasSession = request.cookies.has("__Host-ms_session") || request.cookies.has("ms_session");
+  const hasSession = request.cookies.has("__Host-mw_session") || request.cookies.has("mw_session");
   if (!hasSession) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";

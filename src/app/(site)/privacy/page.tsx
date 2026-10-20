@@ -5,7 +5,7 @@ import "@/styles/pages.css";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "What Moesoft collects, why, how long it is kept and your rights under the Philippine Data Privacy Act of 2012.",
+  description: "What Moeko Works collects, why, how long it is kept and your rights under the Philippine Data Privacy Act of 2012.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         <div className="legal__card paper reveal">
           <h2>Who is responsible</h2>
           <p>
-            This site is the personal portfolio of {site.owner}, published as Moesoft ({site.legalName}). For anything about your data, e-mail <a href={`mailto:${site.email}`}>{site.email}</a>.
+            This site is the personal portfolio of {site.owner}, published as {site.name}. For anything about your data, e-mail <a href={`mailto:${site.email}`}>{site.email}</a>.
           </p>
         </div>
 
@@ -46,8 +46,8 @@ export default function PrivacyPage() {
         <div className="legal__card paper reveal">
           <h2>Cookies and browser storage</h2>
           <p>
-            Visitors get no cookies. The site remembers two small preferences in your own browser: whether you turned motion off (<code>ms_motion</code>, local storage) and that you have already seen the loading
-            screen in this tab (<code>ms_splash</code>, session storage). The private admin area uses one strictly necessary sign-in cookie for the site owner only.
+            Visitors get no cookies. The site remembers two small preferences in your own browser: whether you turned motion off (<code>mw_motion</code>, local storage) and that you have already seen the loading
+            screen in this tab (<code>mw_splash</code>, session storage). The private admin area uses one strictly necessary sign-in cookie for the site owner only.
           </p>
         </div>
 

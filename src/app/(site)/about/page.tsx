@@ -16,7 +16,7 @@ export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Who Kyle Zoleta is, what Moesoft makes, the toolbox and certifications.",
+  description: "Who Kyle Zoleta is, what Moeko Works makes, the toolbox and certifications.",
   alternates: { canonical: "/about" },
 };
 
@@ -49,7 +49,7 @@ export default async function AboutPage() {
     <>
       <PageHead
         label="About"
-        title="About Moesoft"
+        title="About Moeko Works"
         giant="ABOUT"
         micro={
           <>
@@ -61,7 +61,7 @@ export default async function AboutPage() {
           </>
         }
       >
-        <p>The person, the toolbox and the certificates behind Moesoft.</p>
+        <p>The person, the toolbox and the certificates behind Moeko Works.</p>
       </PageHead>
 
       {/* No.01 — PROFILE */}
@@ -72,7 +72,7 @@ export default async function AboutPage() {
             <Tape tone="pink" className="about-profile__tape" />
             <p className="about-profile__hello">Hi, I&apos;m {site.owner} ✿</p>
             <p>
-              Moesoft (Moeko Software and Technologies) is the name I make things under. I build websites from the first sketch to launch day, and I&apos;m happiest when a project has personality: a character, a fandom, a
+              Moeko Works is the name I make things under. I build websites from the first sketch to launch day, and I&apos;m happiest when a project has personality: a character, a fandom, a
               world worth showing off.
             </p>
             <p>Behind the playful side there&apos;s a dependable one. Most of my strength is in the backend, in systems analysis, integration and operations, so everything keeps working long after launch.</p>
@@ -85,7 +85,7 @@ export default async function AboutPage() {
             <div>
               <dt>Makes things as</dt>
               <dd>
-                Moesoft <span className="facts__soft">({site.legalName})</span>
+                {site.name}
               </dd>
             </div>
             <div>

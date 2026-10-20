@@ -1,4 +1,4 @@
-// Moesoft database schema (plan §15). No "server-only" import here: CLI scripts share this file.
+// Moeko Works database schema (plan §15). No "server-only" import here: CLI scripts share this file.
 import { sql } from "drizzle-orm";
 import {
   bigint,
@@ -321,7 +321,7 @@ export const contactMessages = pgTable(
   ],
 );
 
-// ── Analytics (kotoha-compatible + Moesoft fields) ──────────────────
+// ── Analytics (kotoha-compatible + Moeko Works fields) ──────────────────
 export const analyticsEvents = pgTable(
   "analytics_events",
   {

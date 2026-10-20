@@ -8,7 +8,7 @@ import { requireAdmin } from "@/server/auth/session";
 const CLOUD = process.env.CLOUDINARY_CLOUD_NAME ?? process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? "";
 const KEY = process.env.CLOUDINARY_API_KEY ?? "";
 const SECRET = process.env.CLOUDINARY_API_SECRET ?? "";
-const ROOT = process.env.CLOUDINARY_ROOT_FOLDER ?? "moesoft-official";
+const ROOT = process.env.CLOUDINARY_ROOT_FOLDER ?? "moekoworks-official";
 
 function sign(params: Record<string, string | number>) {
   const base = Object.keys(params)
@@ -28,7 +28,7 @@ export async function signUpload(kind: "image" | "video", scope: string): Promis
   const params = {
     asset_folder: `${ROOT}/${scope}`,
     timestamp: Math.floor(Date.now() / 1000),
-    upload_preset: kind === "video" ? (process.env.CLOUDINARY_PRESET_VIDEOS ?? "moesoft_videos_signed") : (process.env.CLOUDINARY_PRESET_IMAGES ?? "moesoft_images_signed"),
+    upload_preset: kind === "video" ? (process.env.CLOUDINARY_PRESET_VIDEOS ?? "moekoworks_videos_signed") : (process.env.CLOUDINARY_PRESET_IMAGES ?? "moekoworks_images_signed"),
   };
   return {
     ok: true,

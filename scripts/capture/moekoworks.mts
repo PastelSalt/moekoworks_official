@@ -1,16 +1,16 @@
-// Captures the Moesoft site itself (production) for its own project page: screenshots + a screencast for the
-// preview video. Never counted in Moesoft's statistics (ms_nt + /api/track answered locally). A fine pointer is
+// Captures the Moeko Works site itself (production) for its own project page: screenshots + a screencast for the
+// preview video. Never counted in Moeko Works' statistics (mw_nt + /api/track answered locally). A fine pointer is
 // emulated so Lenis, hover previews and the cursor sparkles behave as on a desktop. Output:
-// scripts/capture/out/moesoft/ (git-ignored). Then run encode-moesoft.sh.
+// scripts/capture/out/moekoworks/ (git-ignored). Then run encode-moekoworks.sh.
 //
-//   npx tsx scripts/capture/moesoft.mts [--shots] [--video]
+//   npx tsx scripts/capture/moekoworks.mts [--shots] [--video]
 import { mkdirSync, writeFileSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright-core";
 
-const SITE = "https://moesoft.vercel.app";
-const OUT = join(import.meta.dirname, "out", "moesoft");
+const SITE = "https://moekoworks.vercel.app";
+const OUT = join(import.meta.dirname, "out", "moekoworks");
 const FRAMES = join(OUT, "frames");
 const args = new Set(process.argv.slice(2));
 const all = !args.has("--shots") && !args.has("--video");
@@ -24,12 +24,12 @@ async function context(browser: Browser, { mobile = false, splash = false, size 
       ? { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, locale: "en-US", userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Mobile Safari/537.36" }
       : { viewport: size, deviceScaleFactor: 1, locale: "en-US", reducedMotion: "no-preference" },
   );
-  await ctx.route(/\/api\/track/, (r) => r.fulfill({ status: 204 })); // never pollute Moesoft's statistics
+  await ctx.route(/\/api\/track/, (r) => r.fulfill({ status: 204 })); // never pollute Moeko Works' statistics
   await ctx.addInitScript(
     ({ splash, mobile }) => {
       try {
-        localStorage.setItem("ms_nt", "1");
-        if (!splash) sessionStorage.setItem("ms_splash", "1");
+        localStorage.setItem("mw_nt", "1");
+        if (!splash) sessionStorage.setItem("mw_splash", "1");
       } catch {}
       if (!mobile) {
         const mm = window.matchMedia.bind(window);

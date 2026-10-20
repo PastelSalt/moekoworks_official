@@ -23,17 +23,56 @@
 | Design checkpoint ✋ | ✅ approved 2026-10-04 | Kyle: design OK, copy OK, Facebook link OK, Cloudinary key + secret added (Vercel production + `.env.local`); signed upload + delete verified |
 | Hanon Fan Site ✅ | ✅ 2026-10-11 | Added from https://hanon-fansite.vercel.app (project id 5, **published**, now Latest): 8 desktop + 2 phone shots, 28 s preview + 8 s hover, 15 tech (new: PGlite), 23 operations. `scripts/capture/hanon.mts`, `encode-hanon.sh`, `seed-hanon.mts`. 6 admin shots on the "For admins" cards (local in-memory copy, see playbook §6.0) |
 | Kotoha refresh | ✅ 2026-10-11 | Seed updated for the Kotoha repo's 2026-10-09 changes: Lenis + section glides gone (op "Scroll freely"), performance-pass op, sister-site op, birthday/debut dates, AiceClass as history; re-run with `--replace`. Card 04 "Never lose anything" now shows the admin Archive (local in-memory copy) |
-| Moesoft Portfolio | ✅ 2026-10-14 | This site added as a project (id 10, published, dated 2026-01-20 → No.01): 23 s preview, 13 stills, 17 tech, 11 visitor + 7 behind-the-scenes cards, no admin cards. `scripts/capture/moesoft.mts`, `encode-moesoft.sh`, `seed-moesoft.mts` |
+| Moeko Works Portfolio | ✅ 2026-10-14 | This site added as a project (id 10, published, dated 2026-01-20 → No.01): 23 s preview, 13 stills, 17 tech, 11 visitor + 7 behind-the-scenes cards, no admin cards. `scripts/capture/moekoworks.mts`, `encode-moekoworks.sh`, `seed-moekoworks.mts` |
 | Performance pass | ✅ 2026-10-14 (`dev`) | [`PERFORMANCE_PLAN.md`](PERFORMANCE_PLAN.md) §7: no visual change (pixel-checked). Scroll 30→54 fps (Home), 35→60 (About), 22→60 (Kotoha page); idle CPU About 93→9 %. Key fixes: no per-frame `--lean`, compositor marquee/flowers, MUI `box-sizing: inherit` override, Lenis loop only while scrolling. Harness `scripts/perf/{bench,trace,idle}.mjs` |
 | P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
-| P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moesoft.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers; Kyle removes `moesoft-web` |
+| P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moekoworks.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers; Kyle removes `moesoft-web` |
+
+## Incident log
+### 2026-10-20 — EMERGENCY: brand renamed to **Moeko Works** (major)
+**What happened.** Kyle found that the site's old name (the one this repo is still named after) is already used by an
+established company that has nothing to do with him. Every public trace of it had to go immediately.
+
+**Done in the repo (branch `claude/kind-mccarthy-89dx0w`, not yet merged into `main`):**
+- Name, titles, metadata, JSON-LD, manifest, alt texts, footer/sidebar/menu copy, rotating badge, giant words, vertical
+  text, privacy page → **Moeko Works**. `site.legalName` ("… Software and Technologies") removed; the old tagline
+  "software and technologies" is now **"creative websites and systems"**.
+- New logo + splash SVGs (`public/brand/moekoworks-logo.svg`, `moekoworks-splash.svg`): same flowers, colours, outline and
+  shadow, wordmark "M✿eko Works" rebuilt from Lilita One (the Canva font), vector tagline in Fredoka (was a WebP).
+  The wordmark is wider: viewBox 3000 × 653 (was 2084 × 653); every `<img>` width/height updated.
+- Stage pattern (`pattern.svg`): f/t/some M letters swapped for k/r/W. OG image (`src/app/opengraph-image.jpg`)
+  redrawn. `assets/` brand files regenerated as `moekoworks_logo.{png,pdf,gif}` (PDF is 1 page now, GIF 5 s splash).
+- Storage keys `ms_*` → `mw_*` (old `ms_motion` / `ms_nt` are migrated once in the pre-paint script). Session cookie
+  `__Host-mw_session`: **Kyle has to sign in again** after the deploy.
+- Code defaults: site URL `https://moekoworks.vercel.app`, Cloudinary root `moekoworks-official`, presets
+  `moekoworks_{images,videos}_signed`, package name, scripts (`seed-moekoworks.mts`, `capture/moekoworks.mts`,
+  `encode-moekoworks.sh`, `npm run seed:moekoworks`), CSV export name, admin UA, password blocklist.
+- `scripts/rebrand-moekoworks.mts`: rewrites the old name in every text column of the content tables and renames this
+  site's project slug to `moekoworks-portfolio` (old slug kept in `project_slug_history` → 301). Dry run by default.
+
+**Still on Kyle (accounts this session could not reach — Vercel API 403, no Neon/Cloudinary/Canva access):**
+1. **Canva** design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline (no Canva connector here).
+   If you export a new logo from it, the SVGs in `public/brand/` can be swapped for it.
+2. **Vercel:** add the domain `moekoworks.vercel.app` to project `moesoft` (Settings → Domains) and redirect the old
+   `*.vercel.app` domain to it; set `NEXT_PUBLIC_SITE_URL=https://moekoworks.vercel.app` if it is set. Optionally
+   rename the project. **Do this before merging into `main`**, or canonical URLs/sitemap point at a domain that
+   doesn't exist yet.
+3. **Neon:** take a restore point, then `npx tsx scripts/rebrand-moekoworks.mts` (dry run) → `--apply`.
+4. **Cloudinary:** create presets `moekoworks_images_signed` / `moekoworks_videos_signed` (copy the old ones, tag
+   `moekoworks`), or set `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` in Vercel to the old names for now —
+   otherwise admin uploads fail. Existing media still carry the old folder name in their URLs; moving them (rename
+   public_ids + update `media_assets.public_id`) is a separate, approved-first job.
+5. **E-mail** `moekosoftware@outlook.com` still reads as "Moeko Software": give me a new address to switch to.
+6. Optional renames: GitHub repo `moesoft_official` (private, never linked), Neon project/database/role, the
+   local folder `~/Desktop/Moesoft/`, the old Vercel project `moesoft-web` (still online with the old name).
+7. After deploy: re-run the Facebook/X/LinkedIn OG debuggers and resubmit the sitemap in Search Console.
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
 - Kept the scaffold's React 19.2.8 / TypeScript 5 / ESLint 9 (more conservative than plan's "latest").
 - Cover/preview/hover/OG are `media_assets.role` values instead of columns on `projects` (no circular FKs). Cover falls back to the first gallery image.
 - Single DB role (`moesoft_owner`) for now instead of separate app/migrator roles.
-- Logo tagline is rasterised in the Canva PDF; brand SVGs embed it as a transparent WebP with a soft white halo.
+- Logo tagline was rasterised in the Canva PDF (WebP in the SVGs); since the 2026-10-20 rebrand it is vector Fredoka paths.
 - **Global CSS files in cascade layers** (`src/styles/*.css`, kotoha's approach) instead of CSS Modules; letter pops are server-split spans + CSS (no SplitText), reveals are CSS scroll-driven animations (kotoha). GSAP stays installed for later.
 - `@next/next/no-img-element` is off: images are Cloudinary (`f_auto,q_auto`, srcset) or local SVG.
 - Video URLs use the preset's eager transformations exactly (`c_limit,q_auto,vc_h264,w_1280/…mp4` etc.).
@@ -53,6 +92,7 @@
 - `npm run seed:tech`, `npm run seed:kotoha -- --dry-run | --replace`.
 
 ## Owner to-dos
+- **Rebrand follow-ups (urgent):** see "Incident log" → 2026-10-20, items 1–7.
 - First login on the live site (`/admin`) → set your own password (the seed password is temporary).
 - Optional: add the Cloudinary key + secret to the **Preview** environment too if you want uploads on preview builds.
-- Submit `https://moesoft.vercel.app/sitemap.xml` in Google Search Console; remove the old `moesoft-web` project when ready.
+- Submit `https://moekoworks.vercel.app/sitemap.xml` in Google Search Console; remove the old `moesoft-web` project when ready.

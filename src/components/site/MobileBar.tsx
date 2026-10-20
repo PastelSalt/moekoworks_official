@@ -24,7 +24,7 @@ export function MobileBar() {
     <>
       <header className="mbar">
         <Link className="mbar__logo" href="/" data-splash-target-mobile>
-          <img src="/brand/moesoft-logo.svg" alt="Moesoft home" width={127} height={40} />
+          <img src="/brand/moekoworks-logo.svg" alt="Moeko Works home" width={150} height={33} />
         </Link>
         <button type="button" className="mbar__menu" aria-haspopup="dialog" aria-expanded={open} aria-controls="menu-sheet" onClick={show}>
           <span className="burger" aria-hidden="true">
@@ -53,7 +53,7 @@ export function MobileBar() {
         <div className="sheet__inner">
           <div className="sheet__top">
             <Link className="mbar__logo" href="/" onClick={close}>
-              <img src="/brand/moesoft-logo.svg" alt="Moesoft home" width={127} height={40} />
+              <img src="/brand/moekoworks-logo.svg" alt="Moeko Works home" width={150} height={33} />
             </Link>
             <button type="button" className="mbar__menu mbar__menu--close" onClick={close} autoFocus>
               <span className="burger burger--x" aria-hidden="true">
@@ -65,7 +65,7 @@ export function MobileBar() {
             </button>
           </div>
           <p className="sheet__label" aria-hidden="true">
-            Menu ✿ {site.legalName}
+            Menu ✿ {site.name}
           </p>
           <nav aria-label="Main">
             <NavLinks variant="sheet" onNavigate={close} />

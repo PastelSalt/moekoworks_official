@@ -1,4 +1,4 @@
-/* Moesoft design system · tokens. Loaded first: fixes the cascade-layer order for every stylesheet.
+/* Moeko Works design system · tokens. Loaded first: fixes the cascade-layer order for every stylesheet.
    "Bloom Expo": Miku Expo structure, Happy Sugar Life palette & ornaments, kotoha density (plan §6). */
 @layer reset, tokens, base, mui, components, sections, motion, utilities;
 

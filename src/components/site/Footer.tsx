@@ -7,12 +7,12 @@ export function Footer() {
   return (
     <footer className="footer">
       <GiantWord className="footer__giant" tone="pink">
-        MOESOFT
+        MOEKO WORKS
       </GiantWord>
       <div className="footer__inner">
         <div className="footer__brand">
-          <img src="/brand/moesoft-logo.svg" alt="" width={190} height={60} loading="lazy" />
-          <p className="footer__name">{site.legalName}</p>
+          <img src="/brand/moekoworks-logo.svg" alt="" width={190} height={41} loading="lazy" />
+          <p className="footer__name">{site.name}</p>
           <p className="footer__tag">{site.tagline}</p>
         </div>
         <nav className="footer__nav" aria-label="Footer">
@@ -38,7 +38,7 @@ export function Footer() {
         </div>
       </div>
       <p className="footer__legal">
-        © {site.since} {site.legalName} · <Link href="/privacy">Privacy</Link>
+        © {site.since} {site.name} · <Link href="/privacy">Privacy</Link>
       </p>
     </footer>
   );

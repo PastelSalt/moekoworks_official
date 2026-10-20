@@ -30,7 +30,7 @@ export async function GET(req: Request) {
   return new Response(csv, {
     headers: {
       "content-type": "text/csv; charset=utf-8",
-      "content-disposition": `attachment; filename="moesoft-statistics-${range}d-${day}.csv"`,
+      "content-disposition": `attachment; filename="moekoworks-statistics-${range}d-${day}.csv"`,
       "cache-control": "no-store",
     },
   });

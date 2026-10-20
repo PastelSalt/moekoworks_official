@@ -70,7 +70,7 @@ export function pastelize(accent: string) {
   return C > 0.16 ? fromOklch([Math.max(L, 0.72), 0.16, H]) : accent.toUpperCase();
 }
 
-/** CSS custom properties for a project page / card. Falls back to Moesoft pink. */
+/** CSS custom properties for a project page / card. Falls back to Moeko Works pink. */
 export function accentVars(p: { accentColor: string | null; accentColor2?: string | null; accentStrong?: string | null; accentOn?: string | null }) {
   if (!isHex(p.accentColor)) return {};
   const accent = pastelize(p.accentColor);

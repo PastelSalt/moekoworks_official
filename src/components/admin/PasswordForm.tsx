@@ -13,7 +13,7 @@ const RULES: { id: Rule; text: string }[] = [
   { id: "min_length", text: "Have at least 12 characters (a few words together works great)" },
   { id: "contains_username", text: "Not contain your username" },
   { id: "same_as_current", text: "Be different from the current password" },
-  { id: "guessable", text: "Not be only site words like moesoft, flower or password" },
+  { id: "guessable", text: "Not be only site words like moeko, flower or password" },
   { id: "leaked", text: "Not appear in known data leaks" },
   { id: "mismatch", text: "Match in both boxes" },
 ];

@@ -85,7 +85,7 @@
   @media (prefers-reduced-transparency: reduce) { .mbar { background: var(--white); backdrop-filter: none; } }
   @media (min-width: 900px) { .mbar { display: none; } }
   .mbar__logo { display: block; border-radius: 12px; }
-  .mbar__logo img { width: 127px; height: auto; }
+  .mbar__logo img { width: 150px; height: auto; }
   .mbar__menu {
     display: inline-flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px 0 12px;
     border: 2px solid var(--outline); border-radius: var(--r-pill); background: var(--pink-300); color: var(--ink);

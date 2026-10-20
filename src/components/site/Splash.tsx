@@ -11,8 +11,8 @@ export function Splash() {
       </div>
       <div className="splash__inner">
         <div className="splash__logo" data-splash-logo>
-          <img className="splash__anim" src="/brand/moesoft-splash.svg" alt="" width={520} height={163} fetchPriority="high" />
-          <img className="splash__static" src="/brand/moesoft-logo.svg" alt="" width={520} height={163} loading="lazy" />
+          <img className="splash__anim" src="/brand/moekoworks-splash.svg" alt="" width={520} height={113} fetchPriority="high" />
+          <img className="splash__static" src="/brand/moekoworks-logo.svg" alt="" width={520} height={113} loading="lazy" />
         </div>
         <div className="splash__meta">
           <span>Loading ✿</span>

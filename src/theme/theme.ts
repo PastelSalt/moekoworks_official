@@ -2,7 +2,7 @@
 
 import { createTheme } from "@mui/material/styles";
 
-// MUI theme mapped onto the Moesoft tokens (plan §6.9, Appendix B).
+// MUI theme mapped onto the Moeko Works tokens (plan §6.9, Appendix B).
 export const theme = createTheme({
   cssVariables: true,
   palette: {

@@ -32,7 +32,7 @@ export function Spark({ color = "var(--pink-500)", size = 14, className, style }
   );
 }
 
-/** The pastel stage: blush → ice gradient, watercolor corners and the drifting MOESOFT letter pattern. */
+/** The pastel stage: blush → ice gradient, watercolor corners and the drifting MOEKO WORKS letter pattern. */
 export function PatternStage({
   children,
   className = "",

@@ -13,7 +13,7 @@ try {
   await ctx.addInitScript(({ nolenis }) => {
     window.__nolenis = nolenis;
     if (window.__noio) window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} takeRecords() { return []; } };
-    try { sessionStorage.setItem("ms_splash", "1"); localStorage.setItem("ms_nt", "1"); } catch {}
+    try { sessionStorage.setItem("mw_splash", "1"); localStorage.setItem("mw_nt", "1"); } catch {}
     const mm = window.matchMedia.bind(window);
     window.matchMedia = (q) => (q === "(pointer: fine)" ? { matches: !window.__nolenis, media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} } : mm(q));
   }, { nolenis: label.includes("nolenis") });
@@ -23,7 +23,7 @@ try {
   await p.goto(url, { waitUntil: "networkidle" });
   if (css) await p.addStyleTag({ content: css }); // after hydration (React rebuilds <head>)
   if (label.startsWith("rm:")) await p.evaluate((sel) => document.querySelectorAll(sel).forEach((e) => e.remove()), label.slice(3));
-  if (label.includes("nosplashimg")) await p.evaluate(() => document.querySelectorAll("img[src*=moesoft-splash]").forEach((i) => i.remove()));
+  if (label.includes("nosplashimg")) await p.evaluate(() => document.querySelectorAll("img[src*=moekoworks-splash]").forEach((i) => i.remove()));
   await p.waitForTimeout(4000);
   const m = async () => Object.fromEntries((await cdp.send("Performance.getMetrics")).metrics.map((x) => [x.name, x.value]));
   const st = await p.evaluate(() => ({ running: document.getAnimations().filter((x) => x.playState === "running").length, ff: document.querySelector(".flowerfall") ? getComputedStyle(document.querySelector(".flowerfall")).display : "gone", nodes: document.getElementsByTagName("*").length, injected: document.querySelectorAll("head > style").length }));

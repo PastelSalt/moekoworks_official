@@ -1,5 +1,5 @@
 // Cloudinary delivery URLs (no secrets). Video URLs mirror the eager transformations of the
-// `moesoft_videos_signed` preset so they hit pre-generated derivatives instead of on-the-fly processing.
+// `moekoworks_videos_signed` preset so they hit pre-generated derivatives instead of on-the-fly processing.
 const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? "dijqsw0k8";
 const BASE = `https://res.cloudinary.com/${CLOUD}`;
 
@@ -17,7 +17,7 @@ export function cldSrcSet(publicId: string, widths: number[], opts: Omit<ImageOp
   return widths.map((w) => `${cldImage(publicId, { ...opts, w, h: opts.h ? Math.round((opts.h * w) / widths[widths.length - 1]) : undefined })} ${w}w`).join(", ");
 }
 
-// Same transformations as the `moesoft_videos_signed` preset's eager list (format = file extension), so
+// Same transformations as the `moekoworks_videos_signed` preset's eager list (format = file extension), so
 // pages hit the pre-generated derivatives instead of on-the-fly video processing.
 export const VIDEO_EAGER = "c_limit,q_auto,vc_h264,w_1280/mp4|c_limit,q_auto,vc_vp9,w_1280/webm|c_limit,du_8,q_auto,vc_h264,w_854/mp4|c_limit,q_auto,so_auto,w_1280/jpg";
 export const HOVER_EAGER = "c_limit,q_auto,vc_h264,w_854/mp4";
