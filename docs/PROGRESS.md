@@ -50,22 +50,25 @@ established company that has nothing to do with him. Every public trace of it ha
 - `scripts/rebrand-moekoworks.mts`: rewrites the old name in every text column of the content tables and renames this
   site's project slug to `moekoworks-portfolio` (old slug kept in `project_slug_history` → 301). Dry run by default.
 
-**Still on Kyle (accounts this session could not reach — Vercel API 403, no Neon/Cloudinary/Canva access):**
-1. **Canva** design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline (no Canva connector here).
-   If you export a new logo from it, the SVGs in `public/brand/` can be swapped for it.
-2. **Vercel:** add the domain `moekoworks.vercel.app` to project `moesoft` (Settings → Domains) and redirect the old
-   `*.vercel.app` domain to it; set `NEXT_PUBLIC_SITE_URL=https://moekoworks.vercel.app` if it is set. Optionally
-   rename the project. **Do this before merging into `main`**, or canonical URLs/sitemap point at a domain that
-   doesn't exist yet.
-3. **Neon:** take a restore point, then `npx tsx scripts/rebrand-moekoworks.mts` (dry run) → `--apply`.
-4. **Cloudinary:** create presets `moekoworks_images_signed` / `moekoworks_videos_signed` (copy the old ones, tag
-   `moekoworks`), or set `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` in Vercel to the old names for now —
-   otherwise admin uploads fail. Existing media still carry the old folder name in their URLs; moving them (rename
-   public_ids + update `media_assets.public_id`) is a separate, approved-first job.
-5. **E-mail** `moekosoftware@outlook.com` still reads as "Moeko Software": give me a new address to switch to.
-6. Optional renames: ~~GitHub repo~~ (done 2026-10-20: `PastelSalt/moekoworks_official`), Neon project/database/role, ~~the
-   local folder~~ (done 2026-10-20: `Documents/MoekoWorks/moekoworks_official`), the old Vercel project `moesoft-web` (still online with the old name).
-7. After deploy: re-run the Facebook/X/LinkedIn OG debuggers and resubmit the sitemap in Search Console.
+**Resolved 2026-10-20 (local session): live in production.** Merged `claude/kind-mccarthy-89dx0w` → `dev` → `main`
+(fast-forward, `1cb0ce0`). Vercel project renamed `moesoft` → `moekoworks`; domain `moekoworks.vercel.app` added; the old
+`*.vercel.app` domain **removed** (owner's choice: no redirect, it 404s). `NEXT_PUBLIC_SITE_URL` updated + redeployed.
+Neon restore branch `before-rebrand-2026-10-20` (`br-late-band-b3owchpg`, no compute) taken, then
+`rebrand-moekoworks.mts --apply` (11 writes; the old project slug 308s to `moekoworks-portfolio`). New random `HASH_PEPPER`.
+Local fix: the hero badge and purple sticker no longer cover the wider logo at 900–1339 px. Verified live: every page
+title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-name hits in page text.
+
+**Still open:**
+1. **Canva** design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
+2. **Cloudinary:** presets `moekoworks_images_signed` / `moekoworks_videos_signed` (copy the old ones), or set
+   `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` in Vercel to the old names — otherwise admin uploads fail.
+   53 existing media public_ids still carry the old folder name (only visible in image URLs); moving them is a
+   separate, approved-first job.
+3. **E-mail** `moekosoftware@outlook.com` still reads as "Moeko Software": waiting for a new address (`src/lib/site.ts`).
+4. **Neon DB password** was pasted in a chat: rotate it (Vercel + `.env.local`). Optional: rename the Neon
+   project/DB/role, remove the old Vercel project `moesoft-web`.
+5. Re-run the Facebook/X/LinkedIn OG debuggers and resubmit the sitemap (new domain) in Search Console.
+6. Kyle signs in to the admin again (session cookie renamed).
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
@@ -92,7 +95,7 @@ established company that has nothing to do with him. Every public trace of it ha
 - `npm run seed:tech`, `npm run seed:kotoha -- --dry-run | --replace`.
 
 ## Owner to-dos
-- **Rebrand follow-ups (urgent):** see "Incident log" → 2026-10-20, items 1–7.
+- **Rebrand follow-ups:** see "Incident log" → 2026-10-20, "Still open".
 - First login on the live site (`/admin`) → set your own password (the seed password is temporary).
 - Optional: add the Cloudinary key + secret to the **Preview** environment too if you want uploads on preview builds.
 - Submit `https://moekoworks.vercel.app/sitemap.xml` in Google Search Console; remove the old `moesoft-web` project when ready.
