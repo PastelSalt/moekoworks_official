@@ -60,10 +60,10 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 
 **Still open:**
 1. **Canva** design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
-2. **Cloudinary:** presets `moekoworks_images_signed` / `moekoworks_videos_signed` (copy the old ones), or set
-   `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` in Vercel to the old names — otherwise admin uploads fail.
-   53 existing media public_ids still carry the old folder name (only visible in image URLs); moving them is a
-   separate, approved-first job.
+2. ~~**Cloudinary presets**~~ done 2026-10-20 (`moekoworks_{images,videos}_signed`, exact copies, tag `moekoworks`).
+   If `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` were set in Vercel to the old names, delete them (code defaults are right).
+   ~~Media move~~ done 2026-10-20: all 53 assets renamed to `moekoworks-official/…` (Moeko Works portfolio folder
+   `moekoworks-portfolio`), `media_assets.public_id` updated (Neon backup `before-media-move-2026-10-20`).
 3. ~~E-mail~~ done 2026-10-20: the site now uses the personal Gmail address (`src/lib/site.ts`).
 4. **Neon DB password** was pasted in a chat: rotate it (Vercel + `.env.local`). Optional: rename the Neon
    project/DB/role, remove the old Vercel project `moesoft-web`.
