@@ -58,17 +58,35 @@ Neon restore branch `before-rebrand-2026-10-20` (`br-late-band-b3owchpg`, no com
 Local fix: the hero badge and purple sticker no longer cover the wider logo at 900–1339 px. Verified live: every page
 title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-name hits in page text.
 
-**Still open:**
-1. **Canva** design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
-2. ~~**Cloudinary presets**~~ done 2026-10-20 (`moekoworks_{images,videos}_signed`, exact copies, tag `moekoworks`).
-   If `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` were set in Vercel to the old names, delete them (code defaults are right).
-   ~~Media move~~ done 2026-10-20: all 53 assets renamed to `moekoworks-official/…` (Moeko Works portfolio folder
-   `moekoworks-portfolio`), `media_assets.public_id` updated (Neon backup `before-media-move-2026-10-20`).
-3. ~~E-mail~~ done 2026-10-20: the site now uses the personal Gmail address (`src/lib/site.ts`).
-4. **Neon DB password** was pasted in a chat: rotate it (Vercel + `.env.local`). Optional: rename the Neon
-   project/DB/role, remove the old Vercel project `moesoft-web`.
-5. Re-run the Facebook/X/LinkedIn OG debuggers and resubmit the sitemap (new domain) in Search Console.
-6. Kyle signs in to the admin again (session cookie renamed).
+**Cleanup pass 2026-10-20 (owner asked to "clean everything") — done:**
+- E-mail switched to the personal Gmail address (`src/lib/site.ts`), live on /contact.
+- Cloudinary presets `moekoworks_{images,videos}_signed` created (exact copies of the old ones, tag `moekoworks`).
+- Media move: folder `moesoft-official` → `moekoworks-official` (and `projects/moesoft-portfolio` →
+  `projects/moekoworks-portfolio`); all 53 assets renamed (versions unchanged); `media_assets.public_id` updated in one
+  transaction (53 new, 0 old). Neon backup `before-media-move-2026-10-20` (`br-royal-term-b3t3gx3r`) taken first.
+  Images were broken ~5 min between the rename and the production rebuild (commit `0e20df4` forced it). Verified after:
+  0 old ids in page HTML, Hanon project page images load.
+- Tag `moekoworks` added to all 47 images; `moekoworks-portfolio` added to that project's 13 images + 2 videos.
+
+**Cleanup — still to do (resume here):**
+1. Cloudinary tags: add `moekoworks` to the 6 videos (`…/{moekoworks-portfolio,hanon-fansite,kotoha-fansite}/{hover,preview}`),
+   then remove the old tags `moesoft` (all 53) and `moesoft-portfolio` (15). Internal only.
+2. Re-check Home on the live site (every Cloudinary image/video loads); the classifier outage stopped this check.
+3. Docs: rewrite the remaining old-name mentions in `PRELIMENARYPLAN.md`, `docs/NEW-PROJECT-PLAYBOOK.md` and this file to
+   the current names (keep one history line about the rename). Do it after step 4 so the Neon names are final.
+4. Neon: rename database `moesoft` and role `moesoft_owner`, and rotate the leaked password together. The connection
+   string changes, so production has no DB until Kyle pastes the new `DATABASE_URL` / `DATABASE_URL_UNPOOLED` into Vercel
+   and redeploys (~2 min). Give Kyle the exact steps first. Public pages keep serving from cache meanwhile.
+5. Git: delete the merged branch `claude/kind-mccarthy-89dx0w` (local + origin).
+6. Neon backup branches `before-rebrand-2026-10-20` and `before-media-move-2026-10-20`: keep ~1 week, then ask before deleting.
+
+**Still on Kyle:**
+1. Vercel: delete the old project `moesoft-web` (still online with the old brand). Vercel connector gets 403 for the team,
+   so: project → Settings → General → Delete Project.
+2. Vercel env: if `CLOUDINARY_PRESET_*` / `CLOUDINARY_ROOT_FOLDER` were set to the old names, delete them.
+3. Canva design `DAG9mW5bZm8`: change the wordmark to "Moeko Works" and the tagline.
+4. Re-run the Facebook/X/LinkedIn OG debuggers; resubmit the sitemap (new domain) in Search Console.
+5. Sign in to the admin again (session cookie renamed).
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
