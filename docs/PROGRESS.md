@@ -24,6 +24,7 @@
 | Hanon Fan Site ✅ | ✅ 2026-10-11 | Added from https://hanon-fansite.vercel.app (project id 5, **published**, now Latest): 8 desktop + 2 phone shots, 28 s preview + 8 s hover, 15 tech (new: PGlite), 23 operations. `scripts/capture/hanon.mts`, `encode-hanon.sh`, `seed-hanon.mts`. 6 admin shots on the "For admins" cards (local in-memory copy, see playbook §6.0) |
 | Kotoha refresh | ✅ 2026-10-11 | Seed updated for the Kotoha repo's 2026-10-09 changes: Lenis + section glides gone (op "Scroll freely"), performance-pass op, sister-site op, birthday/debut dates, AiceClass as history; re-run with `--replace`. Card 04 "Never lose anything" now shows the admin Archive (local in-memory copy) |
 | Moeko Works Portfolio | ✅ 2026-10-14 | This site added as a project (id 10, published, dated 2026-01-20 → No.01): 23 s preview, 13 stills, 17 tech, 11 visitor + 7 behind-the-scenes cards, no admin cards. `scripts/capture/moekoworks.mts`, `encode-moekoworks.sh`, `seed-moekoworks.mts` |
+| Himawari ✅ | ✅ 2026-10-23 | Added from https://himawari-moekoworks.vercel.app + both repos (project id 11, **published**, now Latest, No.04): 27.5 s preview, 8 s hover, 7 desktop + 2 phone website shots, 4 real Studio shots from the engine repo's `docs/images` (`window` frame); 23 tech (14 new, 10 new logos), 20 ops (11 · 3 · 6), 4 links. **Owner's exception: open source, so the GitHub repo + releases are linked.** Seeded through the Neon MCP (`seed:himawari -- --sql`) because the local `.env.local` still has the pre-rotation password |
 | Performance pass | ✅ 2026-10-14 (`dev`) | [`PERFORMANCE_PLAN.md`](PERFORMANCE_PLAN.md) §7: no visual change (pixel-checked). Scroll 30→54 fps (Home), 35→60 (About), 22→60 (Kotoha page); idle CPU About 93→9 %. Key fixes: no per-frame `--lean`, compositor marquee/flowers, MUI `box-sizing: inherit` override, Lenis loop only while scrolling. Harness `scripts/perf/{bench,trace,idle}.mjs` |
 | P9 Quality | ⬜ | Lighthouse / a11y pass, CSP enforce, cross-browser checks |
 | P10 Launch | 🟡 live 2026-10-04 | `dev` fast-forwarded into `main` (02323cd) → production on moekoworks.vercel.app. Still to do: Kyle's first login (sets his own password), Search Console + sitemap, OG debuggers |
@@ -85,6 +86,9 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 Both Neon backup branches (`before-rebrand-2026-10-20`, `before-media-move-2026-10-20`) deleted at his request.
 Search Console: not set up, so no sitemap resubmission (the site still serves `/sitemap.xml`).
 **Only open item:** Canva design `DAG9mW5bZm8` still shows the old wordmark (Kyle handles it himself, no rush).
+**Password: done** (Kyle, 2026-10-23). The Neon `moesoft_owner` password was reset 2026-10-20 and is in Vercel. Local
+`.env.local` deliberately still holds the old URL (old db name + password), so local scripts can't reach the DB:
+use the Neon MCP (`run_sql_transaction`, e.g. `seed:<slug> -- --sql <file>`) or put the new URL in `.env.local`.
 
 ## Decisions taken during execution
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
@@ -109,6 +113,9 @@ Search Console: not set up, so no sitemap resubmission (the site still serves `/
 - `npx tsx scripts/capture/kotoha.mts [--shots|--video]` → `scripts/capture/out/kotoha/` (git-ignored), then `scripts/capture/encode.sh`.
 - Upload: sign with the Cloudinary MCP `sign-upload`, POST with curl (deterministic public IDs, `overwrite`, eager for videos) → `uploads.json`.
 - `npm run seed:tech`, `npm run seed:kotoha -- --dry-run | --replace`.
+- Himawari (Windows): `npx tsx scripts/capture/himawari.mts [--shots|--video]` → copy the engine repo's `docs/images/*.png` to
+  `out/himawari/app-*.png` → `FFMPEG=<ffmpeg-static ffmpeg.exe> bash scripts/capture/encode-himawari.sh` →
+  upload → `npm run seed:himawari -- --sql <file>` → Neon MCP `run_sql_transaction` (or `seed:himawari` with a working `.env.local`).
 
 ## Owner to-dos
 - **Rebrand follow-ups:** see "Incident log" → 2026-10-20, "Still open".

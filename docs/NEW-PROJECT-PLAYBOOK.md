@@ -682,6 +682,23 @@ point first), the cron rollup and the dashboard card. Admins (cookie), bots and 
 
 ## 15. Worked examples
 
+### Himawari Visual Novel Studio and Engine (2026-10-23, project id 11): a desktop app + its website, on Windows
+- First project done on the **Windows** machine. What changed there: Chrome is
+  `C:/Program Files/Google/Chrome/Application/chrome.exe` (no GPU flags needed); `ffmpeg-static` gives `ffmpeg.exe` (the
+  gyan.dev build **has** `drawtext`: `fontfile='C\:/Windows/Fonts/arial.ttf'`); run `.sh` scripts with `bash`; contact sheets
+  with the repo's `sharp`; the §11.5 runner was rewritten in Node (`fetch` + `FormData`, same rule: echo every signed param).
+- **Owner's exception to "never link source code":** Himawari is open source, so it links its GitHub repo (`other`,
+  label "Source code") and `releases/latest` (`exe`, never a version-pinned file). Other projects keep the rule.
+- App media without running the app: the engine repo's own `docs/images/*.png` (real Studio captures) as `window`-framed
+  gallery shots, first in the gallery so a Studio shot is the cover. The video is the website (`capture/himawari.mts`):
+  smooth `scrollTo` per section id, 6 cuts + end card → 27.5 s, 2.5 MB; hover = the feature rows (the hero barely moves).
+- The local `.env.local` couldn't log in (old password), so `seed-himawari.mts -- --sql <file>` writes the whole seed
+  (tech catalog upsert + project + rows, ids resolved by slug/public_id sub-selects) as statements for the Neon MCP
+  `run_sql_transaction`. Reuse that pattern for future seeds.
+- New tech with logos: C, CMake, CodeMirror, pnpm, Model Context Protocol, Claude, Vitest, GitHub Actions, Astro, Preact
+  (+ monograms SDL 3, FreeType). A newly published project shows on its page at once, but Home/History only after the
+  next build or ISR refresh, and new icon keys need the code deploy (until then they render as monograms).
+
 ### Moeko Works Portfolio (2026-10-14, project id 10): this site as a project
 - `scripts/capture/moekoworks.mts` (captures production with `mw_nt`, emulated fine pointer so Lenis/hover previews
   work; the splash shot uses a fresh session), `encode-moekoworks.sh` (5 cuts + end card → 23 s, 3.9 MB),
