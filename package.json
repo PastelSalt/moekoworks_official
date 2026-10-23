@@ -14,7 +14,8 @@
     "seed:tech": "tsx scripts/seed-tech.mts",
     "seed:kotoha": "tsx scripts/seed-kotoha.mts",
     "seed:hanon": "tsx scripts/seed-hanon.mts",
-    "seed:moekoworks": "tsx scripts/seed-moekoworks.mts"
+    "seed:moekoworks": "tsx scripts/seed-moekoworks.mts",
+    "seed:himawari": "tsx scripts/seed-himawari.mts"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
