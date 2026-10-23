@@ -184,7 +184,7 @@ export type Update = { date: Date; kind: "project" | "certification"; text: stri
 export function buildUpdates(projects: ProjectSummary[], certs: Certification[], limit = 8): Update[] {
   const items: Update[] = [
     ...projects.filter((p) => p.publishedAt).map((p) => ({ date: p.publishedAt as Date, kind: "project" as const, text: `New project: ${p.title}`, href: `/history/${p.slug}` })),
-    ...certs.map((c) => ({ date: new Date(`${c.obtainedOn}T00:00:00+08:00`), kind: "certification" as const, text: `Certification: ${c.title}`, href: "/about#certifications" })),
+    ...certs.map((c) => ({ date: new Date(`${c.obtainedOn}T00:00:00+08:00`), kind: "certification" as const, text: /^Grades\b/.test(c.title) ? c.title : `Certification: ${c.title}`, href: "/about#certifications" })),
   ];
   return items.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, limit);
 }

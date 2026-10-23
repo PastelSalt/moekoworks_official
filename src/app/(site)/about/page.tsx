@@ -7,7 +7,7 @@ import { Lightbox } from "@/components/projects/Lightbox";
 import { PageHead } from "@/components/site/PageHead";
 import { SectionHead } from "@/components/site/SectionHead";
 import { cldImage, cldSrcSet } from "@/lib/cloudinary";
-import { isoDate, longDate, pad2 } from "@/lib/format";
+import { isoDate, longDate, monthYear, pad2 } from "@/lib/format";
 import { site } from "@/lib/site";
 import { getPublishedCertifications, getToolbox } from "@/server/queries/public";
 import "@/styles/pages.css";
@@ -41,8 +41,23 @@ const CATEGORY_ORDER: [string, string][] = [
   ["other", "Other"],
 ];
 
+/** Term grade reports are certifications titled "Grades: …"; they get the grading-scale note and show the term's month. */
+const isGrades = (title: string) => /^Grades\b/.test(title);
+
+const GRADE_SCALE = [
+  ["4.00", "Excellent", "96–100%"],
+  ["3.50", "Very good", "90–95%"],
+  ["3.00", "Good", "84–89%"],
+  ["2.50", "Above satisfactory", "78–83%"],
+  ["2.00", "Satisfactory", "72–77%"],
+  ["1.50", "Fair", "66–71%"],
+  ["1.00", "Pass", "60–65%"],
+  ["0.00", "Fail", ""],
+] as const;
+
 export default async function AboutPage() {
   const [certs, toolbox] = await Promise.all([getPublishedCertifications(), getToolbox()]);
+  const hasGrades = certs.some((c) => isGrades(c.title));
   const groups = CATEGORY_ORDER.map(([key, label]) => ({ key, label, items: toolbox.filter((t) => t.category === key) })).filter((g) => g.items.length);
 
   return (
@@ -165,8 +180,9 @@ export default async function AboutPage() {
 
       {/* No.04 — CERTIFICATIONS */}
       <section className="wrap section certifications" id="certifications" aria-labelledby="certs-title">
-        <SectionHead no="No.04" label="Certifications" title="Certifications" id="certs-title" intro="Courses and certifications I've completed, newest first." />
+        <SectionHead no="No.04" label="Certifications" title="Certifications" id="certs-title" intro="Courses, certificates and my term grades, newest first." />
         {certs.length ? (
+          <>
           <Lightbox
             className="certgrid"
             label="Certificate viewer"
@@ -174,7 +190,7 @@ export default async function AboutPage() {
               src: cldImage(c.media.publicId, { w: 1600 }),
               srcSet: cldSrcSet(c.media.publicId, [800, 1200, 1600, 2000]),
               alt: c.media.altText ?? `Certificate: ${c.title}`,
-              caption: `${c.title} · obtained ${longDate(c.obtainedOn)}`,
+              caption: isGrades(c.title) ? `${c.title} · 4.00 is the highest grade (see the note below the certificates)` : `${c.title} · obtained ${longDate(c.obtainedOn)}`,
               width: c.media.width,
               height: c.media.height,
               track: { t: "certificate_open" as const, id: c.id },
@@ -191,14 +207,52 @@ export default async function AboutPage() {
                   </button>
                   <div className="cert__body">
                     <h3 className="cert__title">{c.title}</h3>
-                    <p className="micro">
-                      Obtained <time dateTime={isoDate(c.obtainedOn)}>{longDate(c.obtainedOn)}</time>
-                    </p>
+                    {isGrades(c.title) ? (
+                      <p className="micro micro--row">
+                        <span>
+                          Term ended <time dateTime={isoDate(c.obtainedOn)}>{monthYear(c.obtainedOn)}</time>
+                        </span>
+                        <a href="#grading-scale">4.00 is the highest</a>
+                      </p>
+                    ) : (
+                      <p className="micro">
+                        Obtained <time dateTime={isoDate(c.obtainedOn)}>{longDate(c.obtainedOn)}</time>
+                      </p>
+                    )}
                   </div>
                 </li>
               ))}
             </ul>
           </Lightbox>
+          {hasGrades ? (
+            <aside className="grade-note paper paper--pad" id="grading-scale" aria-labelledby="grading-scale-title">
+              <h3 id="grading-scale-title" className="grade-note__title">
+                <Flower size={18} /> How to read my grades
+              </h3>
+              <p>
+                <strong>4.00 is the highest grade, not the lowest.</strong> National University uses a zero-based 4.00 scale that runs the opposite way to the 1.00-is-best scale most
+                Philippine schools use. So a GWA (general weighted average) of 3.90 sits near the top, not near failing.
+              </p>
+              <dl className="grade-note__scale">
+                {GRADE_SCALE.map(([grade, meaning, range]) => (
+                  <div key={grade}>
+                    <dt>{grade}</dt>
+                    <dd>
+                      {meaning} {range ? <span>{range}</span> : null}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <p>
+                <strong>Only the final grade counts.</strong> Each final grade already covers the whole term, midterm and finals together, and it is the grade used for the GWA. In CCIT
+                (the College of Computing and Information Technologies, home of BSIT), computing and IT courses are graded continuously and by output: the term&apos;s work builds toward a
+                project that is only finished and submitted in the finals, so there is nothing complete to grade at midterm. That is why those courses show &ldquo;Inc&rdquo; in the Midterm
+                column; it is not an incomplete course, and every one of them has its final grade.
+              </p>
+              <p className="micro">Student ID hidden · subjects marked * (NSTP) are not counted in the GWA, as on the official report</p>
+            </aside>
+          ) : null}
+          </>
         ) : (
           <p className="note">
             <Flower size={18} /> Certificates will appear here soon ✿
