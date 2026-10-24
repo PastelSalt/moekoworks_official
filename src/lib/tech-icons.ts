@@ -3,6 +3,7 @@ import {
   siAndroid,
   siAndroidstudio,
   siAstro,
+  siBetterauth,
   siC,
   siChartdotjs,
   siClaude,
@@ -12,6 +13,7 @@ import {
   siCodemirror,
   siCss,
   siDart,
+  siDiscord,
   siDocker,
   siDrizzle,
   siElectron,
@@ -51,6 +53,7 @@ import {
   siTailwindcss,
   siTauri,
   siTypescript,
+  siUmami,
   siUnity,
   siVercel,
   siVite,
@@ -65,6 +68,7 @@ const ICONS: Record<string, { path: string; hex: string }> = {
   android: siAndroid,
   androidstudio: siAndroidstudio,
   astro: siAstro,
+  betterauth: siBetterauth,
   c: siC,
   chartdotjs: siChartdotjs,
   claude: siClaude,
@@ -74,6 +78,7 @@ const ICONS: Record<string, { path: string; hex: string }> = {
   codemirror: siCodemirror,
   css: siCss,
   dart: siDart,
+  discord: siDiscord,
   docker: siDocker,
   drizzle: siDrizzle,
   electron: siElectron,
@@ -113,6 +118,7 @@ const ICONS: Record<string, { path: string; hex: string }> = {
   tailwindcss: siTailwindcss,
   tauri: siTauri,
   typescript: siTypescript,
+  umami: siUmami,
   unity: siUnity,
   vercel: siVercel,
   vite: siVite,
@@ -122,7 +128,7 @@ const ICONS: Record<string, { path: string; hex: string }> = {
 };
 
 /** Brand colours that are too pale to read on white get a darker stand-in (icons stay recognisable). */
-const READABLE: Record<string, string> = { javascript: "#C9B300", drizzle: "#7FA524", unity: "#222222", neon: "#1BA97A", c: "#5C6F87", vitest: "#3F8F1F" };
+const READABLE: Record<string, string> = { javascript: "#C9B300", drizzle: "#7FA524", unity: "#222222", neon: "#1BA97A", c: "#5C6F87", vitest: "#3F8F1F", betterauth: "#222222" };
 
 export function techIcon(key: string | null | undefined): TechIcon | null {
   if (!key) return null;

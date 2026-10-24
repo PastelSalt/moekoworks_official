@@ -32,6 +32,10 @@ export const TECH: T[] = [
   { slug: "sdl", name: "SDL 3", category: "library", color: "#1D4F91", url: "https://libsdl.org/" },
   { slug: "freetype", name: "FreeType", category: "library", color: "#4A6A8A", url: "https://freetype.org/" },
   { slug: "mcp", name: "Model Context Protocol", category: "library", iconKey: "modelcontextprotocol", url: "https://modelcontextprotocol.io/" },
+  { slug: "better-auth", name: "Better Auth", category: "library", iconKey: "betterauth", url: "https://www.better-auth.com/" },
+  { slug: "uplot", name: "uPlot", category: "library", color: "#2D6CDF", url: "https://github.com/leeoniya/uPlot" },
+  { slug: "fusejs", name: "Fuse.js", category: "library", color: "#D97706", url: "https://www.fusejs.io/" },
+  { slug: "budoux", name: "BudouX", category: "library", color: "#4285F4", url: "https://github.com/google/budoux" },
   // runtime, data, cloud, services
   { slug: "nodejs", name: "Node.js", category: "runtime", iconKey: "nodedotjs", url: "https://nodejs.org/" },
   { slug: "postgresql", name: "PostgreSQL", category: "database", iconKey: "postgresql", url: "https://www.postgresql.org/" },
@@ -40,6 +44,9 @@ export const TECH: T[] = [
   { slug: "vercel", name: "Vercel", category: "cloud", iconKey: "vercel", url: "https://vercel.com/" },
   { slug: "cloudinary", name: "Cloudinary", category: "service", iconKey: "cloudinary", url: "https://cloudinary.com/" },
   { slug: "claude", name: "Claude API", category: "service", iconKey: "claude", url: "https://www.anthropic.com/api" },
+  { slug: "turnstile", name: "Cloudflare Turnstile", category: "service", iconKey: "cloudflare", url: "https://www.cloudflare.com/application-services/products/turnstile/" },
+  { slug: "umami", name: "Umami", category: "service", iconKey: "umami", url: "https://umami.is/" },
+  { slug: "discord", name: "Discord webhooks", category: "service", iconKey: "discord", url: "https://discord.com/developers/docs/resources/webhook" },
   { slug: "youtube", name: "YouTube embeds", category: "service", iconKey: "youtube", url: "https://developers.google.com/youtube" },
   // tools
   { slug: "sharp", name: "sharp", category: "tool", iconKey: "sharp", url: "https://sharp.pixelplumbing.com/" },
