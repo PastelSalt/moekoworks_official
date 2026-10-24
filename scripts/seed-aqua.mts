@@ -30,7 +30,7 @@ const project = {
   ].join("\n\n"),
   category: "web",
   platforms: ["web"],
-  lifecycle: "beta",
+  lifecycle: "live",
   role: "Solo developer: design, front end, back end, moderation and keeper panel, content curation",
   startedOn: "2026-10-12",
   finishedOn: null,
