@@ -2,10 +2,12 @@ import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import { and, count, desc, eq, ilike, inArray, or, type SQL } from "drizzle-orm";
 import type { Metadata } from "next";
+import { Mail, SearchX } from "lucide-react";
 import Link from "next/link";
+import { AdminPageHead } from "@/components/admin/AdminPageHead";
+import { StateBox } from "@/components/admin/StateBox";
 import { MessageList, type MessageRow } from "@/components/admin/MessageList";
 import { bubbleColor, relativeTime } from "@/lib/admin-format";
 import { requireAdmin } from "@/server/auth/session";
@@ -83,10 +85,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/admin/m
 
   return (
     <>
-      <p className="admin-label">No.05 — Messages</p>
-      <Typography variant="h4" component="h1" sx={{ mt: 0.5, mb: 2 }}>
-        Messages
-      </Typography>
+      <AdminPageHead href="/admin/messages" />
 
       <nav className="admin-tabs" aria-label="Folders">
         {FOLDERS.map((f) => (
@@ -119,9 +118,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/admin/m
       {list.length ? (
         <MessageList rows={list} folder={folder} back={href({ page })} />
       ) : (
-        <Typography color="text.secondary" sx={{ py: 6, textAlign: "center" }}>
-          {q ? "No messages match your search." : folder === "inbox" ? "No messages yet. They'll appear here when someone uses the contact form ✿" : "Nothing here."}
-        </Typography>
+        <StateBox icon={q ? SearchX : Mail}>{q ? "No messages match your search." : folder === "inbox" ? "No messages yet. They'll appear here when someone uses the contact form ✿" : "Nothing here."}</StateBox>
       )}
 
       {pages > 1 ? (

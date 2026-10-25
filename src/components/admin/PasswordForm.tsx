@@ -4,6 +4,7 @@ import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import { Check, Circle, X } from "lucide-react";
 import { useActionState, useState } from "react";
 import { changePasswordAction, type PasswordState } from "@/server/auth/actions";
 import type { PasswordRule } from "@/server/auth/password";
@@ -17,6 +18,11 @@ const RULES: { id: Rule; text: string }[] = [
   { id: "leaked", text: "Not appear in known data leaks" },
   { id: "mismatch", text: "Match in both boxes" },
 ];
+
+function RuleIcon({ state }: { state: string }) {
+  const Icon = state === "ok" ? Check : state === "bad" ? X : Circle;
+  return <Icon className="admin-rules__icon" size={16} strokeWidth={state === "idle" ? 2 : 3} aria-hidden />;
+}
 
 // The live rules checklist from kotoha's password form; the last two server-only rules are confirmed on submit.
 export function PasswordForm({ username, forced = false }: { username: string; forced?: boolean }) {
@@ -83,7 +89,9 @@ export function PasswordForm({ username, forced = false }: { username: string; f
           <ul className="admin-rules" aria-live="polite">
             {RULES.map((r) => (
               <li key={r.id} data-state={stateOf(r.id)}>
-                {r.text}
+                <RuleIcon state={stateOf(r.id)} />
+                <span>{r.text}</span>
+                <span className="visually-hidden">{stateOf(r.id) === "ok" ? " (done)" : stateOf(r.id) === "bad" ? " (not yet)" : ""}</span>
               </li>
             ))}
           </ul>

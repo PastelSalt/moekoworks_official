@@ -1,8 +1,9 @@
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import { desc, eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import type { Metadata } from "next";
-import { dateTime } from "@/lib/admin-format";
+import { ActivityList } from "@/components/admin/ActivityList";
+import { AdminPageHead } from "@/components/admin/AdminPageHead";
+import { StateBox } from "@/components/admin/StateBox";
 import { requireAdmin } from "@/server/auth/session";
 import { db, schema } from "@/server/db";
 
@@ -12,40 +13,14 @@ export const metadata: Metadata = { title: "Activity" };
 export default async function ActivityPage() {
   await requireAdmin();
   const rows = await db
-    .select({ at: schema.activityLog.occurredAt, action: schema.activityLog.action, summary: schema.activityLog.summary, user: schema.adminUsers.username })
+    .select({ at: schema.activityLog.occurredAt, action: schema.activityLog.action, summary: schema.activityLog.summary })
     .from(schema.activityLog)
-    .leftJoin(schema.adminUsers, eq(schema.adminUsers.id, schema.activityLog.adminUserId))
     .orderBy(desc(schema.activityLog.occurredAt))
     .limit(200);
   return (
     <>
-      <p className="admin-label">No.07 — Activity</p>
-      <Typography variant="h4" component="h1" sx={{ mt: 0.5, mb: 2 }}>
-        Activity
-      </Typography>
-      <Paper elevation={0} sx={{ boxShadow: "var(--shadow-paper)", overflow: "hidden" }}>
-        <table className="stable">
-          <thead>
-            <tr>
-              <th>When (PH time)</th>
-              <th>What</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r, i) => (
-              <tr key={i}>
-                <td>{dateTime(r.at)}</td>
-                <td>
-                  <code>{r.action}</code>
-                </td>
-                <td>{r.summary ?? "—"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {!rows.length ? <p className="scard__empty" style={{ padding: 16 }}>Nothing yet.</p> : null}
-      </Paper>
+      <AdminPageHead href="/admin/activity" hint="Sign-ins, password changes, publishes, uploads and inbox actions. Times are PH time." />
+      <Paper elevation={0} className="apanel">{rows.length ? <ActivityList rows={rows} /> : <StateBox>Nothing yet.</StateBox>}</Paper>
       <p className="admin-hint">The latest 200 entries.</p>
     </>
   );

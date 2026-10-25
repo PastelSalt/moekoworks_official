@@ -1,5 +1,5 @@
-import Typography from "@mui/material/Typography";
 import type { Metadata } from "next";
+import { AdminPageHead } from "@/components/admin/AdminPageHead";
 import { TechManager } from "@/components/admin/TechManager";
 import { TECH_ICON_KEYS } from "@/lib/tech-icons";
 import { getToolbox } from "@/server/queries/public";
@@ -12,10 +12,7 @@ export default async function TechPage() {
   const rows = await getToolbox();
   return (
     <>
-      <p className="admin-label">No.06 — Tech catalog</p>
-      <Typography variant="h4" component="h1" sx={{ mt: 0.5, mb: 2 }}>
-        Tech catalog
-      </Typography>
+      <AdminPageHead href="/admin/tech" />
       <TechManager rows={rows} iconKeys={TECH_ICON_KEYS} />
     </>
   );

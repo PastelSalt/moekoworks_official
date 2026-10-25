@@ -41,9 +41,19 @@ function move<T>(list: T[], i: number, d: number) {
   return next;
 }
 
-function Section({ no, title, children, hint }: { no: string; title: string; children: ReactNode; hint?: string }) {
+const SECTIONS = [
+  ["ed-basics", "Basics"],
+  ["ed-media", "Media"],
+  ["ed-links", "Links"],
+  ["ed-tech", "Tech"],
+  ["ed-description", "Description"],
+  ["ed-operations", "Operations"],
+  ["ed-credits", "Credits & SEO"],
+];
+
+function Section({ id, no, title, children, hint }: { id: string; no: string; title: string; children: ReactNode; hint?: string }) {
   return (
-    <Paper elevation={0} className="ed-section" sx={{ boxShadow: "var(--shadow-paper)" }}>
+    <Paper elevation={0} component="section" id={id} aria-label={title} className="ed-section">
       <p className="admin-label">
         {no} — {title}
       </p>
@@ -123,6 +133,13 @@ export function ProjectEditor({ data }: { data: EditorData }) {
             View page
           </Button>
         ) : null}
+        <nav className="ed-jump" aria-label="Jump to section">
+          {SECTIONS.map(([id, label]) => (
+            <a key={id} href={`#${id}`}>
+              {label}
+            </a>
+          ))}
+        </nav>
       </div>
       {error ? (
         <Alert severity="error" onClose={() => setError("")} sx={{ mb: 2 }}>
@@ -130,7 +147,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
         </Alert>
       ) : null}
 
-      <Section no="No.01" title="Basics">
+      <Section id="ed-basics" no="No.01" title="Basics">
         <div className="ed-grid">
           <TextField label="Title" value={p.title} onChange={(e) => set("title", e.target.value)} required slotProps={{ htmlInput: { maxLength: 80 } }} />
           <TextField label="Slug (URL)" value={p.slug} onChange={(e) => set("slug", e.target.value.toLowerCase())} helperText={`/history/${p.slug}`} slotProps={{ htmlInput: { maxLength: 60 } }} />
@@ -169,7 +186,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
         </div>
       </Section>
 
-      <Section no="No.02" title="Video & images" hint="The preview video plays on hover in lists, on the Latest card and in the page hero. Images appear in the gallery; the first one (or a 'cover') is the card image. Alt text is required.">
+      <Section id="ed-media" no="No.02" title="Video & images" hint="The preview video plays on hover in lists, on the Latest card and in the page hero. Images appear in the gallery; the first one (or a 'cover') is the card image. Alt text is required.">
         {!data.uploads ? <Alert severity="warning">Uploads are off until CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET are set. You can still edit everything else.</Alert> : null}
         <div className="ed-uploads">
           <Uploader kind="video" scope={scope} label="Upload preview video" disabled={!data.uploads} onUploaded={uploaded("preview")} />
@@ -221,7 +238,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
         </ul>
       </Section>
 
-      <Section no="No.03" title="Links" hint="Visit website, APK, EXE, store pages, docs… Never a source-code link.">
+      <Section id="ed-links" no="No.03" title="Links" hint="Visit website, APK, EXE, store pages, docs… Never a source-code link.">
         {(p.links ?? []).map((l, i) => (
           <div key={i} className="ed-row ed-line">
             <TextField select size="small" label="Kind" value={l.kind} onChange={(e) => set("links", p.links!.map((x, j) => (j === i ? { ...x, kind: e.target.value as "live" } : x)))} sx={{ minWidth: 170 }}>
@@ -241,7 +258,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
         </Button>
       </Section>
 
-      <Section no="No.04" title="Tech stack">
+      <Section id="ed-tech" no="No.04" title="Tech stack">
         <Autocomplete
           multiple
           options={data.catalog}
@@ -265,14 +282,14 @@ export function ProjectEditor({ data }: { data: EditorData }) {
         ))}
       </Section>
 
-      <Section no="No.05" title="Full description" hint="Markdown: **bold**, *italic*, [link](https://…), - lists, ## headings.">
+      <Section id="ed-description" no="No.05" title="Full description" hint="Markdown: **bold**, *italic*, [link](https://…), - lists, ## headings.">
         <Button size="small" startIcon={<Eye size={16} />} onClick={() => setPreview((v) => !v)}>
           {preview ? "Edit" : "Preview"}
         </Button>
         {preview ? <Markdown source={p.descriptionMd ?? ""} className="prose ed-preview" /> : <TextField multiline minRows={8} fullWidth value={p.descriptionMd ?? ""} onChange={(e) => set("descriptionMd", e.target.value)} />}
       </Section>
 
-      <Section no="No.06" title="Operations" hint="What visitors can do, what admins can do, and what happens behind the scenes. Shown as numbered cards.">
+      <Section id="ed-operations" no="No.06" title="Operations" hint="What visitors can do, what admins can do, and what happens behind the scenes. Shown as numbered cards.">
         {(p.operations ?? []).map((o, i) => (
           <div key={i} className="ed-op">
             <div className="ed-row">
@@ -316,7 +333,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
         </Button>
       </Section>
 
-      <Section no="No.07" title="Credits, disclaimer & SEO">
+      <Section id="ed-credits" no="No.07" title="Credits, disclaimer & SEO">
         {(p.credits ?? []).map((c, i) => (
           <div key={i} className="ed-row ed-line">
             <TextField size="small" label="Role" value={c.role ?? ""} onChange={(e) => set("credits", p.credits!.map((x, j) => (j === i ? { ...x, role: e.target.value } : x)))} />
@@ -331,7 +348,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
           Add credit
         </Button>
         <TextField multiline minRows={2} fullWidth label="Disclaimer (Markdown, optional)" value={p.disclaimerMd ?? ""} onChange={(e) => set("disclaimerMd", e.target.value)} sx={{ mt: 2 }} />
-        <div className="ed-row" style={{ marginTop: 16 }}>
+        <div className="ed-row ed-row--gap">
           <TextField label="SEO title (optional)" value={p.seoTitle ?? ""} onChange={(e) => set("seoTitle", e.target.value)} sx={{ flex: 1 }} slotProps={{ htmlInput: { maxLength: 70 } }} />
           <TextField label="SEO description (optional)" value={p.seoDescription ?? ""} onChange={(e) => set("seoDescription", e.target.value)} sx={{ flex: 2 }} slotProps={{ htmlInput: { maxLength: 200 } }} />
         </div>

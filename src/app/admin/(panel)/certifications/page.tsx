@@ -1,6 +1,6 @@
-import Typography from "@mui/material/Typography";
 import { desc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
+import { AdminPageHead } from "@/components/admin/AdminPageHead";
 import { CertificationManager } from "@/components/admin/CertificationManager";
 import { requireAdmin } from "@/server/auth/session";
 import { db, schema } from "@/server/db";
@@ -16,10 +16,7 @@ export default async function CertificationsPage() {
     .orderBy(desc(schema.certifications.obtainedOn));
   return (
     <>
-      <p className="admin-label">No.02 — Certifications</p>
-      <Typography variant="h4" component="h1" sx={{ mt: 0.5, mb: 2 }}>
-        Certifications
-      </Typography>
+      <AdminPageHead href="/admin/certifications" hint="Certificates and term grade reports shown on About. Titles starting with “Grades:” are grade reports." />
       <CertificationManager rows={rows} uploads={Boolean(process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET)} />
     </>
   );

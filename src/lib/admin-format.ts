@@ -25,3 +25,34 @@ export function bubbleColor(seed: string) {
   for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return palette[h % palette.length];
 }
+
+/** Readable names for activity-log codes ("project.publish" → "Published a project"). Unknown codes show as they are. */
+const ACTIVITY: Record<string, string> = {
+  "auth.login": "Signed in",
+  "auth.login_failed": "Failed sign-in attempt",
+  "auth.logout": "Signed out",
+  "auth.logout_others": "Signed out other devices",
+  "auth.password_change": "Changed the password",
+  "project.create": "Created a project",
+  "project.save": "Saved a project",
+  "project.publish": "Published a project",
+  "project.unpublish": "Unpublished a project",
+  "project.archive": "Archived a project",
+  "media.upload": "Uploaded a file",
+  "media.delete": "Deleted a file",
+  "certification.create": "Added a certification",
+  "certification.save": "Saved a certification",
+  "tech.create": "Added a technology",
+  "tech.save": "Saved a technology",
+  "message.read": "Marked messages as read",
+  "message.unread": "Marked messages as unread",
+  "message.archive": "Archived messages",
+  "message.archived": "Archived a message",
+  "message.spam": "Moved messages to Spam",
+  "message.trash": "Moved messages to Trash",
+  "message.restore": "Restored messages",
+  "message.delete": "Deleted a message permanently",
+};
+export function activityLabel(code: string) {
+  return ACTIVITY[code] ?? code;
+}

@@ -1,8 +1,8 @@
-import Typography from "@mui/material/Typography";
 import { asc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdminPageHead } from "@/components/admin/AdminPageHead";
 import { type EditorData, ProjectEditor } from "@/components/admin/ProjectEditor";
 import { requireAdmin } from "@/server/auth/session";
 import { db, schema } from "@/server/db";
@@ -59,9 +59,7 @@ export default async function EditProjectPage({ params }: PageProps<"/admin/proj
       <Link className="admin-back" href="/admin/projects">
         ← Project History
       </Link>
-      <Typography variant="h4" component="h1" sx={{ mt: 1, mb: 2 }}>
-        {p.title}
-      </Typography>
+      <AdminPageHead href="/admin/projects" title={p.title} />
       <ProjectEditor data={data} />
     </>
   );

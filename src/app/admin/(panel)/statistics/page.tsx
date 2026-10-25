@@ -1,11 +1,12 @@
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
 import { Download } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AdminPageHead } from "@/components/admin/AdminPageHead";
+import { StateBox } from "@/components/admin/StateBox";
 import { VisitsChart } from "@/components/admin/VisitsChart";
 import { getStats, type Item, type Range, RANGES } from "@/server/admin/stats";
 import { requireAdmin } from "@/server/auth/session";
@@ -15,22 +16,36 @@ export const metadata: Metadata = { title: "Statistics" };
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 const dur = (ms: number) => (ms < 1000 ? `${Math.round(ms)} ms` : ms < 60_000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.floor(ms / 60_000)} min ${Math.round((ms % 60_000) / 1000)} s`);
 
+function Group({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+  return (
+    <section className="sgroup" aria-label={title}>
+      <h2 className="sgroup__title">
+        {title} {hint ? <span>{hint}</span> : null}
+      </h2>
+      <div className="sgrid">{children}</div>
+    </section>
+  );
+}
+
 function Card({ title, children, wide = false }: { title: string; children: ReactNode; wide?: boolean }) {
   return (
-    <Paper elevation={0} className={`scard ${wide ? "scard--wide" : ""}`} sx={{ boxShadow: "var(--shadow-paper)" }}>
+    <Paper elevation={0} className={`scard${wide ? " scard--wide" : ""}`}>
       <p className="admin-label">{title}</p>
       {children}
     </Paper>
   );
 }
 
-function Bars({ list, unit = "", empty = "No data yet", extra }: { list: Item[]; unit?: string; empty?: string; extra?: (i: Item) => string }) {
-  if (!list.length) return <p className="scard__empty">{empty}</p>;
+function Bars({ list, unit = "", empty = "No data yet", extra, tone = "content" }: { list: Item[]; unit?: string; empty?: string; extra?: (i: Item) => string; tone?: "content" | "visitors" }) {
+  if (!list.length) return <StateBox small>{empty}</StateBox>;
   const max = Math.max(...list.map((i) => i.value), 1);
   return (
-    <ul className="bars">
-      {list.map((i) => (
+    <ol className={`bars bars--${tone}`}>
+      {list.map((i, n) => (
         <li key={i.key}>
+          <span className="bars__rank" aria-hidden="true">
+            {n + 1}
+          </span>
           <span className="bars__label" title={i.label}>
             {i.label}
           </span>
@@ -44,7 +59,7 @@ function Bars({ list, unit = "", empty = "No data yet", extra }: { list: Item[];
           </span>
         </li>
       ))}
-    </ul>
+    </ol>
   );
 }
 
@@ -63,66 +78,91 @@ export default async function StatisticsPage({ searchParams }: PageProps<"/admin
     const str = params.toString();
     return `/admin/statistics${str ? `?${str}` : ""}`;
   };
-  const tiles = [
+  const fixed = [
     { label: "Today", value: s.kpi.today[0], sub: `${s.kpi.today[1]} unique` },
     { label: "This week", value: s.kpi.week[0], sub: `${s.kpi.week[1]} unique (per day)` },
     { label: "This month", value: s.kpi.month[0], sub: `${s.kpi.month[1]} unique (per day)` },
+  ];
+  const inRange = [
+    { label: "Visits", value: s.kpi.visitsInRange, sub: "in this period" },
     { label: "Avg. visit length", value: s.kpi.avgVisitMs ? dur(s.kpi.avgVisitMs) : "—", sub: "visible time, capped at 30 min" },
     { label: "Avg. loading time", value: s.kpi.avgLoadMs ? dur(s.kpi.avgLoadMs) : "—", sub: "splash screen" },
-    { label: "Unread messages", value: s.kpi.unread, sub: "now", href: "/admin/messages" },
-    { label: "Messages", value: s.kpi.messagesInRange, sub: `last ${range} days`, href: "/admin/messages" },
+    { label: "Messages", value: s.kpi.messagesInRange, sub: "received in this period", href: "/admin/messages" },
   ];
   const f = s.funnel;
   const maxHour = Math.max(1, ...s.hours);
+  const peak = s.hours.some((v) => v > 0) ? s.hours.indexOf(maxHour) : -1;
+  const rangeLabel = (r: Range) => (r === 365 ? "1 year" : `${r} days`);
 
   return (
     <>
-      <p className="admin-label">No.04 — Statistics</p>
-      <Typography variant="h4" component="h1" sx={{ mt: 0.5, mb: 2 }}>
-        Statistics
-      </Typography>
-
-      <div className="stoolbar">
-        <nav className="admin-tabs" aria-label="Range">
-          {RANGES.map((r) => (
-            <Link key={r} href={link({ range: r })} className="admin-tab" aria-current={r === range ? "page" : undefined}>
-              {r === 365 ? "1 year" : `${r} days`}
+      <AdminPageHead
+        href="/admin/statistics"
+        actions={
+          <>
+            {s.kpi.unread ? (
+              <Link href="/admin/messages" className="apill apill--messages">
+                {s.kpi.unread} unread now
+              </Link>
+            ) : null}
+            <Link href={link({ env: allEnv ? "" : "all" })} className="admin-tab" aria-pressed={allEnv}>
+              {allEnv ? "✓ " : ""}Include previews & dev
             </Link>
+            {range !== 365 ? (
+              <Button component="a" href={`/admin/statistics/export?range=${range}${allEnv ? "&env=all" : ""}`} variant="outlined" color="secondary" size="small" startIcon={<Download size={16} aria-hidden />}>
+                Export CSV
+              </Button>
+            ) : null}
+          </>
+        }
+      />
+
+      <section className="sblock" aria-labelledby="st-fixed">
+        <h2 className="sblock__title" id="st-fixed">
+          Right now <span>fixed periods, not affected by the range below</span>
+        </h2>
+        <div className="stiles stiles--fixed">
+          {fixed.map((t) => (
+            <Paper key={t.label} elevation={0} className="stile stile--fixed">
+              <p className="admin-label">{t.label}</p>
+              <p className="stile__value">{t.value}</p>
+              <p className="stile__sub">{t.sub}</p>
+            </Paper>
           ))}
-        </nav>
-        <span className="admin-label">
-          {s.kpi.visitsInRange} visit{s.kpi.visitsInRange === 1 ? "" : "s"} in this period
-        </span>
-        <Link href={link({ env: allEnv ? "" : "all" })} className="admin-tab" aria-pressed={allEnv}>
-          {allEnv ? "✓ " : ""}Include previews & dev
-        </Link>
-        {range !== 365 ? (
-          <Button component="a" href={`/admin/statistics/export?range=${range}${allEnv ? "&env=all" : ""}`} variant="outlined" color="secondary" size="small" startIcon={<Download size={16} aria-hidden />}>
-            Export CSV
-          </Button>
+        </div>
+      </section>
+
+      <section className="sblock sblock--range" aria-labelledby="st-range">
+        <div className="sblock__bar">
+          <h2 className="sblock__title" id="st-range">
+            Details for the last {rangeLabel(range)}
+          </h2>
+          <nav className="admin-tabs" aria-label="Range">
+            {RANGES.map((r) => (
+              <Link key={r} href={link({ range: r })} className="admin-tab" aria-current={r === range ? "page" : undefined}>
+                {rangeLabel(r)}
+              </Link>
+            ))}
+          </nav>
+        </div>
+        {range === 365 ? (
+          <Alert severity="info">The 1-year view uses the nightly daily totals (production only), so today and yesterday may not be included yet.</Alert>
         ) : null}
-      </div>
-      {range === 365 ? (
-        <Alert severity="info" sx={{ mb: 2 }}>
-          The 1-year view uses the nightly daily totals (production only), so today and yesterday may not be included yet.
-        </Alert>
-      ) : null}
+        <div className="stiles">
+          {inRange.map((t) => (
+            <Paper key={t.label} elevation={0} className="stile">
+              <p className="admin-label">{t.label}</p>
+              <p className="stile__value">{t.href ? <Link href={t.href}>{t.value}</Link> : t.value}</p>
+              <p className="stile__sub">{t.sub}</p>
+            </Paper>
+          ))}
+        </div>
+        <Paper elevation={0} className="scard scard--chart">
+          <VisitsChart series={s.series} range={range} />
+        </Paper>
+      </section>
 
-      <div className="stiles">
-        {tiles.map((t) => (
-          <Paper key={t.label} elevation={0} className="stile" sx={{ boxShadow: "var(--shadow-paper)" }}>
-            <p className="admin-label">{t.label}</p>
-            <p className="stile__value">{t.href ? <Link href={t.href}>{t.value}</Link> : t.value}</p>
-            <p className="stile__sub">{t.sub}</p>
-          </Paper>
-        ))}
-      </div>
-
-      <Paper elevation={0} sx={{ p: 2.5, my: 2, boxShadow: "var(--shadow-paper)" }}>
-        <VisitsChart series={s.series} range={range} />
-      </Paper>
-
-      <div className="sgrid">
+      <Group title="Content" hint="What people look at and click">
         <Card title="Pages">
           <Bars list={s.pages} extra={(i) => `avg ${dur((i as Item & { avgMs: number }).avgMs)}`} />
         </Card>
@@ -131,32 +171,37 @@ export default async function StatisticsPage({ searchParams }: PageProps<"/admin
         </Card>
         <Card title="Top projects" wide>
           {s.projects.length ? (
-            <table className="stable">
-              <thead>
-                <tr>
-                  <th>Project</th>
-                  <th>Views</th>
-                  <th>Video plays</th>
-                  <th>Link clicks</th>
-                  <th>CTR</th>
-                  <th>Image opens</th>
-                </tr>
-              </thead>
-              <tbody>
-                {s.projects.map((p) => (
-                  <tr key={p.id}>
-                    <td>{p.title}</td>
-                    <td>{p.views}</td>
-                    <td>{p.plays}</td>
-                    <td>{p.clicks}</td>
-                    <td>{pct(p.ctr)}</td>
-                    <td>{p.images}</td>
+            <div className="stable-wrap">
+              <table className="stable">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Views</th>
+                    <th>Video plays</th>
+                    <th>Link clicks</th>
+                    <th>CTR</th>
+                    <th>Image opens</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {s.projects.map((p, i) => (
+                    <tr key={p.id}>
+                      <td>
+                        <span className="stable__rank">{i + 1}</span>
+                        {p.title}
+                      </td>
+                      <td>{p.views}</td>
+                      <td>{p.plays}</td>
+                      <td>{p.clicks}</td>
+                      <td>{pct(p.ctr)}</td>
+                      <td>{p.images}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <p className="scard__empty">No project views yet</p>
+            <StateBox small>No project views yet</StateBox>
           )}
         </Card>
         <Card title="Link clicks by type">
@@ -169,6 +214,61 @@ export default async function StatisticsPage({ searchParams }: PageProps<"/admin
         <Card title="Certificates viewed">
           <Bars list={s.certificates} empty={range === 365 ? "Shown for ranges up to 90 days" : "No certificate views yet"} />
         </Card>
+      </Group>
+
+      <Group title="Audience" hint="Who visits">
+        <Card title="Countries">
+          <Bars list={s.countries} tone="visitors" />
+          {s.countries.length ? <p className="scard__note">{pct(s.phShare)} from the Philippines</p> : null}
+        </Card>
+        <Card title="Devices">
+          <Bars list={s.devices} tone="visitors" />
+        </Card>
+        <Card title="Browsers & OS">
+          <Bars list={s.browsers} tone="visitors" />
+          <p className="admin-label scard__sub">Operating systems</p>
+          <Bars list={s.os} tone="visitors" />
+        </Card>
+        <Card title="Browser languages">
+          <Bars list={s.languages} tone="visitors" />
+        </Card>
+        <Card title="Motion preference">
+          <p className="stile__value">{pct(s.motionOffShare)}</p>
+          <p className="scard__note">of visits turned motion off</p>
+        </Card>
+      </Group>
+
+      <Group title="Traffic" hint="Where visits come from, and when">
+        <Card title="Sources">
+          <Bars list={s.sources} tone="visitors" empty="No referrers yet (direct visits only)" />
+          {s.campaigns.length ? (
+            <>
+              <p className="admin-label scard__sub">Campaigns (utm / ref)</p>
+              <Bars list={s.campaigns} tone="visitors" />
+            </>
+          ) : null}
+        </Card>
+        <Card title="Social & e-mail clicks">
+          <Bars list={s.social} />
+        </Card>
+        <Card title="Busiest hours (PH time)" wide>
+          <div className="hours" role="img" aria-label={`Page views by hour of day, Philippine time${peak >= 0 ? `. Busiest: ${String(peak).padStart(2, "0")}:00 with ${maxHour} views` : ""}`}>
+            {s.hours.map((v, h) => (
+              <span key={h} className={`hours__bar${h === peak ? " is-peak" : ""}`} title={`${String(h).padStart(2, "0")}:00 · ${v} views`}>
+                <span style={{ height: `${(v / maxHour) * 100}%` }} />
+                <small>{h % 3 === 0 ? String(h).padStart(2, "0") : ""}</small>
+              </span>
+            ))}
+          </div>
+          {peak >= 0 ? (
+            <p className="scard__note">
+              Busiest hour: {String(peak).padStart(2, "0")}:00–{String((peak + 1) % 24).padStart(2, "0")}:00 ({maxHour} views)
+            </p>
+          ) : null}
+        </Card>
+      </Group>
+
+      <Group title="Contact & errors">
         <Card title="Contact funnel">
           <ul className="funnel">
             <li>
@@ -189,57 +289,12 @@ export default async function StatisticsPage({ searchParams }: PageProps<"/admin
             </li>
           </ul>
         </Card>
-        <Card title="Social & e-mail clicks">
-          <Bars list={s.social} />
-        </Card>
-        <Card title="Sources">
-          <Bars list={s.sources} empty="No referrers yet (direct visits only)" />
-          {s.campaigns.length ? (
-            <>
-              <p className="admin-label" style={{ marginTop: 14 }}>
-                Campaigns (utm / ref)
-              </p>
-              <Bars list={s.campaigns} />
-            </>
-          ) : null}
-        </Card>
-        <Card title="Countries">
-          <Bars list={s.countries} />
-          {s.countries.length ? <p className="scard__note">{pct(s.phShare)} from the Philippines</p> : null}
-        </Card>
-        <Card title="Devices">
-          <Bars list={s.devices} />
-        </Card>
-        <Card title="Browsers & OS">
-          <Bars list={s.browsers} />
-          <p className="admin-label" style={{ marginTop: 14 }}>
-            Operating systems
-          </p>
-          <Bars list={s.os} />
-        </Card>
-        <Card title="Browser languages">
-          <Bars list={s.languages} />
-        </Card>
-        <Card title="Busiest hours (PH time)" wide>
-          <div className="hours" role="img" aria-label="Page views by hour of day, Philippine time">
-            {s.hours.map((v, h) => (
-              <span key={h} className="hours__bar" title={`${String(h).padStart(2, "0")}:00 · ${v} views`}>
-                <span style={{ height: `${(v / maxHour) * 100}%` }} />
-                <small>{h % 3 === 0 ? String(h).padStart(2, "0") : ""}</small>
-              </span>
-            ))}
-          </div>
-        </Card>
-        <Card title="Motion preference">
-          <p className="stile__value">{pct(s.motionOffShare)}</p>
-          <p className="scard__note">of visits turned motion off</p>
-        </Card>
         <Card title="Not found (404)">
           <Bars list={s.notFound} empty="No broken links ✿" />
         </Card>
-      </div>
+      </Group>
 
-      <p className="admin-hint" style={{ marginTop: 20 }}>
+      <p className="admin-hint admin-hint--foot">
         No cookies are used and no IP addresses are stored. Signed-in admin browsers, bots and preview sites are not counted. Detailed records are kept for 90 days; daily totals are kept.
       </p>
     </>
