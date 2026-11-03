@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { AdminPageHead } from "@/components/admin/AdminPageHead";
 import { TechManager } from "@/components/admin/TechManager";
-import { TECH_ICON_KEYS } from "@/lib/tech-icons";
+import { TECH_ICON_KEYS, techIcon } from "@/lib/tech-icons";
 import { getToolbox } from "@/server/queries/public";
 import { requireAdmin } from "@/server/auth/session";
 
@@ -10,10 +9,6 @@ export const metadata: Metadata = { title: "Tech catalog" };
 export default async function TechPage() {
   await requireAdmin();
   const rows = await getToolbox();
-  return (
-    <>
-      <AdminPageHead href="/admin/tech" />
-      <TechManager rows={rows} iconKeys={TECH_ICON_KEYS} />
-    </>
-  );
+  // Logos are resolved here (server only), so the whole icon set never ships to the browser.
+  return <TechManager rows={rows.map((t) => ({ ...t, logo: techIcon(t.iconKey) }))} iconKeys={TECH_ICON_KEYS} />;
 }

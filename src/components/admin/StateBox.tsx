@@ -1,33 +1,40 @@
-import { Flower2, TriangleAlert, type LucideIcon } from "lucide-react";
+import { CircleAlert, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Flower } from "./Sticker";
 
-/** Shared empty / error state: icon + text + optional link button. `small` for inside cards. */
+/** Kotoha state box: empty = dashed pink box with a flower; error = red box. `small` for inside cards. */
 export function StateBox({
   children,
   tone = "empty",
   small = false,
-  icon,
+  icon: Icon,
   action,
 }: {
   children: ReactNode;
   tone?: "empty" | "error";
   small?: boolean;
   icon?: LucideIcon;
-  action?: { href: string; label: string };
+  action?: ReactNode | { href: string; label: string };
 }) {
-  const Icon = icon ?? (tone === "error" ? TriangleAlert : Flower2);
+  const link = action && typeof action === "object" && "href" in action ? action : null;
   return (
-    <div className={`state state--${tone}${small ? " state--sm" : ""}`} role={tone === "error" ? "alert" : undefined}>
-      <span className="state__icon" aria-hidden="true">
-        <Icon size={small ? 18 : 26} />
-      </span>
-      <p className="state__text">{children}</p>
-      {action ? (
-        <Link className="state__action" href={action.href}>
-          {action.label} →
+    <div className={`state${tone === "error" ? " state--error" : ""}${small ? " state--small" : ""}`} role={tone === "error" ? "alert" : undefined}>
+      {tone === "error" ? (
+        <CircleAlert className="state__icon" aria-hidden />
+      ) : Icon ? (
+        <Icon className="state__icon" aria-hidden />
+      ) : (
+        <Flower tone={small ? "o" : "pink"} className="state__flower" />
+      )}
+      <p>{children}</p>
+      {link ? (
+        <Link className="abtn abtn--ghost abtn--sm" href={link.href}>
+          {link.label}
         </Link>
-      ) : null}
+      ) : (
+        (action as ReactNode)
+      )}
     </div>
   );
 }

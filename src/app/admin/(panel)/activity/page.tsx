@@ -1,5 +1,4 @@
-import Paper from "@mui/material/Paper";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import { ActivityList } from "@/components/admin/ActivityList";
 import { AdminPageHead } from "@/components/admin/AdminPageHead";
@@ -12,16 +11,17 @@ export const metadata: Metadata = { title: "Activity" };
 /** Security & activity log (plan §10.7): sign-ins, password changes, publishes, uploads, inbox actions. */
 export default async function ActivityPage() {
   await requireAdmin();
+  const a = schema.activityLog;
   const rows = await db
-    .select({ at: schema.activityLog.occurredAt, action: schema.activityLog.action, summary: schema.activityLog.summary })
-    .from(schema.activityLog)
-    .orderBy(desc(schema.activityLog.occurredAt))
+    .select({ at: a.occurredAt, action: a.action, summary: a.summary, user: schema.adminUsers.username })
+    .from(a)
+    .leftJoin(schema.adminUsers, eq(schema.adminUsers.id, a.adminUserId))
+    .orderBy(desc(a.occurredAt))
     .limit(200);
   return (
     <>
-      <AdminPageHead href="/admin/activity" hint="Sign-ins, password changes, publishes, uploads and inbox actions. Times are PH time." />
-      <Paper elevation={0} className="apanel">{rows.length ? <ActivityList rows={rows} /> : <StateBox>Nothing yet.</StateBox>}</Paper>
-      <p className="admin-hint">The latest 200 entries.</p>
+      <AdminPageHead href="/admin/activity" hint="Who changed what, and when. Sign-ins, publishes, uploads and inbox actions; the latest 200 entries." />
+      {rows.length ? <ActivityList rows={rows} /> : <StateBox>Nothing yet.</StateBox>}
     </>
   );
 }

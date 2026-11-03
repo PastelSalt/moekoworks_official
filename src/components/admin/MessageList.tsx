@@ -1,9 +1,7 @@
 "use client";
 
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 import { Archive, MailOpen, Mail, RotateCcw, ShieldAlert, Star, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -39,7 +37,7 @@ export function MessageList({ rows, folder, back }: { rows: MessageRow[]; folder
       {selected.map((id) => (
         <input key={id} type="hidden" name="ids" value={id} />
       ))}
-      <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 1, mb: 1.5 }}>
+      <div className="bulkbar">
         <Checkbox
           checked={all}
           indeterminate={selected.length > 0 && !all}
@@ -51,9 +49,9 @@ export function MessageList({ rows, folder, back }: { rows: MessageRow[]; folder
             {label}
           </Button>
         ))}
-        {selected.length ? <span className="admin-label">{selected.length} selected</span> : null}
-      </Box>
-      <Paper elevation={0} sx={{ boxShadow: "var(--shadow-paper)", overflow: "hidden" }}>
+        {selected.length ? <span className="form-hint">{selected.length} selected</span> : null}
+      </div>
+      <div className="panel panel--flush">
         <ul className="msglist">
           {rows.map((r) => (
             <li key={r.id} className="msglist__row" data-unread={r.status === "unread" ? "1" : "0"}>
@@ -80,7 +78,7 @@ export function MessageList({ rows, folder, back }: { rows: MessageRow[]; folder
             </li>
           ))}
         </ul>
-      </Paper>
+      </div>
     </form>
   );
 }

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | **v0.2 (2026-10-25): approved by the owner; B1–B5 coded on `admin-ui-refresh`** (typecheck + lint clean). Waiting for the real-data check (§10 Q4) |
+| **Status** | **v0.2 (2026-10-25): B1–B5 coded on `admin-ui-refresh` (`e87693f`), not merged. Superseded on 2026-11-03 by `docs/ADMIN_UI_KOTOHA_PLAN.md`** (Kotoha-style v2, waiting for the owner's OK) |
 | **Scope** | How the admin panel (`/admin/*`) and the sign-in pages (`/admin/login`, `/admin/change-password`) **look and lay out**. The Dashboard and Statistics get the most work; every other screen gets the shared component polish |
 | **Not changing** | The database and migrations, `src/server/**` (queries, actions, auth, analytics), the API routes, the tracker, roles and sessions, the CSP/security headers, the public site |
 | **Reference** | Kotoha's refresh `../kotoha-fansite/docs/ADMIN_UI_PLAN.md` (commit `dc82320`, live 2026-10-25) and Hanon's port `../hanon-fansite/docs/ADMIN_UI_PLAN.md` (commit `27caad2`). Same goals and rules; this file only adapts them to a Next.js + MUI admin |

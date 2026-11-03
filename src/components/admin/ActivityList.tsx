@@ -1,41 +1,54 @@
-import { Award, FileImage, FolderKanban, KeyRound, LogIn, Mail, Shapes, ShieldAlert, type LucideIcon } from "lucide-react";
+import { Archive, Eye, EyeOff, History, KeyRound, LogIn, LogOut, Mail, Pencil, Plus, ShieldAlert, Trash2, Upload, type LucideIcon } from "lucide-react";
 import { activityLabel, dateTime } from "@/lib/admin-format";
+import { AdminItem, type IconTone } from "./AdminItem";
 
-export type ActivityRow = { at: Date; action: string; summary: string | null };
+export type ActivityRow = { at: Date; action: string; summary: string | null; user?: string | null };
 
-function iconOf(code: string): [LucideIcon, string] {
+// Kotoha picks the icon by the verb at the end of the code ("project.publish" → eye).
+const VERB: Record<string, LucideIcon> = {
+  create: Plus,
+  save: Pencil,
+  publish: Eye,
+  unpublish: EyeOff,
+  archive: Archive,
+  archived: Archive,
+  upload: Upload,
+  delete: Trash2,
+  trash: Trash2,
+  login: LogIn,
+  logout: LogOut,
+};
+
+function look(code: string): [LucideIcon, IconTone] {
   if (code === "auth.login_failed") return [ShieldAlert, "danger"];
   if (code === "auth.password_change") return [KeyRound, "account"];
-  if (code.startsWith("auth.")) return [LogIn, "account"];
-  if (code.startsWith("project.")) return [FolderKanban, "content"];
-  if (code.startsWith("certification.")) return [Award, "content"];
-  if (code.startsWith("tech.")) return [Shapes, "content"];
-  if (code.startsWith("media.")) return [FileImage, "content"];
-  if (code.startsWith("message.")) return [Mail, "messages"];
-  return [FolderKanban, "account"];
+  const verb = code.split(".").pop()!.split("_")[0];
+  const tone: IconTone = code.startsWith("message.") ? "messages" : code.startsWith("auth.") ? "account" : "content";
+  return [VERB[verb] ?? (code.startsWith("message.") ? Mail : History), tone];
 }
 
-/** Activity log rows: icon + readable label + summary + PH time. */
-export function ActivityList({ rows, compact = false }: { rows: ActivityRow[]; compact?: boolean }) {
+/** Activity log rows (Kotoha): icon by verb, readable label, user pill + PH time, details line. */
+export function ActivityList({ rows }: { rows: ActivityRow[] }) {
   return (
-    <ul className={`alist${compact ? " alist--compact" : ""}`}>
+    <div className="items">
       {rows.map((r, i) => {
-        const [Icon, tone] = iconOf(r.action);
+        const [Icon, tone] = look(r.action);
         return (
-          <li key={i} className="alist__row">
-            <span className={`alist__icon alist__icon--${tone}`} aria-hidden="true">
-              <Icon size={16} />
-            </span>
-            <span className="alist__text">
-              <strong title={r.action}>{activityLabel(r.action)}</strong>
-              {r.summary ? <span className="alist__summary">{r.summary}</span> : null}
-            </span>
-            <time className="alist__when" dateTime={new Date(r.at).toISOString()}>
-              {dateTime(r.at)}
-            </time>
-          </li>
+          <AdminItem
+            key={i}
+            icon={Icon}
+            iconTone={tone}
+            title={<span title={r.action}>{activityLabel(r.action)}</span>}
+            meta={
+              <>
+                {r.user ? <span className="apill apill--admin">{r.user}</span> : null}
+                <time dateTime={new Date(r.at).toISOString()}>{dateTime(r.at)} PH time</time>
+              </>
+            }
+            text={r.summary ?? undefined}
+          />
         );
       })}
-    </ul>
+    </div>
   );
 }

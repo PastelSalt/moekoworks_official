@@ -1,102 +1,101 @@
 "use client";
 
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import Toolbar from "@mui/material/Toolbar";
 import { ExternalLink, LogOut, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { logoutAction } from "@/server/auth/actions";
-import { NAV_GROUPS, NAV_ITEMS } from "./nav";
+import { NAV_GROUPS } from "./nav";
+import { Flower } from "./Sticker";
+import { ToastProvider } from "./Toast";
 
-const WIDTH = 256;
 const isActive = (href: string, pathname: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
 
-export function AdminShell({ children, unread = 0 }: { children: React.ReactNode; unread?: number }) {
+/** Kotoha shell: sticky top bar (brand · user badge · View site · Sign out) + floating sidebar panel; phone = drawer. */
+export function AdminShell({ children, unread = 0, username }: { children: React.ReactNode; unread?: number; username: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const current = NAV_ITEMS.find((i) => isActive(i.href, pathname));
 
   const nav = (
-    <div className="aside">
-      <Link href="/admin" className="aside__brand" aria-label="Dashboard" onClick={() => setOpen(false)}>
-        <img src="/brand/moekoworks-logo.svg" alt="Moeko Works" width={176} height={38} />
-        <span className="aside__badge">Admin</span>
-      </Link>
-      <nav className="aside__nav" aria-label="Admin">
-        {NAV_GROUPS.map((g) => (
-          <div key={g.label ?? "top"} className="aside__group">
-            {g.label ? <p className="aside__group-label">{g.label}</p> : null}
-            <ul>
-              {g.items.map(({ href, label, icon: Icon }) => {
-                const active = isActive(href, pathname);
-                return (
-                  <li key={href}>
-                    <Link href={href} className="aside__link" aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>
-                      <Icon size={18} aria-hidden />
-                      <span>{label}</span>
-                      {href === "/admin/messages" && unread > 0 ? (
-                        <span className="aside__count" aria-label={`${unread} unread`}>
-                          {unread}
-                        </span>
-                      ) : null}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </nav>
-      <div className="aside__foot">
-        <Button component={Link} href="/" target="_blank" variant="outlined" color="secondary" endIcon={<ExternalLink size={14} aria-hidden />}>
-          View site
-        </Button>
-        <form action={logoutAction}>
-          <Button type="submit" fullWidth color="inherit" startIcon={<LogOut size={16} aria-hidden />}>
-            Sign out
-          </Button>
-        </form>
-      </div>
-    </div>
+    <nav className="sidebar__nav" aria-label="Admin">
+      {NAV_GROUPS.map((g) => (
+        <div key={g.label ?? "top"} className="sidebar__group">
+          {g.label ? (
+            <p className="sidebar__label">
+              <Flower tone={g.flower} />
+              <span>{g.label}</span>
+            </p>
+          ) : null}
+          <ul>
+            {g.items.map(({ href, label, icon: Icon }) => (
+              <li key={href}>
+                <Link href={href} className="sidebar__link" aria-current={isActive(href, pathname) ? "page" : undefined} onClick={() => setOpen(false)}>
+                  <Icon aria-hidden />
+                  <span>{label}</span>
+                  {href === "/admin/messages" && unread > 0 ? (
+                    <span className="sidebar__count" aria-label={`${unread} unread`}>
+                      {unread}
+                    </span>
+                  ) : null}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </nav>
   );
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100dvh" }}>
-      <AppBar position="fixed" elevation={0} className="admin-appbar" sx={{ display: { md: "none" }, bgcolor: "transparent", color: "text.primary" }}>
-        <Toolbar>
-          <IconButton edge="start" aria-label="Open menu" onClick={() => setOpen(true)}>
-            <Menu />
-          </IconButton>
-          <span className="admin-appbar__title">{current?.label ?? "Admin"}</span>
-          {unread > 0 && current?.href !== "/admin/messages" ? (
-            <Link href="/admin/messages" className="aside__count admin-appbar__count" aria-label={`${unread} unread messages`}>
-              {unread}
-            </Link>
-          ) : null}
-        </Toolbar>
-      </AppBar>
+    <ToastProvider>
+      <a className="askip" href="#main">
+        Skip to content
+      </a>
+      <header className="topbar">
+        <button type="button" className="icon-btn topbar__menu" aria-label="Menu" aria-expanded={open} aria-controls="admin-drawer" onClick={() => setOpen(true)}>
+          <Menu aria-hidden />
+        </button>
+        <Link className="topbar__brand" href="/admin" aria-label="Moeko Works admin, dashboard">
+          <img src="/brand/moekoworks-logo.svg" alt="" width={112} height={24} />
+          <span>Admin</span>
+        </Link>
+        <div className="topbar__right">
+          <span className="user-badge">
+            <span className="user-badge__avatar" aria-hidden="true">
+              <Flower tone="pink" />
+            </span>
+            <span className="user-badge__name">{username}</span>
+            <span className="apill apill--owner">Owner</span>
+          </span>
+          <a className="abtn abtn--ghost abtn--sm" href="/" target="_blank" rel="noopener" aria-label="View site (opens a new tab)">
+            <ExternalLink aria-hidden />
+            <span>View site</span>
+          </a>
+          <form action={logoutAction}>
+            <button type="submit" className="abtn abtn--ghost abtn--sm" aria-label="Sign out">
+              <LogOut aria-hidden />
+              <span>Sign out</span>
+            </button>
+          </form>
+        </div>
+      </header>
+
+      <aside className="sidebar">{nav}</aside>
       <Drawer
+        id="admin-drawer"
         variant="temporary"
         open={open}
         onClose={() => setOpen(false)}
-        sx={{ display: { md: "none" }, "& .MuiDrawer-paper": { width: WIDTH, bgcolor: "transparent", boxShadow: "none" } }}
+        className="sidebar-drawer"
+        slotProps={{ paper: { className: "sidebar sidebar--drawer" }, backdrop: { className: "adialog__backdrop" } }}
       >
         {nav}
       </Drawer>
-      <Drawer
-        variant="permanent"
-        sx={{ display: { xs: "none", md: "block" }, width: WIDTH, flexShrink: 0, "& .MuiDrawer-paper": { width: WIDTH, border: 0, bgcolor: "transparent" } }}
-      >
-        {nav}
-      </Drawer>
-      <Box component="main" className="admin-main" sx={{ flex: 1, minWidth: 0, mt: { xs: 8, md: 0 } }}>
+
+      <main className="view" id="main" tabIndex={-1}>
         {children}
-      </Box>
-    </Box>
+      </main>
+    </ToastProvider>
   );
 }

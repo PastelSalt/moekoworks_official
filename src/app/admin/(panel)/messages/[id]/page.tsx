@@ -1,6 +1,3 @@
-import Chip from "@mui/material/Chip";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
 import { eq } from "drizzle-orm";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -43,7 +40,7 @@ export default async function MessagePage({ params }: PageProps<"/admin/messages
       <Link className="admin-back" href={`/admin/messages${folder === "inbox" ? "" : `?folder=${folder}`}`}>
         ← Back to {folder === "inbox" ? "Inbox" : folder[0].toUpperCase() + folder.slice(1)}
       </Link>
-      <Paper elevation={0} sx={{ mt: 2, p: { xs: 2.5, md: 4 }, boxShadow: "var(--shadow-paper)" }}>
+      <section className="panel msg-panel">
         <div className="msg-head">
           <span className="msglist__bubble msglist__bubble--lg" style={{ background: bubbleColor(msg.email) }} aria-hidden="true">
             {msg.name.slice(0, 1).toUpperCase()}
@@ -52,13 +49,11 @@ export default async function MessagePage({ params }: PageProps<"/admin/messages
             <p className="msg-head__from">
               <strong>{msg.name}</strong> <span>&lt;{msg.email}&gt;</span>
             </p>
-            <p className="admin-label">{msg.status === "spam" ? "In Spam" : msg.status === "trash" ? "In Trash" : msg.status === "archived" ? "Archived" : "Inbox"}</p>
+            <p className="msg-head__folder">{msg.status === "spam" ? "In Spam" : msg.status === "trash" ? "In Trash" : msg.status === "archived" ? "Archived" : "Inbox"}</p>
           </div>
-          {msg.starred ? <Chip label="★ Starred" size="small" color="primary" sx={{ ml: "auto" }} /> : null}
+          {msg.starred ? <span className="apill apill--star">★ Starred</span> : null}
         </div>
-        <Typography variant="h5" component="h1" sx={{ mt: 2.5, mb: 2 }}>
-          {msg.subject}
-        </Typography>
+        <h1 className="msg-subject">{msg.subject}</h1>
         {/* Plain text only: line breaks kept, nothing is turned into a clickable link. */}
         <div className="msg-body">{msg.body}</div>
         <dl className="msg-meta">
@@ -70,8 +65,8 @@ export default async function MessagePage({ params }: PageProps<"/admin/messages
           ))}
         </dl>
         <MessageActions id={msg.id} status={msg.status} starred={msg.starred} email={msg.email} mailto={mailto} />
-      </Paper>
-      <p className="admin-hint">Shortcuts: e archive · s star · # trash</p>
+      </section>
+      <p className="form-hint">Shortcuts: e archive · s star · # trash</p>
     </>
   );
 }

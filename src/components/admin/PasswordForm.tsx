@@ -1,10 +1,6 @@
 "use client";
 
-import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import { Check, Circle, X } from "lucide-react";
+import { Check, CircleAlert, CircleCheck, X } from "lucide-react";
 import { useActionState, useState } from "react";
 import { changePasswordAction, type PasswordState } from "@/server/auth/actions";
 import type { PasswordRule } from "@/server/auth/password";
@@ -18,11 +14,6 @@ const RULES: { id: Rule; text: string }[] = [
   { id: "leaked", text: "Not appear in known data leaks" },
   { id: "mismatch", text: "Match in both boxes" },
 ];
-
-function RuleIcon({ state }: { state: string }) {
-  const Icon = state === "ok" ? Check : state === "bad" ? X : Circle;
-  return <Icon className="admin-rules__icon" size={16} strokeWidth={state === "idle" ? 2 : 3} aria-hidden />;
-}
 
 // The live rules checklist from kotoha's password form; the last two server-only rules are confirmed on submit.
 export function PasswordForm({ username, forced = false }: { username: string; forced?: boolean }) {
@@ -51,55 +42,49 @@ export function PasswordForm({ username, forced = false }: { username: string; f
   const stateOf = (r: Rule) => (live[r] === true ? "ok" : live[r] === false ? "bad" : "idle");
 
   return (
-    <form action={action} noValidate>
-      <Stack spacing={2}>
-        {state?.error && <Alert severity="error">{state.error}</Alert>}
-        {state?.done && <Alert severity="success">Password changed! You&apos;re signed in with the new password.</Alert>}
-        <TextField
-          name="currentPassword"
-          label={forced ? "Current (temporary) password" : "Current password"}
-          type="password"
-          autoComplete="current-password"
-          required
-          value={current}
-          onChange={(e) => setCurrent(e.target.value)}
-        />
-        <TextField
-          name="newPassword"
-          label="New password"
-          type="password"
-          autoComplete="new-password"
-          required
-          slotProps={{ htmlInput: { maxLength: 128 } }}
-          value={next}
-          onChange={(e) => setNext(e.target.value)}
-        />
-        <TextField
-          name="confirmPassword"
-          label="Repeat new password"
-          type="password"
-          autoComplete="new-password"
-          required
-          slotProps={{ htmlInput: { maxLength: 128 } }}
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-        />
-        <div>
-          <p className="admin-label">Your new password must</p>
-          <ul className="admin-rules" aria-live="polite">
-            {RULES.map((r) => (
-              <li key={r.id} data-state={stateOf(r.id)}>
-                <RuleIcon state={stateOf(r.id)} />
+    <form action={action} className="aform" noValidate>
+      {state?.error ? (
+        <p className="form-error" role="alert">
+          <CircleAlert aria-hidden /> {state.error}
+        </p>
+      ) : null}
+      {state?.done ? (
+        <p className="form-ok" role="status">
+          <CircleCheck aria-hidden /> Password changed! You&apos;re signed in with the new password.
+        </p>
+      ) : null}
+      <div className="afield">
+        <label htmlFor="pw-current">{forced ? "Current (temporary) password" : "Current password"}</label>
+        <input id="pw-current" name="currentPassword" type="password" autoComplete="current-password" required value={current} onChange={(e) => setCurrent(e.target.value)} />
+      </div>
+      <div className="afield">
+        <label htmlFor="pw-new">New password</label>
+        <input id="pw-new" name="newPassword" type="password" autoComplete="new-password" required maxLength={128} value={next} onChange={(e) => setNext(e.target.value)} />
+      </div>
+      <div className="afield">
+        <label htmlFor="pw-confirm">Repeat new password</label>
+        <input id="pw-confirm" name="confirmPassword" type="password" autoComplete="new-password" required maxLength={128} value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+      </div>
+      <div>
+        <p className="afield__label">Your new password must</p>
+        <ul className="rules" aria-live="polite">
+          {RULES.map((r) => {
+            const st = stateOf(r.id);
+            return (
+              <li key={r.id} className={st}>
+                <span className="rules__mark" aria-hidden="true">
+                  {st === "ok" ? <Check /> : st === "bad" ? <X /> : null}
+                </span>
                 <span>{r.text}</span>
-                <span className="visually-hidden">{stateOf(r.id) === "ok" ? " (done)" : stateOf(r.id) === "bad" ? " (not yet)" : ""}</span>
+                <span className="visually-hidden">{st === "ok" ? " (done)" : st === "bad" ? " (not yet)" : ""}</span>
               </li>
-            ))}
-          </ul>
-        </div>
-        <Button type="submit" variant="contained" size="large" disabled={pending}>
-          {pending ? "Saving…" : "Change password"}
-        </Button>
-      </Stack>
+            );
+          })}
+        </ul>
+      </div>
+      <button type="submit" className="abtn abtn--primary abtn--block" disabled={pending}>
+        {pending ? "Saving…" : "Change password"}
+      </button>
     </form>
   );
 }

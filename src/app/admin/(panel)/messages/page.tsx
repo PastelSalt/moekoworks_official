@@ -1,12 +1,9 @@
-import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
-import TextField from "@mui/material/TextField";
 import { and, count, desc, eq, ilike, inArray, or, type SQL } from "drizzle-orm";
 import type { Metadata } from "next";
-import { Mail, SearchX } from "lucide-react";
+import { Mail, Search, SearchX } from "lucide-react";
 import Link from "next/link";
 import { AdminPageHead } from "@/components/admin/AdminPageHead";
+import { SegmentedLinks } from "@/components/admin/Segmented";
 import { StateBox } from "@/components/admin/StateBox";
 import { MessageList, type MessageRow } from "@/components/admin/MessageList";
 import { bubbleColor, relativeTime } from "@/lib/admin-format";
@@ -85,35 +82,26 @@ export default async function MessagesPage({ searchParams }: PageProps<"/admin/m
 
   return (
     <>
-      <AdminPageHead href="/admin/messages" />
+      <AdminPageHead href="/admin/messages" hint="Messages from the contact form. Reply by e-mail; nothing is sent from here." />
 
-      <nav className="admin-tabs" aria-label="Folders">
-        {FOLDERS.map((f) => (
-          <Link key={f.key} href={href({ folder: f.key, q: undefined })} aria-current={folder === f.key ? "page" : undefined} className="admin-tab">
-            {f.label}
-            {badge[f.key] ? <Chip label={badge[f.key]} size="small" color={f.key === "spam" ? "default" : "primary"} sx={{ ml: 1, height: 20 }} /> : null}
-          </Link>
-        ))}
-      </nav>
+      <div className="atoolbar">
+        <SegmentedLinks label="Folders" items={FOLDERS.map((f) => ({ href: href({ folder: f.key, q: undefined }), label: f.label, count: badge[f.key] || undefined, active: folder === f.key }))} />
+        <form className="search-box" action="/admin/messages" role="search">
+          {folder !== "inbox" ? <input type="hidden" name="folder" value={folder} /> : null}
+          <Search aria-hidden />
+          <input name="q" defaultValue={q} placeholder="Search name, e-mail, subject or message" aria-label="Search messages" maxLength={100} />
+          <button type="submit" className="abtn abtn--primary abtn--sm">
+            Search
+          </button>
+          {q ? (
+            <Link href={href({ q: undefined })} className="abtn abtn--ghost abtn--sm">
+              Clear
+            </Link>
+          ) : null}
+        </form>
+      </div>
 
-      <form className="admin-search" action="/admin/messages" role="search">
-        {folder !== "inbox" ? <input type="hidden" name="folder" value={folder} /> : null}
-        <TextField name="q" defaultValue={q} size="small" placeholder="Search name, e-mail, subject or message" slotProps={{ htmlInput: { "aria-label": "Search messages", maxLength: 100 } }} sx={{ flex: 1 }} />
-        <Button type="submit" variant="contained">
-          Search
-        </Button>
-        {q ? (
-          <Button component={Link} href={href({ q: undefined })} color="inherit">
-            Clear
-          </Button>
-        ) : null}
-      </form>
-
-      {folder === "spam" || folder === "trash" ? (
-        <Alert severity="info" sx={{ mb: 2 }}>
-          Messages in {folder === "spam" ? "Spam" : "Trash"} are deleted automatically after 30 days.
-        </Alert>
-      ) : null}
+      {folder === "spam" || folder === "trash" ? <p className="note-box">Messages in {folder === "spam" ? "Spam" : "Trash"} are deleted automatically after 30 days.</p> : null}
 
       {list.length ? (
         <MessageList rows={list} folder={folder} back={href({ page })} />
@@ -123,15 +111,19 @@ export default async function MessagesPage({ searchParams }: PageProps<"/admin/m
 
       {pages > 1 ? (
         <div className="admin-pager">
-          <Button component={Link} href={href({ page: page - 1 })} disabled={page <= 1}>
-            ← Newer
-          </Button>
-          <span className="admin-label">
+          {page > 1 ? (
+            <Link className="abtn abtn--ghost" href={href({ page: page - 1 })}>
+              ← Newer
+            </Link>
+          ) : null}
+          <span className="form-hint">
             Page {page} / {pages}
           </span>
-          <Button component={Link} href={href({ page: page + 1 })} disabled={page >= pages}>
-            Older →
-          </Button>
+          {page < pages ? (
+            <Link className="abtn abtn--ghost" href={href({ page: page + 1 })}>
+              Older →
+            </Link>
+          ) : null}
         </div>
       ) : null}
     </>

@@ -56,10 +56,15 @@ export default async function EditProjectPage({ params }: PageProps<"/admin/proj
 
   return (
     <>
-      <Link className="admin-back" href="/admin/projects">
-        ← Project History
-      </Link>
-      <AdminPageHead href="/admin/projects" title={p.title} />
+      <AdminPageHead
+        href="/admin/projects"
+        title={p.title}
+        back={
+          <Link className="admin-back" href="/admin/projects">
+            ← All projects
+          </Link>
+        }
+      />
       <ProjectEditor data={data} />
     </>
   );

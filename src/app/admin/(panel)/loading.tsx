@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/admin/Skeleton";
 
 export default function Loading() {
-  return <Skeleton />;
+  return <Skeleton variant="dashboard" />;
 }

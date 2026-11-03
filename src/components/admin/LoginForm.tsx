@@ -1,14 +1,10 @@
 "use client";
 
-import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
+import { CircleAlert, Hourglass } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { loginAction, type LoginState } from "@/server/auth/actions";
 
+/** Kotoha's sign-in form: labels above the fields, show-password, error box, "waking up" hint. */
 export function LoginForm() {
   const [slow, setSlow] = useState(false);
   const [state, action, pending] = useActionState<LoginState, FormData>((prev, formData) => {
@@ -27,36 +23,41 @@ export function LoginForm() {
   }, [pending]);
 
   return (
-    <form action={action} noValidate>
-      <Stack spacing={2}>
-        {state?.error && <Alert severity="error">{state.error}</Alert>}
-        <TextField
+    <form action={action} className="aform" noValidate>
+      <div className="afield">
+        <label htmlFor="username">Username</label>
+        <input
+          id="username"
           name="username"
-          label="Username"
           autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
           required
           autoFocus
-          fullWidth
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <TextField
-          name="password"
-          label="Password"
-          type={show ? "text" : "password"}
-          autoComplete="current-password"
-          required
-          fullWidth
-        />
-        <FormControlLabel
-          control={<Checkbox checked={show} onChange={(e) => setShow(e.target.checked)} size="small" />}
-          label="Show password"
-        />
-        <Button type="submit" variant="contained" size="large" disabled={pending}>
-          {pending ? "Signing in…" : "Sign in"}
-        </Button>
-        {pending && slow && <Alert severity="info">Waking up the database. The first request after a quiet period can take a few seconds…</Alert>}
-      </Stack>
+      </div>
+      <div className="afield">
+        <label htmlFor="password">Password</label>
+        <input id="password" name="password" type={show ? "text" : "password"} autoComplete="current-password" required />
+        <label className="check">
+          <input type="checkbox" checked={show} onChange={(e) => setShow(e.target.checked)} /> Show password
+        </label>
+      </div>
+      {state?.error ? (
+        <p className="form-error" role="alert">
+          <CircleAlert aria-hidden /> {state.error}
+        </p>
+      ) : null}
+      {pending && slow ? (
+        <p className="form-hint form-hint--wait" role="status">
+          <Hourglass aria-hidden /> Waking up the database. The first request after a quiet period can take a few seconds…
+        </p>
+      ) : null}
+      <button type="submit" className="abtn abtn--primary abtn--block" disabled={pending}>
+        {pending ? "Signing in…" : "Sign in"}
+      </button>
     </form>
   );
 }

@@ -1,62 +1,60 @@
 "use client";
 
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { ChartColumn } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Point = { day: string; visits: number; uniques: number };
 type Mode = "daily" | "weekly" | "monthly";
+type Bar = { key: string; visits: number; uniques: number };
 
-const NARROW = "(max-width: 600px)";
-function useNarrow() {
-  return useSyncExternalStore(
-    (cb) => {
-      const mq = window.matchMedia(NARROW);
-      mq.addEventListener("change", cb);
-      return () => mq.removeEventListener("change", cb);
-    },
-    () => window.matchMedia(NARROW).matches,
-    () => false,
-  );
+const nf = new Intl.NumberFormat("en-US");
+const compact = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+const plural = (n: number, w: string) => `${nf.format(n)} ${w}${n === 1 ? "" : "s"}`;
+
+function shortLabel(mode: Mode, key: string) {
+  if (mode === "monthly") return new Date(`${key}-01T00:00:00Z`).toLocaleString("en-US", { month: "short", timeZone: "UTC" });
+  const [, m, d] = key.split("-").map(Number);
+  return `${m}/${d}`;
+}
+function longLabel(mode: Mode, key: string) {
+  if (mode === "monthly") return new Date(`${key}-01T00:00:00Z`).toLocaleString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
+  const s = new Date(`${key}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: mode === "daily" ? "short" : undefined, day: "numeric", month: "short", timeZone: "UTC" });
+  return mode === "weekly" ? `Week of ${s}` : s;
 }
 
-const plural = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
-
-/** kotoha-style visits chart: an outer bar for visits with an inner bar for unique visitors (counted per day).
- *  Hover, tap or focus a bar (←/→ to move) to read its values. `compact` = the Dashboard's small 7-day version. */
-export function VisitsChart({ series, range, compact = false }: { series: Point[]; range: number; compact?: boolean }) {
+/** Kotoha visits chart: light bars = visits, dark bars = unique visitors (counted per day), drawn at the box's real
+ *  width so the tick text stays 11px on every screen. Hover, tap or ←/→ (box focused) show one period's values. */
+export function VisitsChart({ series, range }: { series: Point[]; range: number }) {
   const [mode, setMode] = useState<Mode>(range > 90 ? "weekly" : "daily");
-  const [active, setActive] = useState<number | null>(null);
-  const [focusIdx, setFocusIdx] = useState(-1);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const narrow = useNarrow();
+  const [active, setActive] = useState(-1);
+  const [width, setWidth] = useState(720);
+  const box = useRef<HTMLDivElement>(null);
 
-  const bars = useMemo(() => {
-    // fill every Manila day in the range so gaps show as empty days
+  useEffect(() => {
+    const node = box.current;
+    if (!node) return;
+    setWidth(Math.max(300, Math.round(node.clientWidth)));
+    const obs = new ResizeObserver(() => setWidth((w) => (Math.abs(node.clientWidth - w) > 30 ? Math.max(300, Math.round(node.clientWidth)) : w)));
+    obs.observe(node);
+    return () => obs.disconnect();
+  }, []);
+
+  const bars = useMemo<Bar[]>(() => {
+    // every Manila day in the range, so quiet days show as gaps
     const byDay = new Map(series.map((p) => [p.day, p]));
     const today = new Date(new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Manila" }).format(new Date()) + "T00:00:00Z");
-    const days: Point[] = [];
+    const days: Bar[] = [];
     for (let i = range - 1; i >= 0; i--) {
       const d = new Date(today.getTime() - i * 86_400_000).toISOString().slice(0, 10);
-      days.push(byDay.get(d) ?? { day: d, visits: 0, uniques: 0 });
+      const p = byDay.get(d);
+      days.push({ key: d, visits: p?.visits ?? 0, uniques: p?.uniques ?? 0 });
     }
-    const fmtDay = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
-    if (mode === "daily") return days.map((p) => ({ label: p.day.slice(5).replace("-", "/"), title: fmtDay(p.day), ...p }));
-    const groups = new Map<string, Point & { label: string; title: string }>();
+    if (mode === "daily") return days;
+    const groups = new Map<string, Bar>();
     for (const p of days) {
-      const d = new Date(`${p.day}T00:00:00Z`);
-      let key: string;
-      let label: string;
-      if (mode === "weekly") {
-        const monday = new Date(d.getTime() - ((d.getUTCDay() + 6) % 7) * 86_400_000).toISOString().slice(0, 10);
-        key = monday;
-        label = monday.slice(5).replace("-", "/");
-      } else {
-        key = p.day.slice(0, 7);
-        label = new Date(`${key}-01T00:00:00Z`).toLocaleString("en-US", { month: "short", timeZone: "UTC" });
-      }
-      const title = mode === "weekly" ? `Week of ${fmtDay(key)}` : new Date(`${key}-01T00:00:00Z`).toLocaleString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
-      const g = groups.get(key) ?? { day: key, label, title, visits: 0, uniques: 0 };
+      const d = new Date(`${p.key}T00:00:00Z`);
+      const key = mode === "weekly" ? new Date(d.getTime() - ((d.getUTCDay() + 6) % 7) * 86_400_000).toISOString().slice(0, 10) : p.key.slice(0, 7);
+      const g = groups.get(key) ?? { key, visits: 0, uniques: 0 };
       g.visits += p.visits;
       g.uniques += p.uniques;
       groups.set(key, g);
@@ -64,105 +62,112 @@ export function VisitsChart({ series, range, compact = false }: { series: Point[
     return [...groups.values()];
   }, [series, range, mode]);
 
-  const totals = bars.reduce((t, b) => ({ visits: t.visits + b.visits, uniques: t.uniques + b.uniques }), { visits: 0, uniques: 0 });
+  const W = width;
+  const H = W < 480 ? 200 : 240;
+  const padL = 40;
+  const padB = 26;
+  const padT = 12;
   const max = Math.max(1, ...bars.map((b) => b.visits));
-  const W = 720;
-  const H = compact ? 170 : narrow ? 240 : 260;
-  const pad = { l: 34, r: 8, t: 12, b: 26 };
-  const bw = (W - pad.l - pad.r) / bars.length;
-  const y = (v: number) => pad.t + (H - pad.t - pad.b) * (1 - v / max);
-  const ticks = [...new Set([0, Math.round(max / 2), max])];
-  const every = narrow ? (mode === "daily" && bars.length > 10 ? 7 : Math.ceil(bars.length / 5)) : Math.ceil(bars.length / 10);
-  const tab = focusIdx >= 0 && focusIdx < bars.length ? focusIdx : bars.length - 1;
-  const shown = active !== null && active < bars.length ? bars[active] : null;
+  const step = (W - padL) / bars.length;
+  const barW = Math.max(3, step * 0.68);
+  const y = (v: number) => padT + (H - padT - padB) * (1 - v / max);
+  const labelEvery = mode === "daily" ? (W < 480 ? 7 : 5) : W < 480 ? 3 : 1;
+  const totals = bars.reduce((t, b) => ({ visits: t.visits + b.visits, uniques: t.uniques + b.uniques }), { visits: 0, uniques: 0 });
+  const shown = active >= 0 && active < bars.length ? bars[active] : null;
+  const pct = shown ? (padL + active * step + step / 2) / W : 0;
 
-  const focusBar = (i: number) => {
-    const j = Math.max(0, Math.min(bars.length - 1, i));
-    setFocusIdx(j);
-    setActive(j);
-    svgRef.current?.querySelector<SVGGElement>(`[data-i="${j}"]`)?.focus();
-  };
   const onKey = (e: React.KeyboardEvent) => {
-    const next = { ArrowRight: tab + 1, ArrowLeft: tab - 1, Home: 0, End: bars.length - 1 }[e.key];
-    if (next === undefined) return;
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     e.preventDefault();
-    focusBar(next);
+    if (e.key === "ArrowLeft") setActive((a) => Math.max(0, (a < 0 ? bars.length : a) - 1));
+    else setActive((a) => Math.min(bars.length - 1, a + 1));
   };
 
   return (
-    <div className={`vchart${compact ? " vchart--compact" : ""}`}>
-      <div className="vchart__head">
+    <div className="vchart">
+      <div className="panel__head">
         <div>
-          {compact ? null : <p className="admin-label">Visits</p>}
-          <p className="vchart__total">
-            <strong>{totals.visits}</strong> {totals.visits === 1 ? "visit" : "visits"} · <strong>{totals.uniques}</strong> unique <span>(counted per day)</span>
+          <h2>
+            <ChartColumn aria-hidden />
+            <span>Visits</span>
+          </h2>
+          <p className="panel__total">
+            {plural(totals.visits, "visit")} · {nf.format(totals.uniques)} unique visitors in the shown period
           </p>
         </div>
-        <p className="vchart__legend">
-          <span className="vchart__key vchart__key--outer" /> Visits <span className="vchart__key vchart__key--inner" /> Unique
-        </p>
-        {compact ? null : (
-          <ToggleButtonGroup size="small" exclusive value={mode} onChange={(_, v) => v && (setMode(v), setActive(null), setFocusIdx(-1))} aria-label="Group by">
-            <ToggleButton value="daily">Daily</ToggleButton>
-            <ToggleButton value="weekly">Weekly</ToggleButton>
-            <ToggleButton value="monthly">Monthly</ToggleButton>
-          </ToggleButtonGroup>
-        )}
+        <div className="segmented" role="radiogroup" aria-label="Group visits by">
+          {(["daily", "weekly", "monthly"] as Mode[]).map((m) => (
+            <label key={m} className="segmented__item">
+              <input type="radio" name="vchart-mode" value={m} checked={mode === m} onChange={() => (setMode(m), setActive(-1))} />
+              <span>{m[0].toUpperCase() + m.slice(1)}</span>
+            </label>
+          ))}
+        </div>
       </div>
-      <div className="vchart__plot" onMouseLeave={() => setActive(null)}>
-        <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="vchart__svg" role="group" aria-label={`Visits and unique visitors, ${mode}. Use the arrow keys to move between bars.`} onKeyDown={onKey}>
-          {ticks.map((t) => (
-            <g key={t} aria-hidden="true">
-              <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} className="vchart__grid" />
-              <text x={pad.l - 6} y={y(t) + 4} className="vchart__tick" textAnchor="end">
-                {t}
+      <div
+        ref={box}
+        className="chart-box"
+        tabIndex={0}
+        aria-label="Visits chart. Use the left and right arrow keys to read each period."
+        onKeyDown={onKey}
+        onFocus={() => setActive((a) => (a < 0 ? bars.length - 1 : a))}
+        onBlur={() => setActive(-1)}
+        onPointerLeave={() => setActive(-1)}
+      >
+        <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} className="chart" role="img" aria-label={`Visits and unique visitors, ${mode}`}>
+          {[0.5, 1].map((f) => (
+            <g key={f} aria-hidden="true">
+              <line x1={padL} x2={W} y1={y(max * f)} y2={y(max * f)} className="chart__grid" />
+              <text x={padL - 8} y={y(max * f) + 4} textAnchor="end" className="chart__tick">
+                {compact.format(Math.round(max * f))}
               </text>
             </g>
           ))}
+          <line x1={padL} x2={W} y1={y(0)} y2={y(0)} className="chart__axis" />
+          <text x={padL - 8} y={y(0) + 4} textAnchor="end" className="chart__tick">
+            0
+          </text>
           {bars.map((b, i) => {
-            const x = pad.l + i * bw;
-            const w = Math.max(2, bw * 0.72);
-            const iw = Math.max(1.5, w * 0.45);
-            const label = `${b.title}: ${plural(b.visits, "visit")}, ${b.uniques} unique`;
+            const x = padL + i * step + (step - barW) / 2;
+            const last = i === bars.length - 1;
             return (
-              <g
-                key={b.day}
-                data-i={i}
-                className={`vchart__bar${active === i ? " is-active" : ""}`}
-                tabIndex={i === tab ? 0 : -1}
-                role="img"
-                aria-label={label}
-                onMouseEnter={() => setActive(i)}
-                onFocus={() => (setActive(i), setFocusIdx(i))}
-                onBlur={() => setActive(null)}
-                onClick={() => setActive(i)}
-              >
-                <title>{label}</title>
-                <rect x={x} y={pad.t} width={bw} height={H - pad.t - pad.b} className="vchart__hit" />
-                <rect x={x + (bw - w) / 2} y={y(b.visits)} width={w} height={H - pad.b - y(b.visits)} rx={Math.min(6, w / 2)} className="vchart__outer" />
-                <rect x={x + (bw - iw) / 2} y={y(b.uniques)} width={iw} height={H - pad.b - y(b.uniques)} rx={Math.min(4, iw / 2)} className="vchart__inner" />
-                {i % every === 0 || (compact && bars.length <= 10) ? (
-                  <text x={x + bw / 2} y={H - 8} className="vchart__tick" textAnchor="middle" aria-hidden="true">
-                    {b.label}
+              <g key={b.key} className={`chart__col${i === active ? " is-active" : ""}`} onPointerEnter={() => setActive(i)} onClick={() => setActive(i)}>
+                <title>{`${longLabel(mode, b.key)}: ${plural(b.visits, "visit")} · ${plural(b.uniques, "unique visitor")}`}</title>
+                <rect x={padL + i * step} y={padT} width={step} height={H - padT - padB} rx={6} className="chart__bg" />
+                <rect x={x} y={y(b.visits)} width={barW} height={Math.max(0, y(0) - y(b.visits))} rx={3} className="chart__bar" />
+                <rect x={x + barW * 0.2} y={y(b.uniques)} width={barW * 0.6} height={Math.max(0, y(0) - y(b.uniques))} rx={2} className="chart__bar chart__bar--inner" />
+                <rect x={padL + i * step} y={0} width={step} height={H} className="chart__hit" />
+                {(bars.length - 1 - i) % labelEvery === 0 ? (
+                  <text x={last ? W : padL + i * step + step / 2} y={H - 6} textAnchor={last ? "end" : "middle"} className="chart__tick" aria-hidden="true">
+                    {shortLabel(mode, b.key)}
                   </text>
                 ) : null}
               </g>
             );
           })}
         </svg>
-        {shown && active !== null ? (
+        {shown ? (
           <div
-            className="vchart__tip"
-            aria-hidden="true"
-            data-side={active > bars.length / 2 ? "left" : "right"}
-            style={{ "--x": `${((pad.l + (active + 0.5) * bw) / W) * 100}%`, "--y": `${(y(shown.visits) / H) * 100}%` } as React.CSSProperties}
+            className="chart-tip"
+            aria-live="polite"
+            style={{
+              left: `${pct * 100}%`,
+              top: `${(y(shown.visits) / H) * 100}%`,
+              translate: `${pct < 0.18 ? "-12%" : pct > 0.82 ? "-88%" : "-50%"} calc(-100% - 8px)`,
+            }}
           >
-            <strong>{shown.title}</strong>
-            <span>{plural(shown.visits, "visit")}</span>
-            <span>{shown.uniques} unique</span>
+            <strong>{longLabel(mode, shown.key)}</strong> {plural(shown.visits, "visit")} · {plural(shown.uniques, "unique visitor")}
           </div>
         ) : null}
       </div>
+      <p className="chart-legend">
+        <span>
+          <i className="chart-legend__key" /> Visits
+        </span>
+        <span>
+          <i className="chart-legend__key chart-legend__key--inner" /> Unique visitors (counted per day)
+        </span>
+      </p>
     </div>
   );
 }

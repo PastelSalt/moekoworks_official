@@ -4,15 +4,12 @@ import Alert from "@mui/material/Alert";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import Chip from "@mui/material/Chip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
-import Paper from "@mui/material/Paper";
 import Radio from "@mui/material/Radio";
-import Snackbar from "@mui/material/Snackbar";
 import TextField from "@mui/material/TextField";
-import { ArrowDown, ArrowUp, ExternalLink, Eye, Plus, Trash2 } from "lucide-react";
+import { AlignLeft, Archive, ArrowDown, ArrowUp, ExternalLink, Eye, EyeOff, FileText, Images, Link2, ListChecks, Plus, Save, Shapes, Trash2, Users, type LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useState, useTransition } from "react";
 import { cldImage, cldVideo } from "@/lib/cloudinary";
@@ -21,6 +18,8 @@ import { flowerBurst } from "@/lib/confetti";
 import { Markdown } from "@/lib/markdown";
 import { OP_ICONS } from "@/lib/op-icons";
 import { addMedia, type ProjectInputT, removeMedia, saveProject, setProjectStatus } from "@/server/admin/projects";
+import { ConfirmButton } from "./ConfirmButton";
+import { useToast } from "./Toast";
 import { Uploader } from "./Uploader";
 
 export type EditorMedia = { id: number; kind: string; role: string; frame: string; altText: string | null; caption: string | null; publicId: string; width: number | null; height: number | null };
@@ -41,25 +40,28 @@ function move<T>(list: T[], i: number, d: number) {
   return next;
 }
 
-const SECTIONS = [
-  ["ed-basics", "Basics"],
-  ["ed-media", "Media"],
-  ["ed-links", "Links"],
-  ["ed-tech", "Tech"],
-  ["ed-description", "Description"],
-  ["ed-operations", "Operations"],
-  ["ed-credits", "Credits & SEO"],
+const SECTIONS: [string, string, LucideIcon][] = [
+  ["ed-basics", "Basics", FileText],
+  ["ed-media", "Media", Images],
+  ["ed-links", "Links", Link2],
+  ["ed-tech", "Tech", Shapes],
+  ["ed-description", "Description", AlignLeft],
+  ["ed-operations", "Operations", ListChecks],
+  ["ed-credits", "Credits & SEO", Users],
 ];
 
 function Section({ id, no, title, children, hint }: { id: string; no: string; title: string; children: ReactNode; hint?: string }) {
+  const Icon = SECTIONS.find(([sid]) => sid === id)?.[2] ?? FileText;
   return (
-    <Paper elevation={0} component="section" id={id} aria-label={title} className="ed-section">
-      <p className="admin-label">
-        {no} — {title}
-      </p>
+    <section id={id} aria-label={title} className="panel ed-section">
+      <h2>
+        <Icon aria-hidden />
+        <span>{title}</span>
+        <span className="ed-section__no">{no}</span>
+      </h2>
       {hint ? <p className="ed-hint">{hint}</p> : null}
       {children}
-    </Paper>
+    </section>
   );
 }
 
@@ -72,11 +74,11 @@ const sel = (options: string[][]) => options.map(([v, l]) => (
 /** Project History editor (plan §11.2). Everything saves together; uploads register immediately. */
 export function ProjectEditor({ data }: { data: EditorData }) {
   const router = useRouter();
+  const toast = useToast();
   const [p, setP] = useState(data.input);
   const [media, setMedia] = useState(data.media);
   const [status, setStatus] = useState(data.status);
   const [error, setError] = useState("");
-  const [saved, setSaved] = useState("");
   const [preview, setPreview] = useState(false);
   const [pending, start] = useTransition();
   const set = <K extends keyof ProjectInputT>(k: K, v: ProjectInputT[K]) => setP((x) => ({ ...x, [k]: v }));
@@ -90,7 +92,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
       const r = await saveProject(data.id, payload());
       if (!r.ok) return setError(r.error);
       if (then) await then();
-      else setSaved("Saved ✓");
+      else toast("Saved!");
       router.refresh();
     });
   const changeStatus = (next: "draft" | "published" | "archived") =>
@@ -98,7 +100,7 @@ export function ProjectEditor({ data }: { data: EditorData }) {
       const r = await setProjectStatus(data.id, next);
       if (!r.ok) return setError(r.error);
       setStatus(next);
-      setSaved(next === "published" ? "Published! ✿" : next === "archived" ? "Archived" : "Moved back to drafts");
+      toast(next === "published" ? "Published! ✿" : next === "archived" ? "Moved to the archive" : "Moved back to drafts");
       if (next === "published") flowerBurst();
     });
   const uploaded = (role: string) => async (u: Parameters<typeof addMedia>[1]) => {
@@ -110,28 +112,36 @@ export function ProjectEditor({ data }: { data: EditorData }) {
   return (
     <div className="editor">
       <div className="ed-bar">
-        <Chip label={status === "published" ? "● Published" : status === "archived" ? "Archived" : "Draft"} color={status === "published" ? "success" : "default"} />
-        <Button variant="contained" disabled={pending} onClick={() => save()}>
-          {pending ? "Saving…" : "Save"}
-        </Button>
+        <span className={`apill apill--${status}`}>{status === "published" ? "Published" : status === "archived" ? "Archived" : "Draft"}</span>
+        <button type="button" className="abtn abtn--primary" disabled={pending} onClick={() => save()}>
+          <Save aria-hidden /> {pending ? "Saving…" : "Save"}
+        </button>
         {status !== "published" ? (
-          <Button variant="contained" color="secondary" disabled={pending} onClick={() => changeStatus("published")}>
-            Save & publish
-          </Button>
+          <button type="button" className="abtn abtn--primary" disabled={pending} onClick={() => changeStatus("published")}>
+            <Eye aria-hidden /> Save & publish
+          </button>
         ) : (
-          <Button color="inherit" disabled={pending} onClick={() => changeStatus("draft")}>
-            Unpublish
-          </Button>
+          <button type="button" className="abtn abtn--ghost" disabled={pending} onClick={() => changeStatus("draft")}>
+            <EyeOff aria-hidden /> Unpublish
+          </button>
         )}
         {status !== "archived" ? (
-          <Button color="inherit" disabled={pending} onClick={() => changeStatus("archived")}>
-            Archive
-          </Button>
+          <ConfirmButton
+            className="abtn abtn--danger-ghost"
+            title="Move to the archive?"
+            message={`“${p.title}” will be saved, then leave the site and the list. You can restore it from the Archive at any time.`}
+            confirmLabel="Move to archive"
+            danger
+            disabled={pending}
+            run={() => changeStatus("archived")}
+          >
+            <Archive aria-hidden /> Archive
+          </ConfirmButton>
         ) : null}
         {status === "published" ? (
-          <Button component="a" href={`/history/${data.input.slug}`} target="_blank" color="inherit" endIcon={<ExternalLink size={14} aria-hidden />}>
-            View page
-          </Button>
+          <a className="abtn abtn--ghost" href={`/history/${data.input.slug}`} target="_blank" rel="noopener">
+            <ExternalLink aria-hidden /> View page
+          </a>
         ) : null}
         <nav className="ed-jump" aria-label="Jump to section">
           {SECTIONS.map(([id, label]) => (
@@ -355,11 +365,10 @@ export function ProjectEditor({ data }: { data: EditorData }) {
       </Section>
 
       <div className="ed-bar ed-bar--bottom">
-        <Button variant="contained" disabled={pending} onClick={() => save()}>
-          {pending ? "Saving…" : "Save"}
-        </Button>
+        <button type="button" className="abtn abtn--primary" disabled={pending} onClick={() => save()}>
+          <Save aria-hidden /> {pending ? "Saving…" : "Save"}
+        </button>
       </div>
-      <Snackbar open={Boolean(saved)} autoHideDuration={2500} onClose={() => setSaved("")} message={saved} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} />
     </div>
   );
 }

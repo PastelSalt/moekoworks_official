@@ -1,14 +1,11 @@
 "use client";
 
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import { Archive, Copy, Inbox, Reply, RotateCcw, ShieldAlert, Star, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { deleteMessageForever, markReplied, setMessageStatus, toggleStar } from "@/server/admin/messages";
+import { AdminDialog } from "./AdminDialog";
 
 type Props = { id: number; status: string; starred: boolean; email: string; mailto: string };
 
@@ -93,16 +90,23 @@ export function MessageActions({ id, status, starred, email, mailto }: Props) {
         </>
       )}
 
-      <Dialog open={confirm} onClose={() => setConfirm(false)}>
-        <DialogTitle>Delete this message permanently?</DialogTitle>
-        <DialogContent>It will be gone for good. This can&apos;t be undone.</DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirm(false)}>Keep it</Button>
-          <Button color="error" variant="contained" onClick={() => run(() => deleteMessageForever(id))}>
-            Delete permanently
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AdminDialog
+        open={confirm}
+        onClose={() => setConfirm(false)}
+        title="Delete this message permanently?"
+        actions={
+          <>
+            <button type="button" className="abtn abtn--ghost" onClick={() => setConfirm(false)}>
+              Keep it
+            </button>
+            <button type="button" className="abtn abtn--danger" disabled={pending} onClick={() => run(() => deleteMessageForever(id))}>
+              Delete permanently
+            </button>
+          </>
+        }
+      >
+        <p>It will be gone for good. This can&apos;t be undone.</p>
+      </AdminDialog>
     </div>
   );
 }
