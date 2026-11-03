@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | **v0.2 (2026-11-03): approved (§11 defaults), K0–K5 coded on `admin-ui-refresh`.** Checked on a mock preview; waiting for the real-data check (K6) and Kyle's OK (K7) |
+| **Status** | **v0.3 (2026-11-03): live on production** (`3007a5a`, merged on Kyle's OK without a local real-data pass; Kyle checks the signed-in screens on production) |
 | **Why** | Kyle: the Kotoha admin is "way better". Take its layout, visual formatting and completeness, and adapt them to this project's data and theme. Also redo the sign-in page after Kotoha's |
 | **Builds on** | Branch `admin-ui-refresh` (commit `e87693f`, v1 of `docs/ADMIN_UI_PLAN.md`: grouped sidebar, page heads, dashboard blocks, grouped statistics, interactive chart). v1 is **not** on `main`. v2 continues on the same branch and replaces v1's look where this file says so |
 | **Reference (read-only)** | `../kotoha-fansite/public/{admin.html,login.html}`, `public/css/admin.css` (490 lines), `public/js/admin/{main,pages,analytics,content,ui,login}.js`, `public/locales/admin/en.json`, live at kotoha-fansite.vercel.app/login |
@@ -282,8 +282,8 @@ Kotoha layout: **account card** (avatar with flower, username, "Owner" pill, "Si
 - [x] **K3** Dashboard (§4) + skeletons
 - [x] **K4** Statistics (§5) incl. the width-aware chart and pending dimming
 - [x] **K5** Lists: Projects (filter + inline actions), Certifications (dialog form, filters), Tech, Activity, Archive, Messages, Account, editor restyle → ✋2 (every screen, desktop + phone)
-- [~] **K6** QA: 1920 / 1366 / 1024 / 768 / 390 px, keyboard-only, reduced motion, contrast; full regression of every flow (sign in, forced change, create → edit → upload → publish → unpublish → archive → restore, certification add/edit/hide/archive/restore, tech add/edit, messages read/star/archive/spam/trash/delete forever/reply, CSV, count-my-visits, sign out others, sign out). `npx tsc --noEmit && npx eslint src && npm run build`
-- [ ] **K7** Secret scan → commit on `admin-ui-refresh` → push → preview → ✋3 Kyle's OK → merge to `dev` → `main` → production check → `PROGRESS.md`
+- [~] **K6** (layout/a11y checks done on a mock; real-data pass = Kyle on production) QA: 1920 / 1366 / 1024 / 768 / 390 px, keyboard-only, reduced motion, contrast; full regression of every flow (sign in, forced change, create → edit → upload → publish → unpublish → archive → restore, certification add/edit/hide/archive/restore, tech add/edit, messages read/star/archive/spam/trash/delete forever/reply, CSV, count-my-visits, sign out others, sign out). `npx tsc --noEmit && npx eslint src && npm run build`
+- [x] **K7** Secret scan → commit on `admin-ui-refresh` → push → preview → ✋3 Kyle's OK → merge to `dev` → `main` → production check → `PROGRESS.md`
 
 ---
 
