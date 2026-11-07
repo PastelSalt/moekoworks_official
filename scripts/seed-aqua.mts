@@ -26,7 +26,7 @@ const project = {
   descriptionMd: [
     "**Aqua Iro Archive** (あくあ色アーカイブ) is an unofficial, non-profit fan archive of **Minato Aqua**, the hololive VTuber who streamed from her debut on 8 August 2018 to her graduation on 28 August 2024. It gathers six years in eight chapters, in Japanese and English: her profile, the clips fans kept, a discography of 19 originals and many covers, all 639 archived streams, the voyage from debut to graduation, 190 pieces of official art, and a message board where fans leave her a note.",
     "The design treats the site as **a harbour where Aqua's colours are the sea**: a pastel seigaiha wash, paper notes taped on top, and a navy deep with a pink-and-cyan crest that rises as a shutter between chapters. It plays like a visual novel: a loading screen with a tide gauge and a PRESS START title, a dialogue box where fan-written lines let you talk with her, a log with a backlog and a memory album, and **Aqua Time**, a tape deck that rewinds the whole archive to any day of her career.",
-    "It's built with Astro (static first) and Preact islands in plain CSS, with Neon Postgres and Drizzle behind the moderated message board, Better Auth with forced two-factor sign-in for the keeper's panel, Cloudflare Turnstile against spam and self-hosted Umami for privacy-friendly statistics, all on Vercel. Pages are checked for a JavaScript budget and WCAG contrast, and the board's pipeline is tested against the real migrations.",
+    "It's built with Astro (static first) and Preact islands in plain CSS, with Neon Postgres and Drizzle behind the moderated message board, Better Auth with forced two-factor sign-in for the keeper's panel, Cloudflare Turnstile against spam and its own cookieless visitor counting (a visitor hash that changes every day, IP addresses never stored), all on Vercel. The code is open source on GitHub. Pages are checked for a JavaScript budget and WCAG contrast, and the board's pipeline is tested against the real migrations.",
   ].join("\n\n"),
   category: "web",
   platforms: ["web"],
@@ -48,7 +48,10 @@ const project = {
     "Unofficial, non-profit fan site. Not affiliated with COVER Corp. or hololive production. Characters, art and songs belong to their respective owners and are credited on the site; Aqua's lines in Talk with Aqua are fan-written, not her actual words.",
 };
 
-const links = [{ kind: "live", label: null, url: "https://aqua-iro-archive.vercel.app/", note: "aqua-iro-archive.vercel.app", isPrimary: true }];
+const links = [
+  { kind: "live", label: null, url: "https://aqua-iro-archive.vercel.app/", note: "aqua-iro-archive.vercel.app", isPrimary: true },
+  { kind: "other", label: "Source code", url: "https://github.com/PastelSalt/aqua-iro-archive", note: "On GitHub · MIT for the code", isPrimary: false },
+];
 
 // [tech slug, usage note]
 const stack: [string, string][] = [
@@ -61,11 +64,10 @@ const stack: [string, string][] = [
   ["fusejs", "Fuzzy search across all 639 streams."],
   ["budoux", "Natural Japanese line breaks in headings and dialogue."],
   ["youtube", "Privacy-enhanced clip and stream embeds, and the BGM player that never autoplays."],
-  ["neon", "Serverless Postgres for the message board, moderation and settings."],
+  ["neon", "Serverless Postgres for the message board, moderation, settings and the site's own visitor statistics."],
   ["drizzle", "Schema, migrations and seeds for the board."],
   ["better-auth", "The keeper's sign-in, with two-factor (TOTP) required."],
   ["turnstile", "Spam protection on new notes, without tracking visitors."],
-  ["umami", "Self-hosted, cookieless statistics, also shown in the keeper's panel."],
   ["discord", "Alerts for reports and held notes, carrying the crew number but never the note text."],
   ["vercel", "Hosting in Singapore (sin1) with a strict, hash-based Content-Security-Policy."],
   ["sharp", "Curated WebP art in every size the pages ask for."],
@@ -89,10 +91,10 @@ const operations: [string, string, string, string][] = [
   ["visitor", "Read it your way", "Japanese or English with one switch, and a Motion OFF that stops every animation.", "languages"],
   ["admin", "Keeper sign-in", "The keeper's panel uses Better Auth with two-factor sign-in required; sign-up is disabled.", "lock"],
   ["admin", "Moderate the board", "Notes are filtered for abuse, reported notes go under review, and held ones wait for the keeper. Alerts reach Discord without the note text.", "shield-check"],
-  ["admin", "See what's happening", "An audit log, an error log and Umami statistics in the panel.", "chart"],
+  ["admin", "See what's happening", "A dashboard, visitor statistics and archive insights (what people play, open and search), all counted by the site itself, plus an audit log and an error log.", "chart"],
   ["system", "Static first", "Every chapter is a static page; only small Preact islands load JavaScript, within a per-page budget.", "gauge"],
   ["system", "Locked-down delivery", "A strict Content-Security-Policy with hashes for every inline script, computed at build time.", "shield"],
-  ["system", "Privacy by design", "Cookieless self-hosted statistics, hashed IPs on the board, Turnstile instead of tracking, and YouTube only through its privacy-enhanced player.", "key"],
+  ["system", "Privacy by design", "Cookieless first-party statistics with a visitor hash that changes every day, hashed IPs on the board, Turnstile instead of tracking, and YouTube only through its privacy-enhanced player.", "key"],
   ["system", "Tested end to end", "Unit, data and integration tests on PGlite with the real migrations, Playwright with axe on the built site, and a visual diff against the live site.", "badge-check"],
   ["system", "Backed up weekly", "A GitHub Actions workflow dumps the database every week and encrypts it with age before storing it.", "database"],
 ];

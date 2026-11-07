@@ -46,7 +46,10 @@ const project = {
     "Unofficial, non-profit fan site. Not affiliated with Hanon, HaKoniwalily, StellaPhizz, HoneyWorks, MARUMOCHI or AiceClass. Characters and artwork belong to their respective owners; fan art is credited on the site.",
 };
 
-const links = [{ kind: "live", label: null, url: "https://hanon-fansite.vercel.app/", note: "hanon-fansite.vercel.app", isPrimary: true }];
+const links = [
+  { kind: "live", label: null, url: "https://hanon-fansite.vercel.app/", note: "hanon-fansite.vercel.app", isPrimary: true },
+  { kind: "other", label: "Source code", url: "https://github.com/PastelSalt/hanon-fansite", note: "On GitHub · MIT for the code", isPrimary: false },
+];
 
 // [tech slug, usage note]
 const stack: [string, string][] = [

@@ -45,7 +45,10 @@ const project = {
     "Unofficial, non-profit fan site. Not affiliated with Kotoha, HaKoniwalily, HoneyWorks or AiceClass. Characters and artwork belong to their respective owners; fan art is credited on the site.",
 };
 
-const links = [{ kind: "live", label: null, url: "https://kotoha-fansite.vercel.app/", note: "kotoha-fansite.vercel.app", isPrimary: true }];
+const links = [
+  { kind: "live", label: null, url: "https://kotoha-fansite.vercel.app/", note: "kotoha-fansite.vercel.app", isPrimary: true },
+  { kind: "other", label: "Source code", url: "https://github.com/PastelSalt/kotoha-fansite", note: "On GitHub · MIT for the code", isPrimary: false },
+];
 
 // [tech slug, usage note]
 const stack: [string, string][] = [

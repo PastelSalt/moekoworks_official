@@ -45,7 +45,10 @@ const project = {
   disclaimerMd: null,
 };
 
-const links = [{ kind: "live", label: null, url: "https://moekoworks.vercel.app/", note: "moekoworks.vercel.app", isPrimary: true }];
+const links = [
+  { kind: "live", label: null, url: "https://moekoworks.vercel.app/", note: "moekoworks.vercel.app", isPrimary: true },
+  { kind: "other", label: "Source code", url: "https://github.com/PastelSalt/moekoworks_official", note: "On GitHub · public to read, all rights reserved", isPrimary: false },
+];
 
 // [tech slug, usage note]
 const stack: [string, string][] = [
