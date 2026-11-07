@@ -11,7 +11,7 @@
 ## Status
 | Phase | Status | Notes |
 |---|---|---|
-| P0 Start-up | ✅ done 2026-10-04 | Node 24.21, `gh` login, private repo `PastelSalt/moekoworks_official` (renamed 2026-10-20), Neon `moekoworks-official` (`shy-rice-98401386`, Singapore, PG 17), Cloudinary folders + signed presets, Vercel project `moesoft` |
+| P0 Start-up | ✅ done 2026-10-04 | Node 24.21, `gh` login, private repo `PastelSalt/moekoworks_official` (renamed 2026-10-20), Neon `moekoworks-official` (`shy-rice-98401386`, Singapore, PG 17), Cloudinary folders + signed presets, Vercel project `<old-name>` |
 | P1 Foundations | ✅ done | Next 16.3.8, React 19.2.8, MUI 9.4 (`@layer mui`), tokens/base CSS, Fredoka 400/700 + Lilita One, security headers (CSP report-only), brand SVGs |
 | P2 Shell & design system | ✅ done (`dev`) | Sidebar / mobile bar + MENU sheet / footer / PAGE TOP; splash (real progress, FLIP); pattern stage from the logo glyphs, watercolor washes, giant words, vertical text, badge, stickers, tape, marquee; motion (Lenis, lean, sparkles, letter pops, CSS scroll-driven reveals, calm mode) |
 | P3 Data & auth | ✅ done | Schema + `0000_init`; owner seeded (forced change pending — Kyle's first login); login / change password / sessions / lockout (9/9 e2e) |
@@ -55,7 +55,7 @@ established company that has nothing to do with him. Every public trace of it ha
   site's project slug to `moekoworks-portfolio` (old slug kept in `project_slug_history` → 301). Dry run by default.
 
 **Resolved 2026-10-20 (local session): live in production.** Merged `claude/kind-mccarthy-89dx0w` → `dev` → `main`
-(fast-forward, `1cb0ce0`). Vercel project renamed `moesoft` → `moekoworks`; domain `moekoworks.vercel.app` added; the old
+(fast-forward, `1cb0ce0`). Vercel project renamed `<old-name>` → `moekoworks`; domain `moekoworks.vercel.app` added; the old
 `*.vercel.app` domain **removed** (owner's choice: no redirect, it 404s). `NEXT_PUBLIC_SITE_URL` updated + redeployed.
 Neon restore branch `before-rebrand-2026-10-20` (`br-late-band-b3owchpg`, no compute) taken, then
 `rebrand-moekoworks.mts --apply` (11 writes; the old project slug 308s to `moekoworks-portfolio`). New random `HASH_PEPPER`.
@@ -65,7 +65,7 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 **Cleanup pass 2026-10-20 (owner asked to "clean everything") — done:**
 - E-mail switched to the personal Gmail address (`src/lib/site.ts`), live on /contact.
 - Cloudinary presets `moekoworks_{images,videos}_signed` created (exact copies of the old ones, tag `moekoworks`).
-- Media move: folder `moesoft-official` → `moekoworks-official` (and `projects/moesoft-portfolio` →
+- Media move: folder `<old-name>-official` → `moekoworks-official` (and `projects/<old-name>-portfolio` →
   `projects/moekoworks-portfolio`); all 53 assets renamed (versions unchanged); `media_assets.public_id` updated in one
   transaction (53 new, 0 old). Neon backup `before-media-move-2026-10-20` (`br-royal-term-b3t3gx3r`) taken first.
   Images were broken ~5 min between the rename and the production rebuild (commit `0e20df4` forced it). Verified after:
@@ -73,23 +73,23 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 - Tag `moekoworks` added to all 47 images; `moekoworks-portfolio` added to that project's 13 images + 2 videos.
 
 **Cleanup pass, part 2 (2026-10-20) — done:**
-- Cloudinary: `moekoworks` tag on all 53 assets (+ the 2 certificate images), old `moesoft` / `moesoft-portfolio` tags removed;
-  0 assets, tags or folders left with the old name. Old presets `moesoft_{images,videos}_signed` deleted. The old site `moesoft-web` no longer exists (Vercel has no such project; its address 404s).
+- Cloudinary: `moekoworks` tag on all 53 assets (+ the 2 certificate images), old `<old-name>` / `<old-name>-portfolio` tags removed;
+  0 assets, tags or folders left with the old name. Old presets `<old-name>_{images,videos}_signed` deleted. The old site `<old-name>-web` no longer exists (Vercel has no such project; its address 404s).
 - Live check: 358 media URLs across 6 pages, all 200.
-- Neon: database renamed `moesoft` → `moekoworks`; `moesoft_owner` password reset by Kyle (the leaked one is dead).
+- Neon: database renamed `<old-name>` → `moekoworks`; `<old-name>_owner` password reset by Kyle (the leaked one is dead).
   The role name stays: Neon roles can't grant/re-own each other (`permission denied to grant role`), so a rename would
   need a full data copy — owner chose to keep it (it only appears inside the private connection string).
 - Vercel env: `DATABASE_URL` (new db + password), `CLOUDINARY_ROOT_FOLDER` = `moekoworks-official`,
   `CLOUDINARY_PRESET_{IMAGES,VIDEOS}` = `moekoworks_{images,videos}_signed` (they had overridden the code defaults
   with the old names since 2026-10-04), redeployed. Verified: production writes analytics events again.
-- Docs: old infra names rewritten in `docs/plans/PRELIMENARYPLAN.md`, the playbook and here (only `moesoft_owner`
+- Docs: old infra names rewritten in `docs/plans/PRELIMENARYPLAN.md`, the playbook and here (only `<old-name>_owner`
   and history lines keep the old name). Merged branch `claude/kind-mccarthy-89dx0w` deleted (local + origin).
 
 **Closed 2026-10-20.** Kyle deleted the downloaded Neon `.env`, signed in to the admin again and re-ran the OG checks.
 Both Neon backup branches (`before-rebrand-2026-10-20`, `before-media-move-2026-10-20`) deleted at his request.
 Search Console: not set up, so no sitemap resubmission (the site still serves `/sitemap.xml`).
 **Only open item:** Canva design `DAG9mW5bZm8` still shows the old wordmark (Kyle handles it himself, no rush).
-**Password: done** (Kyle, 2026-10-23). The Neon `moesoft_owner` password was reset 2026-10-20 and is in Vercel. Local
+**Password: done** (Kyle, 2026-10-23). The Neon `<old-name>_owner` password was reset 2026-10-20 and is in Vercel. Local
 `.env.local` deliberately still holds the old URL (old db name + password), so local scripts can't reach the DB:
 use the Neon MCP (`run_sql_transaction`, e.g. `seed:<slug> -- --sql <file>`) or put the new URL in `.env.local`.
 
@@ -97,7 +97,7 @@ use the Neon MCP (`run_sql_transaction`, e.g. `seed:<slug> -- --sql <file>`) or 
 - **Classic caching model** (Cache Components off): public pages pre-render with `revalidate = 600`; admin saves will call `revalidatePath`. Simpler with MUI/Emotion and cookie-based admin (plan §14.3 fallback).
 - Kept the scaffold's React 19.2.8 / TypeScript 5 / ESLint 9 (more conservative than plan's "latest").
 - Cover/preview/hover/OG are `media_assets.role` values instead of columns on `projects` (no circular FKs). Cover falls back to the first gallery image.
-- Single DB role (`moesoft_owner`, name kept: Neon cannot rename/re-own it) instead of separate app/migrator roles.
+- Single DB role (`<old-name>_owner`, name kept: Neon cannot rename/re-own it) instead of separate app/migrator roles.
 - Logo tagline was rasterised in the Canva PDF (WebP in the SVGs); since the 2026-10-20 rebrand it is vector Fredoka paths.
 - **Global CSS files in cascade layers** (`src/styles/*.css`, kotoha's approach) instead of CSS Modules; letter pops are server-split spans + CSS (no SplitText), reveals are CSS scroll-driven animations (kotoha). GSAP stays installed for later.
 - `@next/next/no-img-element` is off: images are Cloudinary (`f_auto,q_auto`, srcset) or local SVG.
@@ -109,7 +109,7 @@ use the Neon MCP (`run_sql_transaction`, e.g. `seed:<slug> -- --sql <file>`) or 
 - The scratchpad was wiped during a pause: the logo/pattern/wash generator scripts are gone (their outputs in `public/brand/` are final).
 
 ## Capture & seed commands
-- Repo moved to `~/Desktop/Moesoft/moesoft_official` (2026-10-11). `.env.local` was recreated with the DB URLs only
+- Repo moved to `~/Desktop/<Old-name>/<old-name>_official` (2026-10-11). `.env.local` was recreated with the DB URLs only
   (Cloudinary key/secret and the admin seed values are not in it). Capture outputs were lost: rebuild
   `uploads.json` with `npx tsx scripts/capture/uploads-from-db.mts <slug> <folder>`.
 - `npx tsx scripts/capture/hanon.mts [--shots|--video]` → `FFMPEG=<ffmpeg-static path> scripts/capture/encode-hanon.sh` → `npm run seed:hanon -- --replace`.

@@ -56,7 +56,7 @@
 | Topic | Decision (v0.3) |
 |---|---|
 | Positioning | ✅ **A portfolio** under the name Moeko Works, by Kyle Zoleta. **Contact = questions about you or your projects.** No services, prices or "hire me". This fits Vercel Hobby's personal-use rule. |
-| Old site | ✅ You'll remove `moesoft-web` once this site is finished. The new site is a new codebase and a new Vercel project; I won't touch the old one. |
+| Old site | ✅ You'll remove `<old-name>-web` once this site is finished. The new site is a new codebase and a new Vercel project; I won't touch the old one. |
 | Logo | ✅ Canva link set to view-only. The 6-layer PDF and the GIF are in `assets/`. Fonts: **Lilita One** (wordmark) and **Canva Sans Bold Italic** (tagline). |
 | Mobile + references | ✅ Mobile follows **mikuexpo.com**: a top bar with the logo and a "MENU" button that opens a full menu |
 | Splash screen | ✅ **New:** a loading splash where the logo assembles and the flowers keep rotating, based on your GIF (§7.5) |
@@ -219,7 +219,7 @@ The title is "Visitor statistics", counted in **Japan time with weeks starting M
    - `analytics_daily`: (day, metric, dimension) → value.
 
 ### 2.5 The old Moeko Works site
-- `moesoft-web.vercel.app` is still online (checked 2026-10-04) and still lists the old projects. What I meant earlier was only that: until it's removed, those projects stay visible.
+- `<old-name>-web.vercel.app` is still online (checked 2026-10-04) and still lists the old projects. What I meant earlier was only that: until it's removed, those projects stay visible.
 - **You'll remove it after this site launches.** Nothing from it is reused, and I won't touch it.
 
 ### 2.6 Design references (re-studied for v0.3)
@@ -293,7 +293,7 @@ Your wireframes only tell me **which pages and content** you want: Home with the
 ### 2.8 Accounts & quotas (read-only checks)
 | Service | What exists | Plan for Moeko Works |
 |---|---|---|
-| **Vercel** (`pastelsalt`, `pastelsalts-projects`) | `kotoha-fansite` (Git) and `moesoft-web` (old site, you'll remove it) | **New project `moekoworks` → `moekoworks.vercel.app`** on **Hobby**: a portfolio is personal use. Region `sin1`. |
+| **Vercel** (`pastelsalt`, `pastelsalts-projects`) | `kotoha-fansite` (Git) and `<old-name>-web` (old site, you'll remove it) | **New project `moekoworks` → `moekoworks.vercel.app`** on **Hobby**: a portfolio is personal use. Region `sin1`. |
 | **Neon** (Free) | `kotoha-fansite`: `aws-ap-southeast-1`, PG 17, 0.25 CU, 6 h history | New project **`moekoworks-official`** (Singapore), **one production database** |
 | **Cloudinary** (Free, shared with Kotoha) | 25 credits/month, 0.96 % used. Limits: image 10 MB · video 100 MB · 25 MP | Root folder **`moekoworks-official/`** + 2 signed presets |
 | **GitHub** (`PastelSalt`) | `kotoha-fansite` temporarily public for this review | **`PastelSalt/moekoworks_official`, private** |
@@ -1670,7 +1670,7 @@ GitHub Actions on PR: `npm ci`, lint, typecheck, `vitest`, `next build`. Playwri
 ### 19.6 Launch checklist (excerpt)
 - **Production data:** env vars set · migrations applied · tech catalog seeded · admin seeded (temp password) · first login done and password changed · `ADMIN_SEED_PASSWORD` removed from env · Kotoha seeded and published.
 - **Quality gates:** Lighthouse and axe pass · security headers verified · CSP enforced · 404/500 pages checked.
-- **Old site:** you remove `moesoft-web` after launch · OG previews checked (Facebook/X/LinkedIn debuggers) · sitemap submitted to Google Search Console.
+- **Old site:** you remove `<old-name>-web` after launch · OG previews checked (Facebook/X/LinkedIn debuggers) · sitemap submitted to Google Search Console.
 
 ---
 
@@ -2374,7 +2374,7 @@ const Payload = z.object({ v: z.string().min(8).max(64), d: z.enum(['mobile','ta
 
 ## Appendix F — References
 - Your reference project: https://kotoha-fansite.vercel.app/ (the source stays private and is never linked from Moeko Works)
-- Old site (you'll remove it after launch): https://moesoft-web.vercel.app/
+- Old site (you'll remove it after launch): https://<old-name>-web.vercel.app/
 - Design inspiration: https://mikuexpo.com/ (History: https://mikuexpo.com/history.html · tour microsite: https://mikuexpo.com/europe2026/) · https://archive.genco.co.jp/happysugarlife/
 - Next.js docs: https://nextjs.org/docs (App Router, Proxy, Caching / Cache Components, Authentication, Draft Mode)
 - MUI + Next.js integration: https://mui.com/material-ui/integrations/nextjs/
