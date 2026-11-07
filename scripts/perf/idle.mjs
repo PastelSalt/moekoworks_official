@@ -1,4 +1,4 @@
-// Idle cost (docs/PERFORMANCE_PLAN.md): main-thread task / script / style milliseconds per second over 10 s on an
+// Idle cost (docs/plans/PERFORMANCE_PLAN.md): main-thread task / script / style milliseconds per second over 10 s on an
 // untouched page. Fine pointer emulated (Lenis on) unless the label contains "nolenis"; "noio" stubs
 // IntersectionObserver; "nojs" blocks the site's scripts; "rm:<selector>" removes elements; css = extra styles.
 //   node scripts/perf/idle.mjs <url> ["<css>"] [label]

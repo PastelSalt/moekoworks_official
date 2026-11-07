@@ -1,6 +1,14 @@
 {
   "name": "moekoworks-official",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Moeko Works — a portfolio by Kyle Zoleta: creative websites, and the systems behind them.",
+  "license": "UNLICENSED",
+  "author": "Kyle Zoleta (https://moekoworks.vercel.app)",
+  "homepage": "https://moekoworks.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PastelSalt/moekoworks_official.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",

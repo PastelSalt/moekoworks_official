@@ -1,5 +1,5 @@
 // Traces one wheel-scroll pass and sums main-thread work by category, plus DOM size, running animations and
-// composited layers (docs/PERFORMANCE_PLAN.md). Proportions stay meaningful even on a busy machine.
+// composited layers (docs/plans/PERFORMANCE_PLAN.md). Proportions stay meaningful even on a busy machine.
 //   node scripts/perf/trace.mjs <url> [exp: base | lean | lenis | fall, combined with "+"] [w=1920] [h=1080]
 import { chromium } from "playwright-core";
 

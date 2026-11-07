@@ -1,4 +1,4 @@
-/* Moeko Works admin, v2 (docs/ADMIN_UI_KOTOHA_PLAN.md): Kotoha's admin structure and formatting, Bloom Expo colours.
+/* Moeko Works admin, v2 (docs/plans/ADMIN_UI_KOTOHA_PLAN.md): Kotoha's admin structure and formatting, Bloom Expo colours.
    Pink = site content · blue = visitors · lilac/violet = messages · dashed grey = draft. MUI keeps the inputs. */
 
 /* Tokens live on :root so MUI dialogs and the phone drawer (portalled to <body>) get them too. This file only loads on /admin. */

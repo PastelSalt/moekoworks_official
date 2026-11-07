@@ -1,12 +1,12 @@
 # PROGRESS.md — status & resume protocol
 
-> Plan: [`../PRELIMENARYPLAN.md`](../PRELIMENARYPLAN.md) v0.3 (approved 2026-10-04). This file tracks execution.
+> Plan: [`../PRELIMENARYPLAN.md`](PRELIMENARYPLAN.md) v0.3 (approved 2026-10-04). This file tracks execution.
 
 ## Resume protocol (do this first, every new session)
 1. Read this file, then `CLAUDE.md`. Don't re-ask decided questions (plan §0, §24, §26.1).
 2. Check real state: `git status`, `git log --oneline -10`, and that files listed as done exist.
 3. Continue from "Current focus". Update this file after every completed item; commit small and often.
-4. New project to add? Use [`NEW-PROJECT-PLAYBOOK.md`](NEW-PROJECT-PLAYBOOK.md).
+4. New project to add? Use [`NEW-PROJECT-PLAYBOOK.md`](../NEW-PROJECT-PLAYBOOK.md).
 
 ## Status
 | Phase | Status | Notes |
@@ -82,7 +82,7 @@ title, canonical, OG image, sitemap and robots carry the new name/domain; 0 old-
 - Vercel env: `DATABASE_URL` (new db + password), `CLOUDINARY_ROOT_FOLDER` = `moekoworks-official`,
   `CLOUDINARY_PRESET_{IMAGES,VIDEOS}` = `moekoworks_{images,videos}_signed` (they had overridden the code defaults
   with the old names since 2026-10-04), redeployed. Verified: production writes analytics events again.
-- Docs: old infra names rewritten in `PRELIMENARYPLAN.md`, the playbook and here (only `moesoft_owner`
+- Docs: old infra names rewritten in `docs/plans/PRELIMENARYPLAN.md`, the playbook and here (only `moesoft_owner`
   and history lines keep the old name). Merged branch `claude/kind-mccarthy-89dx0w` deleted (local + origin).
 
 **Closed 2026-10-20.** Kyle deleted the downloaded Neon `.env`, signed in to the admin again and re-ran the OG checks.

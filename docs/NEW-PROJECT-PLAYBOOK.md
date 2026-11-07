@@ -2,8 +2,8 @@
 
 > Written 2026-10-04 right after the Kotoha Fan Site was added and the site launched. It records the exact
 > pipeline that worked end to end, with the scripts, IDs, settings and the mistakes worth not repeating.
-> Read this together with `CLAUDE.md` (owner rules, conventions) and `docs/PROGRESS.md` (current state).
-> The plan behind all of it is `PRELIMENARYPLAN.md` (v0.3); §9 (project template), §11 (admin inputs),
+> Read this together with `CLAUDE.md` (owner rules, conventions) and `docs/plans/PROGRESS.md` (current state).
+> The plan behind all of it is `docs/plans/PRELIMENARYPLAN.md` (v0.3); §9 (project template), §11 (admin inputs),
 > §16 (Cloudinary), §21 (the Kotoha seed) matter most here.
 
 ---
@@ -411,7 +411,7 @@ Deleting a media item deletes the row **and** the Cloudinary file.
 5. Wait for it (background until-loop: `curl -s https://moekoworks.vercel.app/ | grep -q "<new title>"`), then
    run §11.8 and a live screenshot. Seed data is in the DB already, so the new build's ISR pages include it;
    otherwise pages refresh within 10 minutes.
-6. Update `docs/PROGRESS.md` (docs-only commits can stay on `dev` until the next approved merge).
+6. Update `docs/plans/PROGRESS.md` (docs-only commits can stay on `dev` until the next approved merge).
 
 ---
 

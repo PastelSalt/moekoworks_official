@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | **v0.3 (2026-11-03): live on production** (`3007a5a`, merged on Kyle's OK without a local real-data pass; Kyle checks the signed-in screens on production) |
 | **Why** | Kyle: the Kotoha admin is "way better". Take its layout, visual formatting and completeness, and adapt them to this project's data and theme. Also redo the sign-in page after Kotoha's |
-| **Builds on** | Branch `admin-ui-refresh` (commit `e87693f`, v1 of `docs/ADMIN_UI_PLAN.md`: grouped sidebar, page heads, dashboard blocks, grouped statistics, interactive chart). v1 is **not** on `main`. v2 continues on the same branch and replaces v1's look where this file says so |
+| **Builds on** | Branch `admin-ui-refresh` (commit `e87693f`, v1 of `docs/plans/ADMIN_UI_PLAN.md`: grouped sidebar, page heads, dashboard blocks, grouped statistics, interactive chart). v1 is **not** on `main`. v2 continues on the same branch and replaces v1's look where this file says so |
 | **Reference (read-only)** | `../kotoha-fansite/public/{admin.html,login.html}`, `public/css/admin.css` (490 lines), `public/js/admin/{main,pages,analytics,content,ui,login}.js`, `public/locales/admin/en.json`, live at kotoha-fansite.vercel.app/login |
 | **Scope** | Look, layout and completeness of `/admin/*`, `/admin/login`, `/admin/change-password`. Same data, same server actions, same rules |
 
@@ -257,7 +257,7 @@ Kotoha layout: **account card** (avatar with flower, username, "Owner" pill, "Si
 ## 8. Files
 
 **New:** `src/components/admin/{AdminItem,Toast,ConfirmDialog,Segmented,KpiCard,StatusButton,AdminDialogForm}.tsx`, `src/app/admin/(panel)/archive/page.tsx` (if Q3 = yes), `src/app/admin/(panel)/error.tsx`, `loading.tsx` for projects, certifications, tech, messages, activity.
-**Changed:** `admin.css` (rewritten on Kotoha's structure), `AdminShell.tsx`, `nav.ts`, `AdminPageHead.tsx`, `StateBox.tsx`, `Skeleton.tsx`, `VisitsChart.tsx`, `ActivityList.tsx`, `CertificationManager.tsx`, `TechManager.tsx`, `ProjectEditor.tsx` (markup/classes, toast, confirm), `MessageList.tsx`, `MessageActions.tsx`, `LoginForm.tsx`, `PasswordForm.tsx`, `(panel)/layout.tsx` (pass username/role, toast provider), every `(panel)` page, `login/page.tsx`, `change-password/page.tsx`, `src/lib/admin-format.ts` (verb icons), `docs/ADMIN_UI_PLAN.md` (status → superseded by this file), `docs/PROGRESS.md`.
+**Changed:** `admin.css` (rewritten on Kotoha's structure), `AdminShell.tsx`, `nav.ts`, `AdminPageHead.tsx`, `StateBox.tsx`, `Skeleton.tsx`, `VisitsChart.tsx`, `ActivityList.tsx`, `CertificationManager.tsx`, `TechManager.tsx`, `ProjectEditor.tsx` (markup/classes, toast, confirm), `MessageList.tsx`, `MessageActions.tsx`, `LoginForm.tsx`, `PasswordForm.tsx`, `(panel)/layout.tsx` (pass username/role, toast provider), every `(panel)` page, `login/page.tsx`, `change-password/page.tsx`, `src/lib/admin-format.ts` (verb icons), `docs/plans/ADMIN_UI_PLAN.md` (status → superseded by this file), `docs/plans/PROGRESS.md`.
 **Not changed:** everything in §0.1's "not allowed" list.
 
 ---

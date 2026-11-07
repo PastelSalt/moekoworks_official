@@ -2,12 +2,12 @@
 
 | | |
 |---|---|
-| **Status** | **v0.2 (2026-10-25): B1–B5 coded on `admin-ui-refresh` (`e87693f`), not merged. Superseded on 2026-11-03 by `docs/ADMIN_UI_KOTOHA_PLAN.md`** (Kotoha-style v2, waiting for the owner's OK) |
+| **Status** | **v0.2 (2026-10-25): B1–B5 coded on `admin-ui-refresh` (`e87693f`), not merged. Superseded on 2026-11-03 by `docs/plans/ADMIN_UI_KOTOHA_PLAN.md`** (Kotoha-style v2, waiting for the owner's OK) |
 | **Scope** | How the admin panel (`/admin/*`) and the sign-in pages (`/admin/login`, `/admin/change-password`) **look and lay out**. The Dashboard and Statistics get the most work; every other screen gets the shared component polish |
 | **Not changing** | The database and migrations, `src/server/**` (queries, actions, auth, analytics), the API routes, the tracker, roles and sessions, the CSP/security headers, the public site |
-| **Reference** | Kotoha's refresh `../kotoha-fansite/docs/ADMIN_UI_PLAN.md` (commit `dc82320`, live 2026-10-25) and Hanon's port `../hanon-fansite/docs/ADMIN_UI_PLAN.md` (commit `27caad2`). Same goals and rules; this file only adapts them to a Next.js + MUI admin |
+| **Reference** | Kotoha's refresh `../kotoha-fansite/docs/plans/ADMIN_UI_PLAN.md` (commit `dc82320`, live 2026-10-25) and Hanon's port `../hanon-fansite/docs/plans/ADMIN_UI_PLAN.md` (commit `27caad2`). Same goals and rules; this file only adapts them to a Next.js + MUI admin |
 | **Branch** | `admin-ui-refresh` from `dev`; merge to `main` (= production) only with the owner's OK |
-| **Resume file** | This file (§9 is the checklist). `docs/PROGRESS.md` stays the source of truth for everything else |
+| **Resume file** | This file (§9 is the checklist). `docs/plans/PROGRESS.md` stays the source of truth for everything else |
 
 ---
 
@@ -184,7 +184,7 @@ Bar lists: slightly taller tracks, values right-aligned in tabular numerals, ran
 
 ## 7. Files
 
-**Will change:** `src/app/admin/admin.css` (most of the work), `src/components/admin/AdminShell.tsx`, `VisitsChart.tsx`, `ProjectEditor.tsx` (jump list + class names only), `CertificationManager.tsx` (grouping), `MessageList.tsx`, `LoginForm.tsx`, `PasswordForm.tsx`, every page under `src/app/admin/(panel)/` (layout/markup only), `src/app/admin/login/page.tsx`, `src/app/admin/change-password/page.tsx`, `src/lib/admin-format.ts` (activity labels), new `src/components/admin/{AdminPageHead,StateBox}.tsx`, new `loading.tsx` for `/admin` and `/admin/statistics`, `docs/PROGRESS.md`, this file.
+**Will change:** `src/app/admin/admin.css` (most of the work), `src/components/admin/AdminShell.tsx`, `VisitsChart.tsx`, `ProjectEditor.tsx` (jump list + class names only), `CertificationManager.tsx` (grouping), `MessageList.tsx`, `LoginForm.tsx`, `PasswordForm.tsx`, every page under `src/app/admin/(panel)/` (layout/markup only), `src/app/admin/login/page.tsx`, `src/app/admin/change-password/page.tsx`, `src/lib/admin-format.ts` (activity labels), new `src/components/admin/{AdminPageHead,StateBox}.tsx`, new `loading.tsx` for `/admin` and `/admin/statistics`, `docs/plans/PROGRESS.md`, this file.
 
 **Will not change:** `src/server/**`, `drizzle/**`, `scripts/**`, `src/app/api/**`, `src/app/(site)/**`, `src/components/{site,projects,decor}/**`, `src/theme/**`, `src/proxy.ts`, `next.config.ts`, `vercel.json`. If a bug turns up there, ask first.
 

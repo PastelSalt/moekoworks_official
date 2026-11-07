@@ -1,4 +1,4 @@
-// Scroll benchmark on the real GPU (docs/PERFORMANCE_PLAN.md): wheel-scrolls a page down and back up and records
+// Scroll benchmark on the real GPU (docs/plans/PERFORMANCE_PLAN.md): wheel-scrolls a page down and back up and records
 // every requestAnimationFrame interval. A fresh browser per run; a fine pointer is emulated so Lenis runs like on a
 // real mouse/touchpad. Never counted in Moeko Works' statistics (mw_nt, /api/track answered locally).
 //   node scripts/perf/bench.mjs <url> <exp[,exp…]> [w=1920] [h=1080] [cpu=1]

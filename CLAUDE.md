@@ -3,7 +3,7 @@
 # Moeko Works — working notes for Claude sessions
 
 Portfolio of Kyle Zoleta under the name **Moeko Works**. The plan and every decision live in
-`PRELIMENARYPLAN.md` (v0.3). Progress and the resume protocol live in `docs/PROGRESS.md`. Read both before changing anything.
+`docs/plans/PRELIMENARYPLAN.md` (v0.3). Progress and the resume protocol live in `docs/plans/PROGRESS.md`. Read both before changing anything.
 **Adding a new project/website to the portfolio?** Follow `docs/NEW-PROJECT-PLAYBOOK.md` step by step (intake, capture,
 admin shots, Cloudinary upload, seed, verify, ship) — it has the exact scripts, IDs and gotchas.
 

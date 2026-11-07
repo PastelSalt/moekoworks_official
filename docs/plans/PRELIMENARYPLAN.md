@@ -1,8 +1,8 @@
 # Moeko Works Official Website — Preliminary Plan
 
 > **Moeko Works** — a portfolio by **Kyle Zoleta**
-> ⚠️ **Renamed 2026-10-20:** the brand was renamed to **Moeko Works** (the old name belongs to an established company). Brand text in this plan was updated; infrastructure names quoted below (repo, Neon/Vercel projects, Cloudinary folder, DB roles) are the ones created at the time — see `docs/PROGRESS.md` → "Incident log".
-> File: `PRELIMENARYPLAN.md` · Version **0.3** · Updated **2026-10-04** (Asia/Manila)
+> ⚠️ **Renamed 2026-10-20:** the brand was renamed to **Moeko Works** (the old name belongs to an established company). Brand text in this plan was updated; infrastructure names quoted below (repo, Neon/Vercel projects, Cloudinary folder, DB roles) are the ones created at the time — see `docs/plans/PROGRESS.md` → "Incident log".
+> File: `docs/plans/PRELIMENARYPLAN.md` · Version **0.3** · Updated **2026-10-04** (Asia/Manila)
 > Status: **Ready to start** once the 4 start-up items in [§26](#26-readiness--start-up-items) are done
 > Plan readiness: v0.1 61.1 → v0.2 80.0 → **v0.3 94.5 / 100** · **96.7 after the start-up items** · the last points come from your copy review at the design checkpoint ✋
 
@@ -83,7 +83,7 @@
    - deleting or overwriting anything I didn't create
    - changing account or project settings
    - production deploys or writes
-7. **Handoff docs:** keep `docs/PROGRESS.md` (resume protocol) and `MIGRATION.md` (session handoff) current.
+7. **Handoff docs:** keep `docs/plans/PROGRESS.md` (resume protocol) and `MIGRATION.md` (session handoff) current.
 8. **Content rules:** no sound; seed only real, verified data.
 
 ---
@@ -1199,7 +1199,7 @@ flowchart LR
 ### 14.4 Folder structure
 ```
 moekoworks_official/
-├─ PRELIMENARYPLAN.md
+├─ docs/plans/PRELIMENARYPLAN.md
 ├─ assets/                    source brand files (moekoworks_logo.png, references/, logo.svg when available)
 ├─ docs/                      RUNBOOK.md · ADMIN_GUIDE.md · DECISIONS.md
 ├─ CLAUDE.md                  conventions for future AI sessions (like kotoha's MIGRATION.md)
@@ -1827,7 +1827,7 @@ Effort: **S** ≈ 1 working session · **M** ≈ 2–3 · **L** ≈ 4+. ✋ = yo
 
 | Phase | Key deliverables | Acceptance criteria | Size | Needs from you |
 |---|---|---|---|---|
-| **P0** Start-up | Node 24, private repo + push access, Neon project, Cloudinary presets/folders, Vercel project `moekoworks`, `.env.local`/Vercel env (credentials as env only), `CLAUDE.md`, `docs/PROGRESS.md` | `node -v` = 24.x; first push works; a signed test upload works; a hello-world preview deploys | S | **S1, S2, S3** |
+| **P0** Start-up | Node 24, private repo + push access, Neon project, Cloudinary presets/folders, Vercel project `moekoworks`, `.env.local`/Vercel env (credentials as env only), `CLAUDE.md`, `docs/plans/PROGRESS.md` | `node -v` = 24.x; first push works; a signed test upload works; a hello-world preview deploys | S | **S1, S2, S3** |
 | **P1** Foundations | Next 16 + TS + ESLint/Prettier; MUI + Emotion + CSS layers; tokens/theme/fonts (Fredoka + Lilita One); layouts; security headers; `proxy.ts`; pre-paint motion script | Lint/type/build green; headers present; no motion flicker | M | — |
 | **P2** Shell & design system | **Splash loader** (6 SVG layers), white fixed sidebar, Miku Expo mobile MENU bar, pattern stage, watercolor corners, giant words, badge, vertical text, page titles, micro-labels, cards with hover video, History list with floating preview, marquee, PAGE TOP, footer; dev-only `/dev/design` | Matches the references at 1440 / 900 / 390 px; smooth on a mid laptop. **Design checkpoint** ✋ | L | Your review |
 | **P3** Data & auth | Drizzle schema/migrations (restore point first); seeds; login, forced change, Change password page (kotoha rules), sessions, lockout, rate limits, activity log | E2E: first login → forced change → dashboard → change password again | M | — |
