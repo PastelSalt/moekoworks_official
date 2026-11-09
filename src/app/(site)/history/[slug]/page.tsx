@@ -129,7 +129,8 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
   // The case study (this page) is about the work; the work is by the same Person @id as every page here, and
   // points at the project's own site and repository so search engines join the two.
   const pageUrl = `${base}/history/${p.slug}`;
-  const workUrls = [...new Set(p.links.filter((l) => l.kind === "live" || /github\.com\//.test(l.url)).map((l) => l.url))];
+  // only the work's own addresses: its live site and its repository root (not release or download pages)
+  const workUrls = [...new Set(p.links.filter((l) => l.kind === "live" || /^https:\/\/github\.com\/[^/]+\/[^/]+\/?$/.test(l.url)).map((l) => l.url))];
   const jsonLd = graph(
     {
       "@type": p.category === "web" ? "WebSite" : p.category === "mobile" || p.category === "desktop" ? "SoftwareApplication" : "CreativeWork",
