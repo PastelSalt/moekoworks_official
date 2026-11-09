@@ -8,6 +8,7 @@ import { PageHead } from "@/components/site/PageHead";
 import { SectionHead } from "@/components/site/SectionHead";
 import { cldImage, cldSrcSet } from "@/lib/cloudinary";
 import { isoDate, longDate, monthYear, pad2 } from "@/lib/format";
+import { base, breadcrumbs, graph, ids, ldHtml, personNode, websiteNode } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { getPublishedCertifications, getToolbox } from "@/server/queries/public";
 import "@/styles/pages.css";
@@ -15,7 +16,7 @@ import "@/styles/pages.css";
 export const revalidate = 600;
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Kyle Zoleta",
   description: "Who Kyle Zoleta is, what Moeko Works makes, the toolbox and certifications.",
   alternates: { canonical: "/about" },
 };
@@ -60,8 +61,40 @@ export default async function AboutPage() {
   const hasGrades = certs.some((c) => isGrades(c.title));
   const groups = CATEGORY_ORDER.map(([key, label]) => ({ key, label, items: toolbox.filter((t) => t.category === key) })).filter((g) => g.items.length);
 
+  // AboutPage whose main entity is the Person: the page search engines read for "Kyle Zoleta", with the toolbox
+  // as what he knows and the certifications as credentials.
+  const used = toolbox.filter((t) => t.projects > 0).map((t) => t.name);
+  const jsonLd = graph(
+    {
+      "@type": "AboutPage",
+      "@id": `${base}/about#page`,
+      url: `${base}/about`,
+      name: `About ${site.owner} · ${site.name}`,
+      isPartOf: { "@id": ids.website },
+      mainEntity: { "@id": ids.person },
+      breadcrumb: breadcrumbs([
+        { name: site.name, path: "/" },
+        { name: "About", path: "/about" },
+      ]),
+    },
+    {
+      ...personNode(used),
+      ...(certs.length
+        ? {
+            hasCredential: certs.map((c) => ({
+              "@type": "EducationalOccupationalCredential",
+              name: c.title,
+              dateCreated: c.obtainedOn,
+            })),
+          }
+        : {}),
+    },
+    websiteNode(),
+  );
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldHtml(jsonLd)} />
       <PageHead
         label="About"
         title="About Moeko Works"

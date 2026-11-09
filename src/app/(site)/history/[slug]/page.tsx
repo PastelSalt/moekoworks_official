@@ -16,6 +16,7 @@ import { accentVars } from "@/lib/color";
 import { CATEGORY_LABEL, dotDate, isoDate, LIFECYCLE_LABEL, no, pad2, PLATFORM_LABEL, timeline } from "@/lib/format";
 import { Markdown, markdownToText } from "@/lib/markdown";
 import { opIcon } from "@/lib/op-icons";
+import { base, breadcrumbs, graph, ids, ldHtml, personNode, websiteNode } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { getMovedSlug, getProjectBySlug, getPublishedProjects, type Operation } from "@/server/queries/public";
 import "@/styles/project.css";
@@ -39,6 +40,8 @@ export async function generateMetadata({ params }: PageProps<"/history/[slug]">)
     title: p.seoTitle || p.title,
     description: p.seoDescription || p.tagline,
     alternates: { canonical: `/history/${p.slug}` },
+    authors: [{ name: site.owner, url: site.url }],
+    keywords: [p.title, site.owner, site.name, ...p.tech.map((t) => t.name)],
     openGraph: { type: "article", title: `${p.title} · ${site.name}`, description: p.tagline, images: p.cover ? [{ url: cldImage(p.cover.publicId, { w: 1200, h: 630, crop: "fill", gravity: "auto" }).replace("f_auto", "f_jpg"), width: 1200, height: 630, alt: p.cover.altText ?? p.title }] : undefined },
   };
 }
@@ -123,22 +126,50 @@ export default async function ProjectPage({ params }: PageProps<"/history/[slug]
   let n = 0;
   const next = () => `No.${pad2(++n)}`;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": p.category === "web" ? "WebSite" : p.category === "mobile" || p.category === "desktop" ? "SoftwareApplication" : "CreativeWork",
-    name: p.title,
-    description: p.tagline,
-    url: live?.url,
-    author: { "@type": "Person", name: site.owner },
-    dateCreated: p.startedOn ?? undefined,
-    datePublished: p.publishedAt?.toISOString(),
-    image: heroMedia ? cldImage(heroMedia.publicId, { w: 1200 }) : undefined,
-    keywords: p.tech.map((t) => t.name).join(", "),
-  };
+  // The case study (this page) is about the work; the work is by the same Person @id as every page here, and
+  // points at the project's own site and repository so search engines join the two.
+  const pageUrl = `${base}/history/${p.slug}`;
+  const workUrls = [...new Set(p.links.filter((l) => l.kind === "live" || /github\.com\//.test(l.url)).map((l) => l.url))];
+  const jsonLd = graph(
+    {
+      "@type": p.category === "web" ? "WebSite" : p.category === "mobile" || p.category === "desktop" ? "SoftwareApplication" : "CreativeWork",
+      "@id": `${pageUrl}#work`,
+      name: p.title,
+      description: p.tagline,
+      url: live?.url ?? pageUrl,
+      ...(workUrls.length ? { sameAs: workUrls } : {}),
+      author: { "@id": ids.person },
+      creator: { "@id": ids.person },
+      dateCreated: p.startedOn ?? undefined,
+      datePublished: p.publishedAt?.toISOString(),
+      image: heroMedia ? cldImage(heroMedia.publicId, { w: 1200 }) : undefined,
+      keywords: p.tech.map((t) => t.name).join(", "),
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${pageUrl}#page`,
+      url: pageUrl,
+      name: `${p.seoTitle || p.title} · ${site.name}`,
+      description: p.seoDescription || p.tagline,
+      inLanguage: "en",
+      isPartOf: { "@id": ids.website },
+      about: { "@id": `${pageUrl}#work` },
+      mainEntity: { "@id": `${pageUrl}#work` },
+      author: { "@id": ids.person },
+      datePublished: p.publishedAt?.toISOString(),
+      breadcrumb: breadcrumbs([
+        { name: site.name, path: "/" },
+        { name: "History", path: "/history" },
+        { name: p.title, path: `/history/${p.slug}` },
+      ]),
+    },
+    personNode(),
+    websiteNode(),
+  );
 
   return (
     <article className="project" style={accentVars(p)} data-track-view={`project:${p.id}`}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldHtml(jsonLd)} />
 
       {/* ── Key-visual hero ── */}
       <PatternStage as="header" className="phero stage--accent">

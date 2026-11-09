@@ -9,7 +9,7 @@ import { site } from "@/lib/site";
 import "@/styles/pages.css";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact Kyle Zoleta",
   description: "Questions about Kyle Zoleta or the projects on Moeko Works? Send a message.",
   alternates: { canonical: "/contact" },
 };

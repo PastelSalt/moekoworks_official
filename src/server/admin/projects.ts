@@ -47,7 +47,11 @@ const ProjectInput = z.object({
 export type ProjectInputT = z.input<typeof ProjectInput>;
 export type SaveResult = { ok: true; slug: string } | { ok: false; error: string };
 
-const refresh = () => revalidatePath("/", "layout");
+// every page, plus the sitemap, so a newly published project is listed for search engines right away
+const refresh = () => {
+  revalidatePath("/", "layout");
+  revalidatePath("/sitemap.xml");
+};
 
 function slugify(title: string) {
   return (

@@ -7,14 +7,16 @@ import { PageHead } from "@/components/site/PageHead";
 import { cldImage, cldVideo, hoverUrl } from "@/lib/cloudinary";
 import { accentVars } from "@/lib/color";
 import { CATEGORY_LABEL, dotDate, isoDate, no, pad2, yearOf } from "@/lib/format";
+import { base, breadcrumbs, graph, ids, ldHtml, personNode, websiteNode, worksList } from "@/lib/seo";
+import { site } from "@/lib/site";
 import { getPublishedProjects, type ProjectSummary } from "@/server/queries/public";
 import "@/styles/pages.css";
 
 export const revalidate = 600;
 
 export const metadata: Metadata = {
-  title: "Project History",
-  description: "Every project made under Moeko Works, newest first.",
+  title: "Projects by Kyle Zoleta",
+  description: "Every project Kyle Zoleta has made as Moeko Works, newest first: fan sites, an archive, a visual novel engine and this portfolio.",
   alternates: { canonical: "/history" },
 };
 
@@ -26,8 +28,28 @@ export default async function HistoryPage() {
     years.set(y, [...(years.get(y) ?? []), { project: p, n: projects.length - i }]);
   });
 
+  const jsonLd = graph(
+    {
+      "@type": "CollectionPage",
+      "@id": `${base}/history#page`,
+      url: `${base}/history`,
+      name: `Projects by ${site.owner} · ${site.name}`,
+      isPartOf: { "@id": ids.website },
+      about: { "@id": ids.person },
+      mainEntity: { "@id": ids.works },
+      breadcrumb: breadcrumbs([
+        { name: site.name, path: "/" },
+        { name: "History", path: "/history" },
+      ]),
+    },
+    worksList(projects),
+    personNode(),
+    websiteNode(),
+  );
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldHtml(jsonLd)} />
       <PageHead
         label="History"
         title="Moeko Works History"

@@ -10,6 +10,7 @@ import { ComingSoonCard, ProjectCard } from "@/components/projects/ProjectCard";
 import { NewsTicker } from "@/components/site/NewsTicker";
 import { SectionHead } from "@/components/site/SectionHead";
 import { dotDate, isoDate, longDate, pad2 } from "@/lib/format";
+import { base, graph, ids, ldHtml, personNode, websiteNode, worksList } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { buildToolbox, buildUpdates, getPublishedCertifications, getPublishedProjects } from "@/server/queries/public";
 import "@/styles/home.css";
@@ -32,46 +33,26 @@ export default async function Home() {
   const works = projects.slice(0, 5);
   const lastUpdate = updates[0]?.date;
 
-  // One linked graph so search engines tie the brand, the site and the person together (Google's site name + knowledge panel).
-  const base = site.url.replace(/\/$/, "");
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": `${base}/#website`,
-        name: site.name,
-        alternateName: [`${site.name} by ${site.owner}`, `${site.owner} portfolio`],
-        url: `${base}/`,
-        description: site.intro,
-        inLanguage: "en",
-        author: { "@id": `${base}/#person` },
-        publisher: { "@id": `${base}/#person` },
-      },
-      {
-        "@type": "Person",
-        "@id": `${base}/#person`,
-        name: site.owner,
-        url: `${base}/`,
-        jobTitle: "Web developer",
-        description: `Makes creative websites and the systems behind them, as ${site.name}.`,
-        brand: { "@type": "Brand", name: site.name },
-        sameAs: site.socials.filter((s) => s.id !== "email").map((s) => s.href),
-      },
-      {
-        "@type": "ProfilePage",
-        "@id": `${base}/#profile`,
-        url: `${base}/`,
-        name: `${site.name} — ${site.tagline}`,
-        isPartOf: { "@id": `${base}/#website` },
-        mainEntity: { "@id": `${base}/#person` },
-      },
-    ],
-  };
+  // One linked graph so search engines tie the brand, the site, the person and the works together (Google's site
+  // name, the knowledge panel for the name, and the project pages). Nodes live in lib/seo.ts.
+  const jsonLd = graph(
+    websiteNode(),
+    personNode(toolbox.slice(0, 12).map((t) => t.name)),
+    {
+      "@type": "ProfilePage",
+      "@id": ids.profile,
+      url: `${base}/`,
+      name: `${site.name} — ${site.tagline}`,
+      isPartOf: { "@id": ids.website },
+      mainEntity: { "@id": ids.person },
+      hasPart: { "@id": ids.works },
+    },
+    worksList(projects),
+  );
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldHtml(jsonLd)} />
       <NewsTicker items={updates.map((u) => ({ date: dotDate(u.date), iso: isoDate(u.date), text: u.text, href: u.href }))} />
 
       {/* ── Key-visual stage ── */}
